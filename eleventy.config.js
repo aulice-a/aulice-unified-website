@@ -4,6 +4,11 @@ module.exports = function(eleventyConfig) {
     dir: {
       input: "src",
       output: "_site"
-    }
+    },
+    
+    // CRITICAL FIX: Explicitly set template engines to avoid filter conflicts
+    markdownTemplateEngine: "liquid",
+    htmlTemplateEngine: "liquid",
+    dataTemplateEngine: "liquid"
   };
 };
