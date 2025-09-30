@@ -1,7 +1,127 @@
+/* --- Global Styles --- */
+
 body {
     font-family: 'Inter', sans-serif;
-    background-color: #f7f9fc;
+    background-color: #f7f9fc; /* Using a clean, light background */
 }
+
+/* Optional: Subtle text shadow for better readability on busy backgrounds */
 .text-shadow {
     text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+/* --- Simulator Specific Styles --- */
+/* These were moved from banking-simulator.njk */
+
+.container {
+    max-width: 900px;
+}
+.scrollable-content {
+    max-height: 400px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #d1d5db #f3f4f6;
+}
+.scrollable-content::-webkit-scrollbar {
+    width: 8px;
+}
+.scrollable-content::-webkit-scrollbar-track {
+    background: #f3f4f6;
+    border-radius: 10px;
+}
+.scrollable-content::-webkit-scrollbar-thumb {
+    background-color: #d1d5db;
+    border-radius: 10px;
+    border: 2px solid #f3f4f6;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+.score-change {
+    transition: opacity 0.5s ease-in-out;
+}
+
+
+/* --- Course Color Scheme Variables --- */
+
+/* Default/Global Fallback Colors */
+:root {
+    --course-primary-color: #3b82f6; /* Tailwind Blue-500 */
+    --course-secondary-color: #1f2937; /* Tailwind Gray-800 */
+    --course-text-color: #ffffff;
+    --course-logo-color: #ffffff;
+    --course-gold-accent: #f59e0b; /* Tailwind Amber-500 */
+}
+
+/* 1. Banking Specialists (RAL 5010 Dark Blue Misty) */
+.banking-course {
+    --course-primary-color: #1e3a8a; /* Darker Blue */
+    --course-secondary-color: #505c86; /* Misty Blue/Darker Primary */
+    --course-logo-color: #a0522d; /* Sienna Brown for logo */
+}
+
+/* 2. Logistics Coordinator (RAL 7043 Carbon Steel) */
+.logistics-course {
+    --course-primary-color: #4a4d4e; /* Carbon Steel */
+    --course-secondary-color: #f97316; /* Orange for truck/accent */
+}
+
+/* 3. Mining Engineer (RAL 6026 Spring Green) */
+.mining-course {
+    --course-primary-color: #0d9488; /* Spring Green/Teal */
+    --course-secondary-color: #1e40af; /* Darker accent */
+}
+
+/* 4. Medical Professionals (RAL 3004 Mahogany) */
+.medical-course {
+    --course-primary-color: #8b3a3a; /* Mahogany */
+    --course-secondary-color: #ffffff;
+}
+
+/* 5. Oil & Gas Professionals (RAL 2009 Orange) */
+.oil-gas-course {
+    --course-primary-color: #ea580c; /* Orange */
+    --course-secondary-color: #1f2937; /* Dark Grey for barrel */
+}
+
+/* 6. Civil Aviation Professionals (RAL 5009 Azure Blue Dark) */
+.aviation-course {
+    --course-primary-color: #1e40af; /* Dark Azure Blue */
+    --course-secondary-color: #ffffff;
+}
+
+/* 7. Aestheticians (Violet) */
+.aesthetician-course {
+    --course-primary-color: #7c3aed; /* Violet */
+    --course-secondary-color: #ffffff;
+}
+
+/* 8. Legal Professionals (RAL 6016 Turquoise) */
+.legal-course {
+    --course-primary-color: #06b6d4; /* Turquoise */
+    --course-secondary-color: #1f2937;
+}
+
+/* 9. Hotel & Hospitality Professionals (RAL 6020 Dark Green) */
+.hospitality-course {
+    --course-primary-color: #15803d; /* Dark Green */
+    --course-secondary-color: #ca8a04; /* Gold Text */
+    --course-text-color: var(--course-secondary-color); /* Gold text override */
+}
+
+/* 10. Cabin Crew Professionals (RAL 5017 Sky Blue) */
+.cabin-crew-course {
+    --course-primary-color: #0b9ed4; /* Sky Blue */
+    --course-secondary-color: #ffffff;
+}
+
+/* Apply variables to common elements (Adjust these to match your actual component structure) */
+.course-button {
+    background-color: var(--course-primary-color);
+    color: var(--course-text-color);
+    /* Add hover states here using the variables */
 }

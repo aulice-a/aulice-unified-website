@@ -1,0 +1,391 @@
+---
+layout: base.html
+title: Hotel & Hospitality Simulator
+permalink: /hotel-simulator/
+---
+
+<div class="hotel-course bg-gray-100 flex flex-col items-center min-h-screen">
+    
+    <header class="fixed top-0 left-0 right-0 z-50 bg-white shadow-lg py-4 px-8 flex justify-between items-center">
+        <nav class="flex space-x-6 text-gray-700 font-medium">
+            <a href="https://www.aulice.ca/" target="_blank" class="hover:text-gray-800 transition-colors duration-200">Gate</a>
+            <a href="https://aulice-about.netlify.app/" target="_blank" class="hover:text-gray-800 transition-colors duration-200">About us</a>
+            <a href="https://aulice-pricing-plans.netlify.app/" target="_blank" class="hover:text-gray-800 transition-colors duration-200">Pricing Plans</a>
+            <a href="https://aulice-lexicon.netlify.app/" target="_blank" class="hover:text-gray-800 transition-colors duration-200">Lexicon</a>
+            <a href="https://aulice-teacher-dashboard.netlify.app/" target="_blank" class="hover:text-gray-800 transition-colors duration-200">Teacher</a>
+            <a href="https://aulice-contact.netlify.app/" target="_blank" class="hover:text-gray-800 transition-colors duration-200">Contact</a>
+        </nav>
+        <button id="share-btn" class="text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-colors" style="background-color: var(--course-primary-color);">
+            Share
+        </button>
+    </header>
+
+    <div id="message-modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white p-6 rounded-xl shadow-2xl max-w-sm w-full text-center">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">Link Copied!</h3>
+            <p class="text-gray-600 mb-6">The shareable link has been copied to your clipboard. Share it with your friends!</p>
+            <button id="close-modal-btn" class="text-white font-semibold py-2 px-6 rounded-lg transition-colors" style="background-color: var(--course-primary-color);">Close</button>
+        </div>
+    </div>
+
+    <div id="game-container" class="container mx-auto p-8 bg-white shadow-2xl rounded-2xl border border-gray-200 mt-20 mb-8">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800">Hotel & Hospitality Simulator</h1>
+            <p class="text-lg text-gray-500 mt-2">Navigate challenging situations with professionalism and grace.</p>
+        </header>
+
+        <main class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-gray-50 p-6 rounded-xl border border-gray-200 shadow-inner flex flex-col justify-between">
+                <div>
+                    <h2 class="text-2xl font-semibold text-gray-700 mb-4">Situation <span id="situation-number">1</span>/10</h2>
+                    <div class="scrollable-content">
+                        <p id="situation-text" class="text-gray-600 leading-relaxed text-base fade-in">
+                            </p>
+                    </div>
+                </div>
+                <div class="mt-6 text-center">
+                    <p class="text-2xl font-extrabold" style="color: var(--course-primary-color);">Score: <span id="score">100</span></p>
+                    <p id="score-change-indicator" class="text-sm font-semibold mt-1 opacity-0 score-change">
+                        </p>
+                </div>
+            </div>
+
+            <div class="flex flex-col">
+                <div id="option-buttons-container" class="grid grid-cols-1 gap-4 mb-6">
+                    <button class="option-btn text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-colors transform hover:scale-105 duration-200" style="background-color: var(--course-primary-color);" data-option-index="0">Option 1</button>
+                    <button class="option-btn text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-colors transform hover:scale-105 duration-200" style="background-color: var(--course-primary-color);" data-option-index="1">Option 2</button>
+                    <button class="option-btn text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-colors transform hover:scale-105 duration-200" style="background-color: var(--course-primary-color);" data-option-index="2">Option 3</button>
+                    <button class="option-btn text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-colors transform hover:scale-105 duration-200" style="background-color: var(--course-primary-color);" data-option-index="3">Option 4</button>
+                </div>
+                
+                <div id="outcome-container" class="bg-gray-50 p-6 rounded-xl border border-gray-200 shadow-inner hidden fade-in">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Outcome:</h3>
+                    <p id="outcome-text" class="text-gray-600 leading-relaxed text-base">
+                        </p>
+                </div>
+
+                <button id="next-situation-btn" class="mt-6 bg-green-500 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-green-600 transition-colors transform hover:scale-105 duration-200 hidden">Next Situation</button>
+            </div>
+        </main>
+    </div>
+
+    <div id="shared-score-container" class="container mx-auto p-8 bg-white shadow-2xl rounded-2xl border border-gray-200 my-8 hidden">
+        <div class="text-center p-8">
+            <h2 class="text-5xl font-extrabold text-gray-800 mb-4">Hotel & Hospitality Simulator</h2>
+            <p class="text-2xl font-medium text-gray-600 mb-2">Someone wants to share their score with you!</p>
+            <p class="text-7xl font-black mt-8 mb-8" style="color: var(--course-primary-color);">Score: <span id="shared-score"></span></p>
+            <p class="text-lg text-gray-500 max-w-md mx-auto mb-8">This is the final score they achieved. Are you ready to beat it?</p>
+            <button id="play-now-btn" class="text-white font-semibold py-3 px-8 rounded-full shadow-lg transition-colors transform hover:scale-105 duration-200" style="background-color: var(--course-primary-color);">Play Now!</button>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Utility function to shuffle an array (Fisher-Yates)
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+
+            const situations = [
+                {
+                    title: "The Overbooked Guest",
+                    situation: "A guest with a confirmed reservation arrives late at night, but due to a system error, the hotel is completely overbooked. The guest is exhausted and visibly upset.",
+                    options: [
+                        { text: "Apologize sincerely, explain the situation, and immediately find them a room at a nearby comparable hotel, covering the cost of the first night's stay and their taxi fare.", outcome: "You prioritize guest satisfaction and honesty. You turn a negative situation into a positive one, earning their loyalty and respect. This is the correct and professional course of action.", scoreChange: +35 },
+                        { text: "Tell them it's not your fault and the problem is with the booking company, then give them directions to the nearest motel.", outcome: "You show a complete lack of empathy and professionalism. The guest leaves a scathing review, and you lose their business forever. An unprofessional and shortsighted choice.", scoreChange: -30 },
+                        { text: "Offer them a discount for their next stay and tell them you can’t help them with a room tonight.", outcome: "You are not managing your guest's expectations or needs. You are offering a solution for a problem you are not solving. An unhelpful and shortsighted response.", scoreChange: -25 },
+                        { text: "Tell them to wait while you call a competing hotel and get a room for them.", outcome: "You are attempting to solve the problem, but you are not doing it in a way that is sensitive to your guest's needs. The guest is tired and needs a solution now, not to be waiting on you to figure it out. An unhelpful and shortsighted choice.", scoreChange: -15 }
+                    ]
+                },
+                {
+                    title: "The Loud Party",
+                    situation: "It's 2 AM and a guest from room 305 calls the front desk to complain about a loud party in the room next door. This is the third complaint about the same room tonight.",
+                    options: [
+                        { text: "Go to the room, politely ask the guests to quiet down, and remind them of the hotel's quiet hours policy. Offer to move the complaining guest to a quieter room if the noise continues.", outcome: "You address the issue directly and professionally. You enforce hotel policy while also offering a solution to the complaining guest, demonstrating excellent problem-solving skills. A correct and professional choice.", scoreChange: +30 },
+                        { text: "Call security immediately and tell them to remove the guests from the room.", outcome: "You are escalating the situation without attempting to resolve it first. The guests may not be aware of the hotel's quiet hours. An unprofessional and aggressive choice.", scoreChange: -20 },
+                        { text: "Tell the complaining guest that you will take care of it, but you don’t do anything.", outcome: "You lie to the complaining guest and you do nothing to solve the problem. An unprofessional and dishonest choice.", scoreChange: -30 },
+                        { text: "Tell the complaining guest that they can't do anything about the noise because the hotel is full.", outcome: "You show a complete lack of professionalism and empathy. You are not attempting to solve the problem. An unhelpful and unprofessional choice.", scoreChange: -30 }
+                    ]
+                },
+                {
+                    title: "The Found Valuables",
+                    situation: "You find a designer wallet filled with cash and credit cards on a lounge chair by the pool. The guest who was sitting there checked out an hour ago.",
+                    options: [
+                        { text: "Immediately secure the wallet in a lockbox or a safe, log the found item, and contact the guest using the contact information on file.", outcome: "You demonstrate honesty and integrity. You follow proper protocol for lost and found, ensuring the guest's property is returned safely. This is the correct and ethical choice.", scoreChange: +40 },
+                        { text: "Leave the wallet with the pool attendant, telling them to give it to the guest if they come back.", outcome: "You fail to secure the valuables and you are not following proper procedure. You have no way of knowing if the pool attendant will return it to the owner. An irresponsible and unprofessional choice.", scoreChange: -30 },
+                        { text: "Take the cash out of the wallet, believing the guest will not miss it.", outcome: "This is a criminal act and a massive ethical failure. You are stealing from a guest. You would be fired and potentially face criminal charges. A catastrophic and reckless decision.", scoreChange: -50 },
+                        { text: "Wait to see if the guest comes back for it, and then decide what to do.", outcome: "You are not following proper procedure. The guest may not come back, and the valuables could be stolen. A risky and irresponsible choice.", scoreChange: -20 }
+                    ]
+                },
+                {
+                    title: "The Negative Online Review",
+                    situation: "You find a negative online review from a recent guest complaining about a small issue that was resolved during their stay. They are exaggerating the problem to a ridiculous degree.",
+                    options: [
+                        { text: "Draft a polite and professional public response, acknowledging their feedback and inviting them to contact you privately to discuss the matter further.", outcome: "You handle the situation with grace and professionalism. You demonstrate that the hotel takes feedback seriously while moving the conversation offline. A correct and ethical choice.", scoreChange: +25 },
+                        { text: "Write an angry public response, defending the hotel and pointing out how they are exaggerating.", outcome: "You escalate the situation and make the hotel look defensive and unprofessional. This public display of immaturity will harm the hotel's reputation. An unprofessional and shortsighted choice.", scoreChange: -30 },
+                        { text: "Delete the review and block the user from the hotel's social media pages.", outcome: "You are not addressing the problem. You are attempting to hide a problem that will inevitably resurface. An unprofessional and shortsighted choice.", scoreChange: -30 },
+                        { text: "Ignore the review and hope it disappears.", outcome: "You are not addressing the problem. You are showing a lack of professionalism and a fear of confrontation. A passive and unhelpful response.", scoreChange: -20 }
+                    ]
+                },
+                {
+                    title: "The Health & Safety Violation",
+                    situation: "A guest reports a broken handrail on a staircase. You know this is a significant safety hazard that could lead to a serious injury.",
+                    options: [
+                        { text: "Immediately block off the staircase with a 'Wet Floor' sign, contact maintenance for an urgent repair, and report the issue to a manager.", outcome: "You prioritize guest safety above all else. You take swift and decisive action to prevent an injury. This is the correct and ethical course of action.", scoreChange: +40 },
+                        { text: "Tell the guest that you will take care of it, but you don’t do anything.", outcome: "You are not addressing a serious safety hazard. You are putting a guest at risk. An irresponsible and unprofessional choice.", scoreChange: -40 },
+                        { text: "Tell the guest that they should be more careful.", outcome: "You are blaming the guest for a hotel safety issue. You show a complete lack of empathy and professionalism. An unhelpful and unprofessional choice.", scoreChange: -40 },
+                        { text: "Try to fix the broken handrail yourself, even though you are not a maintenance professional.", outcome: "You are putting yourself and others at risk by attempting a repair you are not qualified to do. A reckless and unprofessional choice.", scoreChange: -25 }
+                    ]
+                },
+                {
+                    title: "The Guest with a Service Animal",
+                    situation: "A guest arrives with a large dog, which they claim is a service animal. Another guest complains loudly about the dog, saying they have an allergy.",
+                    options: [
+                        { text: "Politely inform the complaining guest that the hotel accommodates service animals as required by law, and offer to move them to a different room, explaining the situation to them.", outcome: "You correctly uphold legal obligations while managing a difficult situation with empathy and professionalism. A correct and compassionate choice.", scoreChange: +30 },
+                        { text: "Tell the guest with the dog that they need to leave the hotel with their dog.", outcome: "You are discriminating against a guest with a service animal. This is a violation of the law. An illegal and unprofessional choice.", scoreChange: -40 },
+                        { text: "Tell the complaining guest that you can't help them with their allergy and that they need to move rooms on their own.", outcome: "You show a lack of professionalism and empathy. You are not attempting to solve the problem. An unhelpful and unprofessional choice.", scoreChange: -25 },
+                        { text: "Tell the guest with the dog that they need to pay a special fee for having a dog.", outcome: "You are attempting to charge a guest for a service animal. This is a violation of the law. An illegal and unethical choice.", scoreChange: -30 }
+                    ]
+                },
+                {
+                    title: "The Drunk Guest",
+                    situation: "A visibly intoxicated guest stumbles into the lobby and starts yelling at another guest. They are being disruptive and rude.",
+                    options: [
+                        { text: "Remain calm and respectfully escort the intoxicated guest to a private area to de-escalate the situation, then call security to help them return to their room.", outcome: "You handle a difficult and potentially dangerous situation with professionalism and composure. You de-escalate the situation and ensure the safety of other guests. A correct and professional choice.", scoreChange: +35 },
+                        { text: "Yell at the drunk guest and tell them to leave the hotel.", outcome: "You are escalating the situation and putting yourself and others at risk. An unprofessional and dangerous choice.", scoreChange: -40 },
+                        { text: "Tell the other guest to leave the lobby and avoid the drunk guest.", outcome: "You are not addressing the problem. You are putting another guest at risk and telling them to get out of the way. An unhelpful and unprofessional choice.", scoreChange: -25 },
+                        { text: "Call the police immediately and tell them to arrest the drunk guest.", outcome: "You are over-reacting to the situation. You should have attempted to de-escalate the situation first. An unprofessional and shortsighted choice.", scoreChange: -20 }
+                    ]
+                },
+                {
+                    title: "The Displeased Diner",
+                    situation: "A guest in the hotel restaurant sends back their steak, claiming it is overcooked, and demands a full refund for their entire meal, even though they ate the other parts of the meal.",
+                    options: [
+                        { text: "Apologize for the inconvenience, offer to replace the steak immediately, and comp the cost of the steak from their bill.", outcome: "You address the guest's complaint directly and professionally. You provide a solution that satisfies the guest without compromising the restaurant's policies. A correct and professional choice.", scoreChange: +25 },
+                        { text: "Tell them you can't replace the steak and they can't get a refund because they ate the rest of their meal.", outcome: "You are not managing your guest's expectations or needs. You are being unhelpful and unprofessional. A shortsighted and unhelpful response.", scoreChange: -25 },
+                        { text: "Give them a full refund for their entire meal, including the parts they ate.", outcome: "You are giving away too much to the guest. You are not upholding the restaurant's policies. A shortsighted and unprofessional choice.", scoreChange: -15 },
+                        { text: "Tell the guest that they are lying and that the steak is cooked to perfection.", outcome: "You are insulting the guest and calling them a liar. You show a complete lack of professionalism and empathy. A rude and unprofessional choice.", scoreChange: -30 }
+                    ]
+                },
+                {
+                    title: "The VIP Who Demands Special Treatment",
+                    situation: "A well-known celebrity, who is not a VIP guest, demands a complimentary upgrade to the Presidential Suite, threatening to leave a negative review if they don't get what they want.",
+                    options: [
+                        { text: "Politely explain the hotel's policy, but offer a smaller perk like a complimentary breakfast or a discount on a future stay.", outcome: "You uphold hotel policy while still showing appreciation for the guest, avoiding a major loss while attempting to manage expectations. A correct and professional choice.", scoreChange: +30 },
+                        { text: "Give them the upgrade to avoid the negative review.", outcome: "You are caving to a threat. You are setting a dangerous precedent for future guests. An unprofessional and shortsighted choice.", scoreChange: -25 },
+                        { text: "Tell the celebrity that you will not give them the upgrade and you don't care if they leave a negative review.", outcome: "You show a complete lack of professionalism. You are not a professional who is willing to manage a difficult situation. A rude and unprofessional choice.", scoreChange: -30 },
+                        { text: "Tell the celebrity that you will get them the upgrade, but only if they promise to leave a positive review.", outcome: "You are attempting to manipulate a celebrity into giving you a good review. An unethical and unprofessional choice.", scoreChange: -40 }
+                    ]
+                },
+                {
+                    title: "The Guest Who is Being Followed",
+                    situation: "A frantic guest approaches the front desk, claiming to be followed by a suspicious person. They ask for help and a different room.",
+                    options: [
+                        { text: "Immediately alert security and move the guest to a new, secure room without revealing their new room number or location to anyone.", outcome: "You prioritize the guest's safety above all else. You take their concern seriously and provide them with immediate assistance. A correct and professional choice.", scoreChange: +40 },
+                        { text: "Tell the guest that you can't do anything about it and they should call the police.", outcome: "You are not a professional who is willing to help a guest in a crisis. You are abandoning your duties. A cowardly and unprofessional choice.", scoreChange: -30 },
+                        { text: "Tell the guest that you will move them, but you will need to get their information first.", outcome: "You are not prioritizing the guest's safety. You are wasting time when they are in a crisis. A passive and unhelpful response.", scoreChange: -20 },
+                        { text: "Tell the guest that you don't believe them and that they are over-reacting.", outcome: "You show a complete lack of empathy and professionalism. You are not a professional who is willing to help a guest in a crisis. An unethical and cruel choice.", scoreChange: -50 }
+                    ]
+                }
+            ];
+
+            let score = 100;
+            let currentSituationIndex = 0;
+            let currentOptions = []; // Stores the shuffled options for the current question
+            
+            const scoreElement = document.getElementById('score');
+            const situationNumberElement = document.getElementById('situation-number');
+            const situationTextElement = document.getElementById('situation-text');
+            const optionButtons = document.querySelectorAll('.option-btn');
+            const outcomeContainer = document.getElementById('outcome-container');
+            const outcomeTextElement = document.getElementById('outcome-text');
+            const nextSituationBtn = document.getElementById('next-situation-btn');
+            const scoreChangeIndicator = document.getElementById('score-change-indicator');
+            const gameContainer = document.getElementById('game-container');
+            const sharedScoreContainer = document.getElementById('shared-score-container');
+            const sharedScoreElement = document.getElementById('shared-score');
+            const playNowBtn = document.getElementById('play-now-btn');
+            const shareBtn = document.getElementById('share-btn');
+            const messageModal = document.getElementById('message-modal');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            const optionButtonsContainer = document.getElementById('option-buttons-container');
+
+            // Function to show the share modal
+            function showShareModal() {
+                messageModal.classList.remove('hidden');
+            }
+
+            // Function to handle the fallback for copying to clipboard
+            function fallbackCopyTextToClipboard(text) {
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                textArea.style.position = "fixed";
+                textArea.style.top = "0";
+                textArea.style.left = "0";
+                textArea.style.opacity = "0";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                } catch (err) {
+                    console.error('Fallback: Oops, unable to copy', err);
+                }
+                document.body.removeChild(textArea);
+            }
+
+            // Share button event listener
+            shareBtn.addEventListener('click', () => {
+                const link = window.location.href;
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(link).then(() => {
+                        showShareModal();
+                    }, (err) => {
+                        fallbackCopyTextToClipboard(link);
+                        showShareModal();
+                    });
+                } else {
+                    fallbackCopyTextToClipboard(link);
+                    showShareModal();
+                }
+            });
+
+            // Close modal button event listener
+            closeModalBtn.addEventListener('click', () => {
+                messageModal.classList.add('hidden');
+            });
+
+
+            // Function to update the score display with a transition
+            function updateScoreDisplay(newScore, change) {
+                const isPositive = change > 0;
+                scoreElement.textContent = newScore;
+                scoreChangeIndicator.textContent = `${isPositive ? '+' : ''}${change}`;
+                scoreChangeIndicator.classList.remove('text-green-600', 'text-red-600', 'opacity-0');
+                scoreChangeIndicator.classList.add(isPositive ? 'text-green-600' : 'text-red-600', 'fade-in');
+                setTimeout(() => {
+                    scoreChangeIndicator.classList.add('opacity-0');
+                }, 1000);
+            }
+
+            // Function to load the current situation (UPDATED for randomization)
+            function loadSituation() {
+                if (currentSituationIndex >= situations.length) {
+                    showFinalScore();
+                    return;
+                }
+                const situation = situations[currentSituationIndex];
+                
+                // --- Shuffle the options for randomization ---
+                currentOptions = shuffleArray([...situation.options]);
+                // ---------------------------------------------
+
+                // Hide outcome and button
+                outcomeContainer.classList.add('hidden');
+                nextSituationBtn.classList.add('hidden');
+                optionButtonsContainer.classList.remove('hidden'); // Ensure options are visible
+
+                // Reset buttons and their listeners
+                optionButtons.forEach(btn => {
+                    btn.disabled = false;
+                    btn.classList.remove('bg-gray-400', 'cursor-not-allowed', 'opacity-50');
+                    btn.classList.add('transition-colors', 'transform', 'hover:scale-105', 'duration-200');
+                    // Ensure the inline style for course color is reset
+                    btn.style.backgroundColor = 'var(--course-primary-color)'; 
+                });
+                
+                // Set situation number and text
+                situationNumberElement.textContent = currentSituationIndex + 1;
+                situationTextElement.classList.remove('fade-in');
+                void situationTextElement.offsetWidth; // Trigger reflow to restart animation
+                situationTextElement.textContent = situation.situation;
+                situationTextElement.classList.add('fade-in');
+
+                // Set option button texts using the SHUFFLED array
+                currentOptions.forEach((option, index) => {
+                    optionButtons[index].textContent = option.text;
+                });
+            }
+
+            // Function to handle option clicks (UPDATED for randomization)
+            function handleOptionClick(event) {
+                // Disable all option buttons after a choice is made
+                optionButtons.forEach(btn => {
+                    btn.disabled = true;
+                    btn.classList.remove('transition-colors', 'transform', 'hover:scale-105', 'duration-200');
+                    btn.classList.add('bg-gray-400', 'cursor-not-allowed', 'opacity-50');
+                    // Remove inline style on disabled buttons for neutral gray look
+                    btn.style.backgroundColor = ''; 
+                });
+                
+                const optionIndex = parseInt(event.target.dataset.optionIndex, 10);
+                
+                // --- Use the SHUFFLED options array to get the result ---
+                const chosenOption = currentOptions[optionIndex];
+                // --------------------------------------------------------
+                
+                // Update score and display change
+                score += chosenOption.scoreChange;
+                updateScoreDisplay(score, chosenOption.scoreChange);
+
+                // Display outcome
+                outcomeTextElement.textContent = chosenOption.outcome;
+                outcomeContainer.classList.remove('hidden');
+                nextSituationBtn.classList.remove('hidden');
+            }
+
+            // --- UPDATED FINAL SCORE FUNCTION for LeaderLab ---
+            function showFinalScore() {
+                // Save the final score and the profession to local storage
+                localStorage.setItem('finalScore', score);
+                localStorage.setItem('profession', 'Hotel & Hospitality Simulator');
+                
+                // Redirect the user to the static results page
+                window.location.href = `/leaderlab-results/?score=${score}`;
+            }
+            // ----------------------------------------------------
+
+            // --- URL Parameter Handling for Shared View ---
+            const urlParams = new URLSearchParams(window.location.search);
+            const sharedScore = urlParams.get('score');
+
+            if (sharedScore) {
+                gameContainer.classList.add('hidden');
+                sharedScoreContainer.classList.remove('hidden');
+                sharedScoreElement.textContent = sharedScore;
+                shareBtn.classList.add('hidden');
+            } else {
+                gameContainer.classList.remove('hidden');
+                sharedScoreContainer.classList.add('hidden');
+                shareBtn.classList.remove('hidden');
+            }
+
+            // Play Now button action (for the shared view)
+            playNowBtn.addEventListener('click', () => {
+                window.location.href = window.location.pathname; // Reload the page without the score parameter
+            });
+            // ----------------------------------------------
+            
+            // Attach event listeners for the game
+            optionButtons.forEach(btn => {
+                btn.addEventListener('click', handleOptionClick);
+            });
+
+            nextSituationBtn.addEventListener('click', () => {
+                currentSituationIndex++;
+                loadSituation();
+            });
+
+            // Initial load only if not in shared view
+            if (!sharedScore) {
+                loadSituation();
+            }
+        });
+    </script>
+</div>

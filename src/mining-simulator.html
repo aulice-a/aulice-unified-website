@@ -1,0 +1,108 @@
+---
+layout: base.html
+title: Mining Engineer Simulator
+permalink: /mining-simulator/
+---
+
+<div class="bg-gray-100 flex flex-col items-center min-h-screen">
+    
+    <nav class="w-full bg-gray-800 p-4 shadow-md">
+        <div class="flex items-center justify-between mx-auto max-w-7xl">
+            <ul class="flex flex-wrap items-center space-x-2 md:space-x-6 text-sm md:text-base">
+                <li><a href="https://www.aulice.ca/" class="text-gray-300 hover:text-white transition-colors">Gate</a></li>
+                <li><a href="https://aulice-about.netlify.app/" class="text-gray-300 hover:text-white transition-colors">About Us</a></li>
+                <li><a href="https://aulice-pricing-plans.netlify.app/" class="text-gray-300 hover:text-white transition-colors">Pricing Plans</a></li>
+                <li><a href="https://aulice-lexicon.netlify.app/" class="text-gray-300 hover:text-white transition-colors">Lexicon</a></li>
+                <li><a href="https://aulice-teacher-dashboard.netlify.app/" class="text-gray-300 hover:text-white transition-colors">Teacher</a></li>
+                <li><a href="https://aulice-contact.netlify.app/" class="text-gray-300 hover:text-white transition-colors">Contact</a></li>
+            </ul>
+            <button id="share-btn" class="text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-colors transform hover:scale-105 duration-200 text-sm md:text-base" style="background-color: var(--course-primary-color);">
+                Share
+            </button>
+        </div>
+    </nav>
+    
+    <div id="share-message" class="fixed bottom-4 left-1/2 -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg opacity-0 transition-opacity duration-300 ease-in-out z-50">
+        Link copied to clipboard!
+    </div>
+
+    <div class="mining-course container mx-auto p-8 bg-white shadow-2xl rounded-2xl border border-gray-200 my-8">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800">Mining Engineer Simulator</h1>
+            <p class="text-lg text-gray-500 mt-2">Make critical decisions that impact safety, efficiency, and the environment.</p>
+        </header>
+
+        <main class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-gray-50 p-6 rounded-xl border border-gray-200 shadow-inner flex flex-col justify-between">
+                <div>
+                    <h2 class="text-2xl font-semibold text-gray-700 mb-4">Situation <span id="situation-number">1</span>/10</h2>
+                    <div class="scrollable-content">
+                        <p id="situation-text" class="text-gray-600 leading-relaxed text-base fade-in">
+                            </p>
+                    </div>
+                </div>
+                <div class="mt-6 text-center">
+                    <p class="text-2xl font-extrabold" style="color: var(--course-primary-color);">Score: <span id="score">100</span></p>
+                    <p id="score-change-indicator" class="text-sm font-semibold mt-1 opacity-0 score-change">
+                        </p>
+                </div>
+            </div>
+
+            <div class="flex flex-col">
+                <div class="grid grid-cols-1 gap-4 mb-6">
+                    <button class="option-btn text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-colors transform hover:scale-105 duration-200" style="background-color: var(--course-primary-color); --tw-ring-color: var(--course-primary-color);" data-option-index="0">Option 1</button>
+                    <button class="option-btn text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-colors transform hover:scale-105 duration-200" style="background-color: var(--course-primary-color); --tw-ring-color: var(--course-primary-color);" data-option-index="1">Option 2</button>
+                    <button class="option-btn text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-colors transform hover:scale-105 duration-200" style="background-color: var(--course-primary-color); --tw-ring-color: var(--course-primary-color);" data-option-index="2">Option 3</button>
+                    <button class="option-btn text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-colors transform hover:scale-105 duration-200" style="background-color: var(--course-primary-color); --tw-ring-color: var(--course-primary-color);" data-option-index="3">Option 4</button>
+                </div>
+                
+                <div id="outcome-container" class="bg-gray-50 p-6 rounded-xl border border-gray-200 shadow-inner hidden fade-in">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Outcome:</h3>
+                    <p id="outcome-text" class="text-gray-600 leading-relaxed text-base">
+                        </p>
+                </div>
+
+                <button id="next-situation-btn" class="mt-6 bg-green-500 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-green-600 transition-colors transform hover:scale-105 duration-200 hidden">Next Situation</button>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Utility function to shuffle an array (Fisher-Yates)
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+
+            const situations = [
+                {
+                    title: "Unexpected Ground Instability",
+                    situation: "During underground tunneling, ground conditions suddenly deteriorate. Geotechnical sensors show a high risk of a minor rock burst in an active mining section. Production targets are already behind schedule, and stopping work will mean a significant financial penalty.",
+                    options: [
+                        { text: "Immediately halt all work in the affected section and begin stabilization efforts.", outcome: "You prioritize the safety of your crew above all else. By stopping work, you prevent a potentially fatal accident. The financial penalty is minor compared to the cost of a human life and a major incident. A responsible and correct decision.", scoreChange: +30 },
+                        { text: "Continue operations, but increase monitoring and alert the crew of the heightened risk.", outcome: "You choose to push forward, hoping for the best. The rock burst occurs, causing equipment damage and serious injuries to several crew members. Production is halted indefinitely by the incident and subsequent investigation. A reckless and costly mistake.", scoreChange: -40 },
+                        { text: "Temporarily pull back the crew to a safer area, but have them re-enter every hour to check for changes.", outcome: "This half-measure is a facade of caution. The crew is still exposed to risk, and the repeated entries and exits waste valuable time without significantly improving safety. The risk remains unmitigated.", scoreChange: -15 },
+                        { text: "Increase the speed of operations to finish the section before the instability can worsen.", outcome: "You rush the process, increasing the likelihood of human error and equipment failure. This a highly dangerous gamble that puts lives at risk for the sake of a deadline. A catastrophic decision.", scoreChange: -50 }
+                    ]
+                },
+                {
+                    title: "Environmental Spill at the Tailings Dam",
+                    situation: "A routine inspection reveals a small but growing leak in the tailings dam. The dam holds processed waste with heavy metals. The leak is not yet a major environmental threat, but a heavy rainstorm is forecast within 48 hours, which could exacerbate the problem and lead to a significant spill.",
+                    options: [
+                        { text: "Mobilize the emergency response team immediately to contain the leak and reinforce the dam before the storm.", outcome: "You take decisive and immediate action to prevent a major environmental disaster. By responding proactively, you protect the local ecosystem and avoid massive regulatory fines and public backlash. A prudent and highly effective choice.", scoreChange: +35 },
+                        { text: "Wait until after the storm to assess the damage and then begin repairs.", outcome: "The storm worsens the leak, leading to a major spill that contaminates a nearby river and agricultural land. The company faces a public relations crisis, immense fines, and potential legal action. A disastrous and irresponsible failure.", scoreChange: -50 },
+                        { text: "Install more sensors to monitor the leak's growth during the storm.", outcome: "While data is useful, it is not a solution. The leak will continue to grow, and you will have more data on a catastrophe you could have prevented. A passive and naive response.", scoreChange: -25 },
+                        { text: "Use temporary, low-cost fixes to slow the leak and hope for the best.", outcome: "The temporary fix fails under the pressure of the storm. The leak becomes a medium-sized spill, still causing significant environmental damage and leading to fines and a damaged reputation. An insufficient and risky choice.", scoreChange: -20 }
+                    ]
+                },
+                {
+                    title: "Balancing Production and Equipment Lifespan",
+                    situation: "Your fleet of haul trucks is nearing its recommended maintenance schedule. Your supervisor is pushing for a record-breaking quarterly production target and suggests skipping the non-critical maintenance tasks to keep the trucks running. This would save time and meet the target, but could reduce the lifespan of the equipment.",
+                    options: [
+                        { text: "Adhere to the full maintenance schedule, explaining the long-term cost benefits to your supervisor.", outcome: "You prioritize the long-term health of the operation. By ensuring proper maintenance, you prevent future breakdowns, costly repairs, and potential safety incidents. You maintain the trust of your team and protect the company’s assets. A strategic and responsible choice.", scoreChange: +25 },
+                        { text: "Skip the maintenance to meet the target and avoid conflict with your supervisor.", outcome: "The trucks suffer increased wear and

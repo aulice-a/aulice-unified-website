@@ -1,0 +1,48 @@
+layout: base.html title: LeaderLab Macro Simulators permalink: /leaderlab-macro/index.html<!-- Load Tailwind CSS framework --><script src="https://cdn.tailwindcss.com"></script><style>/* Custom style for card hover effect /.simulator-card {transition: all 0.3s ease-in-out;}.simulator-card:hover {transform: translateY(-5px);box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);}/ Ensure the grid is responsive on small screens */@media (max-width: 640px) {#simulator-grid {grid-template-columns: repeat(1, minmax(0, 1fr));}}</style><script type="module">// --- 1. COURSE DATA MAPPING (Copied from results page to populate the list) ---const COURSE_DATA = {// Slugs must match the file path of the simulator (e.g., /hotel-simulator/)'hospitality': { name: "Hotel & Hospitality", slug: "hotel-simulator", color: "#3b82f6", icon: "🏨" }, // Blue'logistics': { name: "Logistics Coordinator", slug: "logistics-coordinator", color: "#ef4444", icon: "🚛" }, // Red'mining': { name: "Mining Engineer", slug: "mining-engineer", color: "#10b981", icon: "⛏️" }, // Emerald'medical': { name: "Medical Professional", slug: "medical-professional", color: "#06b6d4", icon: "⚕️" }, // Cyan'oil-gas': { name: "Oil & Gas Professional", slug: "oil-gas-professional", color: "#f59e0b", icon: "⛽" }, // Amber'pilot': { name: "Pilot & ATC", slug: "pilot-atc-simulator", color: "#1d4ed8", icon: "✈️" }, // Dark Blue'aesthetics': { name: "Aesthetics Professional", slug: "aesthetics-professional", color: "#db2777", icon: "🌸" }, // Deep Pink'legal': { name: "Legal Professional", slug: "legal-professional", color: "#6d28d9", icon: "⚖️" }, // Purple'cabin-crew': { name: "Cabin Crew Professional", slug: "cabin-crew-simulator", color: "#f97316", icon: "🧑‍✈️" } // Orange};document.addEventListener('DOMContentLoaded', () => {const grid = document.getElementById('simulator-grid');// Create an array of all courses
+const courses = Object.values(COURSE_DATA);
+
+// Generate the HTML for each simulator card
+const cardsHtml = courses.map(course =&gt; {
+    // Construct the relative URL path to the simulator&#39;s index page
+    const simulatorUrl = `/${course.slug}/`;
+
+    return `
+        &lt;a href=&quot;${simulatorUrl}&quot; class=&quot;simulator-card block p-6 bg-white rounded-xl border border-gray-200 transition-all duration-300 transform hover:border-gray-400&quot;&gt;
+            &lt;div class=&quot;text-5xl mb-4&quot; style=&quot;color: ${course.color};&quot;&gt;${course.icon}&lt;/div&gt;
+            &lt;h3 class=&quot;text-xl font-bold text-gray-800 mb-2&quot;&gt;${course.name}&lt;/h3&gt;
+            &lt;p class=&quot;text-sm text-gray-500&quot;&gt;Start the ethical and critical thinking simulator for the ${course.name} career path.&lt;/p&gt;
+            &lt;div class=&quot;mt-4 text-sm font-semibold&quot; style=&quot;color: ${course.color};&quot;&gt;
+                Launch Simulator &amp;rarr;
+            &lt;/div&gt;
+        &lt;/a&gt;
+    `;
+}).join(&#39;&#39;);
+
+grid.innerHTML = cardsHtml;
+});</script><div class="bg-gray-50 min-h-screen py-12"><div class="container mx-auto px-4 max-w-6xl">    <!-- Hero Section -->
+    <header class="text-center mb-16 pt-16">
+        <h1 class="text-5xl md:text-6xl font-extrabold text-gray-900 mb-4">LeaderLab Macro Simulators</h1>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+            Select a professional career path below to begin your ethical and critical decision-making simulation.
+            Test your leadership skills and see your final score!
+        </p>
+    </header>
+
+    <!-- Simulator Grid -->
+    <div id="simulator-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Cards will be dynamically inserted here by JavaScript -->
+        <p class="text-center text-gray-500 col-span-full">Loading simulator options...</p>
+    </div>
+
+    <!-- Footer Call to Action -->
+    <footer class="text-center mt-20 p-8 border-t border-gray-200">
+        <h3 class="text-2xl font-bold text-gray-800 mb-3">Ready to become a Leader?</h3>
+        <p class="text-gray-600 mb-6 max-w-lg mx-auto">
+            Explore our full professional development courses to master the soft skills required for success in these fields.
+        </p>
+        <a href="https://aulice-pricing-plans.netlify.app/" target="_blank" class="inline-block bg-indigo-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition-colors hover:bg-indigo-700">
+            View Pricing Plans
+        </a>
+    </footer>
+</div>
+</div>

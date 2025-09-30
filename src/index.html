@@ -96,15 +96,28 @@ permalink: /
     </section>
 
     <script>
-        // Define the button set and activate the event listeners
-        const learnMoreBtns = document.querySelectorAll('.learn-more-btn');
-        
-        // Add event listeners to all "Learn More" buttons
-        learnMoreBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const courseName = e.currentTarget.dataset.course;
-                // This calls the global showModal function defined in base.html
-                showModal(courseName); 
+        document.addEventListener('DOMContentLoaded', () => {
+            // Define the button set and activate the event listeners
+            const learnMoreBtns = document.querySelectorAll('.learn-more-btn');
+            
+            // We must wait for the DOMContentLoaded event to ensure all elements
+            // (the buttons AND the showModal function from modal.js) are loaded.
+
+            learnMoreBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault(); // Stop default button action
+                    const courseName = e.currentTarget.dataset.course;
+                    
+                    // The global showModal function is now defined and ready to be called
+                    if (typeof showModal === 'function') {
+                        showModal(courseName); 
+                    } else {
+                        console.error('showModal function not found. Check if /js/modal.js is loaded correctly.');
+                    }
+                });
             });
+
+            // Handle the "Young Geniuses" and "Dream Achiever Plan" links
+            // Since these go to a form/quiz, they don't need the modal logic, but good practice to prevent default if needed.
         });
     </script>

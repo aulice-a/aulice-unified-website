@@ -1,0 +1,389 @@
+---
+layout: base.html
+title: Medical Professional Simulator
+permalink: /medical-simulator/
+---
+
+<div class="bg-gray-100 flex flex-col items-center min-h-screen p-4">
+
+    <div class="medical-course container mx-auto p-8 bg-white shadow-2xl rounded-2xl border border-gray-200">
+        <nav class="flex justify-between items-center mb-8">
+            <a href="https://www.aulice.ca/" class="text-xl font-bold text-gray-800">Aulice</a>
+            <div class="flex items-center space-x-4 md:space-x-6">
+                <a href="https://www.aulice.ca/" class="text-gray-600 hover:text-gray-800 transition-colors">Gate</a>
+                <a href="https://aulice-about.netlify.app/" class="text-gray-600 hover:text-gray-800 transition-colors">About us</a>
+                <a href="https://aulice-pricing-plans.netlify.app/" class="text-gray-600 hover:text-gray-800 transition-colors">Pricing Plans</a>
+                <a href="https://aulice-lexicon.netlify.app/" class="text-gray-600 hover:text-gray-800 transition-colors">Lexicon</a>
+                <a href="https://aulice-teacher-dashboard.netlify.app/" class="text-gray-600 hover:text-gray-800 transition-colors">Teacher</a>
+                <a href="https://aulice-contact.netlify.app/" class="text-gray-600 hover:text-gray-800 transition-colors">Contact</a>
+                <button id="share-btn" class="hidden text-white font-semibold py-2 px-6 rounded-full shadow-md transition-colors transform hover:scale-105 duration-200" style="background-color: var(--course-primary-color);">Share</button>
+            </div>
+        </nav>
+
+        <div id="game-container">
+            <header class="text-center mb-8">
+                <h1 class="text-4xl font-bold text-gray-800">Medical Professional Simulator</h1>
+                <p class="text-lg text-gray-500 mt-2">Test your diagnostic skills, ethical judgment, and patient care.</p>
+            </header>
+
+            <main class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-gray-50 p-6 rounded-xl border border-gray-200 shadow-inner flex flex-col justify-between">
+                    <div>
+                        <h2 class="text-2xl font-semibold text-gray-700 mb-4">Situation <span id="situation-number">1</span>/10</h2>
+                        <div class="scrollable-content">
+                            <p id="situation-text" class="text-gray-600 leading-relaxed text-base fade-in">
+                                </p>
+                        </div>
+                    </div>
+                    <div class="mt-6 text-center">
+                        <p class="text-2xl font-extrabold" style="color: var(--course-primary-color);">Score: <span id="score">100</span></p>
+                        <p id="score-change-indicator" class="text-sm font-semibold mt-1 opacity-0 score-change">
+                            </p>
+                    </div>
+                </div>
+
+                <div class="flex flex-col">
+                    <div class="grid grid-cols-1 gap-4 mb-6">
+                        <button class="option-btn text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-colors transform hover:scale-105 duration-200" style="background-color: var(--course-primary-color); --tw-ring-color: var(--course-primary-color);" data-option-index="0">Option 1</button>
+                        <button class="option-btn text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-colors transform hover:scale-105 duration-200" style="background-color: var(--course-primary-color); --tw-ring-color: var(--course-primary-color);" data-option-index="1">Option 2</button>
+                        <button class="option-btn text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-colors transform hover:scale-105 duration-200" style="background-color: var(--course-primary-color); --tw-ring-color: var(--course-primary-color);" data-option-index="2">Option 3</button>
+                        <button class="option-btn text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-colors transform hover:scale-105 duration-200" style="background-color: var(--course-primary-color); --tw-ring-color: var(--course-primary-color);" data-option-index="3">Option 4</button>
+                    </div>
+                    
+                    <div id="outcome-container" class="bg-gray-50 p-6 rounded-xl border border-gray-200 shadow-inner hidden fade-in">
+                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Outcome:</h3>
+                        <p id="outcome-text" class="text-gray-600 leading-relaxed text-base">
+                            </p>
+                    </div>
+
+                    <div id="final-buttons" class="flex flex-col md:flex-row gap-4 mt-6 hidden">
+                        <button id="next-situation-btn" class="flex-1 bg-green-500 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-green-600 transition-colors transform hover:scale-105 duration-200">Next Situation</button>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <div id="shared-score-container" class="text-center p-8 hidden">
+            <h2 class="text-5xl font-extrabold text-gray-800 mb-4">Medical Professional Simulator</h2>
+            <p class="text-2xl font-medium text-gray-600 mb-2">Someone wants to share their score with you!</p>
+            <p class="text-7xl font-black mt-8 mb-8" style="color: var(--course-primary-color);">Score: <span id="shared-score"></span></p>
+            <p class="text-lg text-gray-500 max-w-md mx-auto mb-8">This is the final score they achieved. Are you ready to beat it?</p>
+            <button id="play-now-btn" class="text-white font-semibold py-3 px-8 rounded-full shadow-lg transition-colors transform hover:scale-105 duration-200" style="background-color: var(--course-primary-color);">Play Now!</button>
+        </div>
+
+        <div id="message-modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden z-50">
+            <div class="bg-white p-6 rounded-xl shadow-2xl max-w-sm w-full text-center">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">Link Copied!</h3>
+                <p class="text-gray-600 mb-6">The shareable link has been copied to your clipboard. Share it with your friends!</p>
+                <button id="close-modal-btn" class="text-white font-semibold py-2 px-6 rounded-lg transition-colors" style="background-color: var(--course-primary-color);">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Utility function to shuffle an array (Fisher-Yates)
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+
+            const situations = [
+                {
+                    title: "The Vague Diagnosis",
+                    situation: "A 45-year-old patient presents with chronic fatigue, joint pain, and a low-grade fever that have persisted for months. Initial lab results are inconclusive. The patient is anxious and wants a definitive diagnosis immediately, but you suspect a complex autoimmune disorder that will require more tests.",
+                    options: [
+                        { text: "Order all necessary diagnostic tests at once, explaining the process to the patient and managing their expectations.", outcome: "You take a systematic, evidence-based approach. By explaining the need for further tests, you build trust with the patient and avoid a premature, incorrect diagnosis. This is the gold standard for clinical practice.", scoreChange: +25 },
+                        { text: "Prescribe a broad-spectrum antibiotic to treat a possible infection while you wait for more information.", outcome: "You give an unnecessary antibiotic, which could lead to antibiotic resistance and does not address the patient's underlying issue. This is a poor diagnostic and treatment decision.", scoreChange: -20 },
+                        { text: "Refer the patient to a specialist without further investigation.", outcome: "You pass the responsibility to another doctor without doing a proper workup. This delays a potential diagnosis and shows a lack of due diligence. This is a weak clinical decision.", scoreChange: -15 },
+                        { text: "Give a vague, speculative diagnosis to reassure the patient.", outcome: "You provide a misleading diagnosis that may calm the patient in the short term, but it is ethically wrong and could lead to unnecessary treatments or a worsening of their actual condition. This is a major medical and ethical misstep.", scoreChange: -30 }
+                    ]
+                },
+                {
+                    title: "Triage in a Crowded ER",
+                    situation: "You are the head of the emergency room on a busy night. A patient with a severe abdominal pain and a patient with a minor ankle sprain arrive at the same time. Both are demanding to be seen immediately.",
+                    options: [
+                        { text: "Prioritize the patient with abdominal pain, as their condition could be life-threatening.", outcome: "You correctly apply the principle of triage, prioritizing the patient with a potentially critical condition over the patient with a non-life-threatening injury. This is the correct and ethical approach in an emergency setting.", scoreChange: +30 },
+                        { text: "See the patient with the ankle sprain first, as their case is simpler and will clear a bed faster.", outcome: "While this might make the ER flow more efficiently, it puts a patient with a potentially serious condition at risk. A focus on efficiency over safety is a dangerous practice.", scoreChange: -25 },
+                        { text: "See the patient who is most demanding to de-escalate the situation.", outcome: "You allow the patient's demeanor to dictate the order of care, which is a major ethical failure. This could have fatal consequences and demonstrates a lack of professional judgment.", scoreChange: -40 },
+                        { text: "Tell both patients that they have to wait and do not provide an estimated time.", outcome: "You fail to communicate effectively or manage patient expectations. This will lead to frustration, and a more critical patient may leave before receiving care. A failure of patient communication.", scoreChange: -15 }
+                    ]
+                },
+                {
+                    title: "The Non-Compliant Patient",
+                    situation: "A patient with Type 2 diabetes has consistently failed to follow their dietary and medication regimen. Their blood glucose levels are dangerously high, and they are at risk of serious complications. They tell you they feel overwhelmed and don't see the point in trying.",
+                    options: [
+                        { text: "Spend time with the patient to understand their barriers and create a simplified, achievable care plan.", outcome: "You take a patient-centered approach, recognizing that medical advice is only effective if the patient can follow it. By showing empathy and working with them, you increase their likelihood of success. This is an effective and compassionate choice.", scoreChange: +20 },
+                        { text: "Tell the patient that if they don't follow the plan, they will suffer dire consequences.", outcome: "You try to motivate through fear, which can lead to the patient feeling shame, disengaging from their care, and ultimately failing to improve. This is a poor communication strategy.", scoreChange: -25 },
+                        { text: "Refer them to a dietitian and an endocrinologist and step back from their care.", outcome: "While a referral is appropriate, you should not abandon the patient. They need a team approach, and your role as a primary care provider is crucial for coordination and support. A failure of patient management.", scoreChange: -15 },
+                        { text: "Tell the patient that you cannot help them if they do not follow your advice.", outcome: "You give up on the patient, which is a significant ethical violation. This shows a complete lack of empathy and professional responsibility. A major failing of your duty.", scoreChange: -30 }
+                    ]
+                },
+                {
+                    title: "Questionable Treatment Requests",
+                    situation: "A patient with a terminal illness, for whom all conventional treatments have failed, asks you for a highly experimental and unproven therapy they saw on social media. They are desperate and insist on trying it, despite its high cost and lack of scientific evidence.",
+                    options: [
+                        { text: "Acknowledge their desperation and explain the risks, cost, and lack of evidence, while exploring legitimate palliative care options.", outcome: "You maintain a compassionate and ethical approach. You show empathy while upholding your professional duty to not harm the patient with a potentially dangerous or ineffective treatment. You guide them toward a better path. A responsible and humane decision.", scoreChange: +25 },
+                        { text: "Agree to provide the treatment to give the patient hope.", outcome: "You agree to an unproven treatment, which is a major ethical violation. You put the patient at risk and are prioritizing their feelings over your professional responsibility. An unprincipled decision.", scoreChange: -40 },
+                        { text: "Dismiss their request and tell them they are being naive.", outcome: "Your dismissal is seen as cold and unfeeling. The patient will seek help elsewhere, likely from an unqualified provider who will offer the treatment. A major communication failure.", scoreChange: -20 },
+                        { text: "Tell them to seek a second opinion.", outcome: "You avoid the difficult conversation and push the decision onto another professional. This is a cowardly and ineffective way to deal with a patient's emotional distress. A passive and unhelpful response.", scoreChange: -10 }
+                    ]
+                },
+                {
+                    title: "Handling a Medication Error",
+                    situation: "You realize you have just prescribed the wrong dosage of a common medication to a patient. The error is minor and unlikely to cause serious harm, but it is still a mistake. You can either call the patient and correct it or hope they don't notice the difference.",
+                    options: [
+                        { text: "Immediately call the patient to inform them of the error, apologize, and provide the correct prescription.", outcome: "You act with integrity and transparency. By immediately correcting the error, you prevent any potential harm to the patient and build trust. This is the correct ethical and professional action.", scoreChange: +35 },
+                        { text: "Do nothing and hope the patient doesn't notice.", outcome: "You choose to hide a mistake, which is a breach of trust and a significant ethical violation. This could lead to a more serious problem down the line and shows a lack of professional responsibility. A dishonest and dangerous choice.", scoreChange: -50 },
+                        { text: "Change the patient's record to the correct dosage and hope they don't check.", outcome: "You falsify a medical record, which is a serious crime. You also fail to inform the patient, which is a major ethical failure. A catastrophic and illegal action.", scoreChange: -40 },
+                        { text: "Wait to see if the patient has a negative reaction before calling them.", outcome: "You gamble with the patient's health. You are waiting for harm to occur before you act, which is a clear violation of your duty to protect them. A reckless and irresponsible decision.", scoreChange: -25 }
+                    ]
+                },
+                {
+                    title: "Patient Confidentiality Breach",
+                    situation: "You are on a social outing when a mutual friend asks you for details about a patient you recently treated who is also known to your social circle. The friend promises not to tell anyone, but they are very persistent.",
+                    options: [
+                        { text: "Politely but firmly explain that patient privacy laws prevent you from discussing any patient information.", outcome: "You uphold your ethical and legal duty to protect patient privacy. By respectfully declining, you maintain professional boundaries without alienating your friend. This is the only correct response.", scoreChange: +30 },
+                        { text: "Tell the friend a few minor, non-identifying details to satisfy their curiosity.", outcome: "Any information you share is a violation of HIPAA and a breach of trust. You open the door to a more serious leak and demonstrate a disregard for a fundamental professional principle. An unethical and illegal action.", scoreChange: -40 },
+                        { text: "Tell the friend you don't remember the details.", outcome: "You lie to avoid the situation. While it doesn't violate patient privacy, it is a dishonest and weak response. It doesn't enforce professional boundaries, and the friend may ask again. A cowardly and unhelpful response.", scoreChange: -15 },
+                        { text: "Tell the friend to ask the patient directly.", outcome: "You shift the responsibility to the patient, which is inappropriate and unprofessional. You are still hinting at a relationship with the patient without directly violating confidentiality. A poor choice.", scoreChange: -10 }
+                    ]
+                },
+                {
+                    title: "The Unhelpful Specialist",
+                    situation: "You have referred a patient to a specialist, but the specialist's office is slow to return calls and provides minimal information. The patient is frustrated and feels lost in the system. You need the specialist's input to continue the patient's care.",
+                    options: [
+                        { text: "Contact the specialist's office and politely but firmly insist on better communication and collaboration for the sake of the patient.", outcome: "You advocate for your patient and take responsibility for their care. By asserting your professional needs, you ensure the patient gets the coordinated care they deserve. This is the correct approach to inter-professional collaboration.", scoreChange: +25 },
+                        { text: "Tell the patient to find a different specialist.", outcome: "You abandon the patient without helping them solve the immediate problem. This is a failure of your duty to coordinate care and leaves the patient to navigate a difficult system alone. A failure of patient management.", scoreChange: -20 },
+                        { text: "Do nothing and hope the specialist gets back to you.", outcome: "Your inaction leaves the patient in limbo, delaying their care and causing them unnecessary stress. This is a passive and ineffective approach to a problem that requires your intervention. A failure of professional responsibility.", scoreChange: -30 },
+                        { text: "Escalate the issue to the hospital administration.", outcome: "This is a dramatic and premature escalation. It may damage your professional relationship with the specialist without first trying to solve the problem directly. A rigid and unhelpful response.", scoreChange: -10 }
+                    ]
+                },
+                {
+                    title: "Ethical Dilemma: Family vs. Patient",
+                    situation: "An elderly patient with full mental capacity has made a clear advance directive refusing a life-saving procedure. Their family arrives and begs you to ignore the directive and perform the procedure, as they believe the patient is not in their right mind.",
+                    options: [
+                        { text: "Uphold the patient's advance directive and gently explain to the family that their wishes cannot be legally and ethically superseded.", outcome: "You respect the patient's autonomy and legal rights. This is the only ethical and legal course of action, and it demonstrates respect for patient self-determination. A sound and ethical choice.", scoreChange: +35 },
+                        { text: "Perform the procedure, prioritizing the family's wishes.", outcome: "You violate the patient's autonomy, their legal rights, and a binding advance directive. This is a major ethical and legal breach that could lead to a lawsuit and a loss of your medical license. A catastrophic failure.", scoreChange: -50 },
+                        { text: "Attempt to convince the patient to change their mind.", outcome: "You try to coerce a patient into making a choice they have already decided against. This violates their autonomy and is a form of manipulation. An unethical and disrespectful action.", scoreChange: -20 },
+                        { text: "Ask another doctor to make the decision for you.", outcome: "You abdicate your professional responsibility and put another doctor in a difficult position. This is a cowardly and irresponsible action. A poor choice.", scoreChange: -15 }
+                    ]
+                },
+                {
+                    title: "Medical Misinformation",
+                    situation: "A patient refuses a critical, evidence-based treatment for a serious condition, stating they found a 'cure' for it on a social media video. The information they have is false and potentially dangerous.",
+                    options: [
+                        { text: "Engage with the patient, using clear, simple language to explain why the information is incorrect and present evidence-based data in a non-confrontational way.", outcome: "You address the misinformation with patience and respect for the patient's concerns. By using clear, accessible language and data, you empower them to make an informed decision. This is the most effective approach to combating misinformation.", scoreChange: +25 },
+                        { text: "Tell the patient that what they read on social media is fake and foolish.", outcome: "You dismiss the patient's beliefs, which will cause them to feel judged and disrespected. They will likely disengage from your care and seek out someone who validates their beliefs, putting themselves at risk. A poor communication strategy.", scoreChange: -30 },
+                        { text: "Refuse to treat the patient if they don't accept your recommendations.", outcome: "While you can refuse care under certain circumstances, this is a dangerous and premature action. This is a failure of your duty to educate and treat, and it could lead to the patient receiving no care at all. A confrontational and unhelpful approach.", scoreChange: -20 },
+                        { text: "Ignore the patient's claim and proceed with your recommended treatment.", outcome: "You fail to address the patient's underlying beliefs, and they will likely not adhere to your plan. Their lack of trust will make future care difficult, and they will likely seek out alternative treatments. A passive and ineffective response.", scoreChange: -15 }
+                    ]
+                },
+                {
+                    title: "Work-Life Balance and Burnout",
+                    situation: "You've been working 80-hour weeks for months, are constantly on call, and feel the effects of professional burnout. Your supervisor asks you to take on an additional high-stress case, which could be a career-defining opportunity, but you know it will push you to your limit.",
+                    options: [
+                        { text: "Decline the new case, explaining your need to prioritize your mental and physical health to maintain the quality of your work.", outcome: "You act as a responsible professional by recognizing your limits. By prioritizing your well-being, you ensure you can continue to provide quality care in the long term, preventing errors and a potential career-ending burnout. A mature and correct decision.", scoreChange: +20 },
+                        { text: "Accept the case, believing the short-term stress is worth the career opportunity.", outcome: "You push yourself past your breaking point. The stress leads to errors in judgment, and the quality of your work suffers. You eventually become so burned out that you have to take an extended leave of absence. A high-risk and unsustainable choice.", scoreChange: -30 },
+                        { text: "Accept the case and use stimulants to stay awake and focused.", outcome: "This is a dangerous and illegal act that could lead to serious harm to yourself and your patients. This shows a complete disregard for your own health and the safety of others. A catastrophic and unethical decision.", scoreChange: -50 },
+                        { text: "Tell your supervisor that you will take the case, but only if they give you a raise.", outcome: "You turn a professional and health concern into a negotiation. This is seen as opportunistic and unprofessional, and it does not address the underlying issue of burnout. An unprofessional and ineffective response.", scoreChange: -15 }
+                    ]
+                }
+            ];
+
+            let score = 100;
+            let currentSituationIndex = 0;
+            let currentOptions = []; // Stores the shuffled options for the current question
+
+            const scoreElement = document.getElementById('score');
+            const situationNumberElement = document.getElementById('situation-number');
+            const situationTextElement = document.getElementById('situation-text');
+            const optionButtons = document.querySelectorAll('.option-btn');
+            const outcomeContainer = document.getElementById('outcome-container');
+            const outcomeTextElement = document.getElementById('outcome-text');
+            const finalButtonsContainer = document.getElementById('final-buttons');
+            const nextSituationBtn = document.getElementById('next-situation-btn');
+            const scoreChangeIndicator = document.getElementById('score-change-indicator');
+            const gameContainer = document.getElementById('game-container');
+            const sharedScoreContainer = document.getElementById('shared-score-container');
+            const sharedScoreElement = document.getElementById('shared-score');
+            const playNowBtn = document.getElementById('play-now-btn');
+            const messageModal = document.getElementById('message-modal');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            const shareBtn = document.getElementById('share-btn');
+            
+            // Function to update the score display with a transition
+            function updateScoreDisplay(newScore, change) {
+                const isPositive = change > 0;
+                scoreElement.textContent = newScore;
+                scoreChangeIndicator.textContent = `${isPositive ? '+' : ''}${change}`;
+                scoreChangeIndicator.classList.remove('text-green-600', 'text-red-600', 'opacity-0');
+                scoreChangeIndicator.classList.add(isPositive ? 'text-green-600' : 'text-red-600', 'fade-in');
+                setTimeout(() => {
+                    scoreChangeIndicator.classList.add('opacity-0');
+                }, 1000);
+            }
+
+            // Function to load the current situation (UPDATED for randomization)
+            function loadSituation() {
+                if (currentSituationIndex >= situations.length) {
+                    showFinalScore();
+                    return;
+                }
+                const situation = situations[currentSituationIndex];
+                
+                // --- Shuffle the options for randomization ---
+                currentOptions = shuffleArray([...situation.options]);
+                // ---------------------------------------------
+
+                // Hide outcome and buttons
+                outcomeContainer.classList.add('hidden');
+                finalButtonsContainer.classList.add('hidden');
+                
+                // Reset buttons and their listeners
+                optionButtons.forEach(btn => {
+                    btn.disabled = false;
+                    btn.classList.remove('bg-gray-400', 'cursor-not-allowed', 'opacity-50');
+                    btn.classList.add('transition-colors', 'transform', 'hover:scale-105', 'duration-200');
+                    // Ensure the inline style for course color is reset
+                    btn.style.backgroundColor = 'var(--course-primary-color)'; 
+                });
+                
+                // Set situation number and text
+                situationNumberElement.textContent = currentSituationIndex + 1;
+                situationTextElement.classList.remove('fade-in');
+                void situationTextElement.offsetWidth; // Trigger reflow to restart animation
+                situationTextElement.textContent = situation.situation;
+                situationTextElement.classList.add('fade-in');
+
+                // Set option button texts using the SHUFFLED array
+                currentOptions.forEach((option, index) => {
+                    optionButtons[index].textContent = option.text;
+                });
+            }
+
+            // Function to handle option clicks (UPDATED for randomization)
+            function handleOptionClick(event) {
+                // Disable all option buttons after a choice is made
+                optionButtons.forEach(btn => {
+                    btn.disabled = true;
+                    btn.classList.remove('transition-colors', 'transform', 'hover:scale-105', 'duration-200');
+                    btn.classList.add('bg-gray-400', 'cursor-not-allowed', 'opacity-50');
+                    // Remove inline style on disabled buttons for neutral gray look
+                    btn.style.backgroundColor = ''; 
+                });
+                
+                const optionIndex = parseInt(event.target.dataset.optionIndex, 10);
+                
+                // --- Use the SHUFFLED options array to get the result ---
+                const chosenOption = currentOptions[optionIndex];
+                // --------------------------------------------------------
+                
+                // Update score and display change
+                score += chosenOption.scoreChange;
+                updateScoreDisplay(score, chosenOption.scoreChange);
+
+                // Display outcome
+                outcomeTextElement.textContent = chosenOption.outcome;
+                outcomeContainer.classList.remove('hidden');
+                finalButtonsContainer.classList.remove('hidden');
+            }
+
+            // --- UPDATED FINAL SCORE FUNCTION ---
+            function showFinalScore() {
+                // Save the final score and the profession to local storage
+                localStorage.setItem('finalScore', score);
+                localStorage.setItem('profession', 'Medical Professional Simulator');
+                
+                // Redirect the user to the static results page
+                window.location.href = `/leaderlab-results/?score=${score}`;
+            }
+            // ----------------------------------------------
+            
+            // Function to show the share modal
+            function showShareModal() {
+                messageModal.classList.remove('hidden');
+            }
+
+            // Function to handle the fallback for copying to clipboard
+            function fallbackCopyTextToClipboard(text) {
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                textArea.style.position = "fixed";
+                textArea.style.top = "0";
+                textArea.style.left = "0";
+                textArea.style.opacity = "0";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                } catch (err) {
+                    console.error('Fallback: Oops, unable to copy', err);
+                }
+                document.body.removeChild(textArea);
+            }
+
+            // Share button event listener
+            shareBtn.addEventListener('click', () => {
+                const link = window.location.href;
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(link).then(() => {
+                        showShareModal();
+                    }, (err) => {
+                        fallbackCopyTextToClipboard(link);
+                        showShareModal();
+                    });
+                } else {
+                    fallbackCopyTextToClipboard(link);
+                    showShareModal();
+                }
+            });
+
+            // Close modal button event listener
+            closeModalBtn.addEventListener('click', () => {
+                messageModal.classList.add('hidden');
+            });
+
+            // --- URL Parameter Handling for Shared View ---
+            const urlParams = new URLSearchParams(window.location.search);
+            const sharedScore = urlParams.get('score');
+
+            if (sharedScore) {
+                gameContainer.classList.add('hidden');
+                sharedScoreContainer.classList.remove('hidden');
+                sharedScoreElement.textContent = sharedScore;
+            } else {
+                gameContainer.classList.remove('hidden');
+                sharedScoreContainer.classList.add('hidden');
+                // Only show the Share button when playing the game
+                shareBtn.classList.remove('hidden');
+            }
+
+            // Play Now button action (for the shared view)
+            playNowBtn.addEventListener('click', () => {
+                window.location.href = window.location.pathname; // Reload the page without the score parameter
+            });
+            // ----------------------------------------------
+
+            // Attach event listeners for the game
+            optionButtons.forEach(btn => {
+                btn.addEventListener('click', handleOptionClick);
+            });
+
+            nextSituationBtn.addEventListener('click', () => {
+                currentSituationIndex++;
+                loadSituation();
+            });
+
+            // Initial load only if not in shared view
+            if (!sharedScore) {
+                loadSituation();
+            }
+        });
+    </script>
+</div>

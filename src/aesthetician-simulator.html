@@ -1,0 +1,390 @@
+---
+layout: base.html
+title: Esthetician Professional Simulator
+permalink: /esthetician-simulator/
+---
+
+<div class="bg-gray-100 flex flex-col items-center min-h-screen">
+    <header class="fixed top-0 left-0 right-0 z-50 bg-white shadow-lg py-4 px-8 flex justify-between items-center">
+        <nav class="flex space-x-6 text-gray-700 font-medium">
+            <a href="https://www.aulice.ca/" target="_blank" class="hover:text-gray-800 transition-colors duration-200">Gate</a>
+            <a href="https://aulice-about.netlify.app/" target="_blank" class="hover:text-gray-800 transition-colors duration-200">About us</a>
+            <a href="https://aulice-pricing-plans.netlify.app/" target="_blank" class="hover:text-gray-800 transition-colors duration-200">Pricing Plans</a>
+            <a href="https://aulice-lexicon.netlify.app/" target="_blank" class="hover:text-gray-800 transition-colors duration-200">Lexicon</a>
+            <a href="https://aulice-teacher-dashboard.netlify.app/" target="_blank" class="hover:text-gray-800 transition-colors duration-200">Teacher</a>
+            <a href="https://aulice-contact.netlify.app/" target="_blank" class="hover:text-gray-800 transition-colors duration-200">Contact</a>
+        </nav>
+        <button id="share-btn" class="text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-colors" style="background-color: var(--course-primary-color);">
+            Share
+        </button>
+    </header>
+
+    <div class="esthetician-course container mx-auto p-8 bg-white shadow-2xl rounded-2xl border border-gray-200 mt-20">
+        <div id="game-container">
+            <header class="text-center mb-8">
+                <h1 class="text-4xl font-bold text-gray-800">Esthetician Professional Simulator</h1>
+                <p class="text-lg text-gray-500 mt-2">Diagnose skin conditions and apply the right treatment plan.</p>
+            </header>
+
+            <main class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-gray-50 p-6 rounded-xl border border-gray-200 shadow-inner flex flex-col justify-between">
+                    <div>
+                        <h2 class="text-2xl font-semibold text-gray-700 mb-4">Situation <span id="situation-number">1</span>/10</h2>
+                        <div class="scrollable-content">
+                            <p id="situation-text" class="text-gray-600 leading-relaxed text-base fade-in">
+                                </p>
+                        </div>
+                    </div>
+                    <div class="mt-6 text-center">
+                        <p class="text-2xl font-extrabold" style="color: var(--course-primary-color);">Score: <span id="score">100</span></p>
+                        <p id="score-change-indicator" class="text-sm font-semibold mt-1 opacity-0 score-change">
+                            </p>
+                    </div>
+                </div>
+
+                <div class="flex flex-col">
+                    <div id="option-buttons-container" class="grid grid-cols-1 gap-4 mb-6">
+                        <button class="option-btn text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-colors transform hover:scale-105 duration-200" style="background-color: var(--course-primary-color);" data-option-index="0">Option 1</button>
+                        <button class="option-btn text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-colors transform hover:scale-105 duration-200" style="background-color: var(--course-primary-color);" data-option-index="1">Option 2</button>
+                        <button class="option-btn text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-colors transform hover:scale-105 duration-200" style="background-color: var(--course-primary-color);" data-option-index="2">Option 3</button>
+                        <button class="option-btn text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-colors transform hover:scale-105 duration-200" style="background-color: var(--course-primary-color);" data-option-index="3">Option 4</button>
+                    </div>
+                    
+                    <div id="outcome-container" class="bg-gray-50 p-6 rounded-xl border border-gray-200 shadow-inner hidden fade-in">
+                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Outcome:</h3>
+                        <p id="outcome-text" class="text-gray-600 leading-relaxed text-base">
+                            </p>
+                    </div>
+
+                    <div id="final-buttons" class="flex flex-col md:flex-row gap-4 mt-6">
+                        <button id="next-situation-btn" class="flex-1 bg-green-500 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-green-600 transition-colors transform hover:scale-105 duration-200 hidden">Next Situation</button>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <div id="shared-score-container" class="text-center p-8 hidden">
+            <h2 class="text-5xl font-extrabold text-gray-800 mb-4">Esthetician Professional Simulator</h2>
+            <p class="text-2xl font-medium text-gray-600 mb-2">Someone wants to share their score with you!</p>
+            <p class="text-7xl font-black mt-8 mb-8" style="color: var(--course-primary-color);">Score: <span id="shared-score"></span></p>
+            <p class="text-lg text-gray-500 max-w-md mx-auto mb-8">This is the final score they achieved. Are you ready to beat it?</p>
+            <button id="play-now-btn" class="text-white font-semibold py-3 px-8 rounded-full shadow-lg transition-colors transform hover:scale-105 duration-200" style="background-color: var(--course-primary-color);">Play Now!</button>
+        </div>
+
+        <div id="message-modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden z-50">
+            <div class="bg-white p-6 rounded-xl shadow-2xl max-w-sm w-full text-center">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">Link Copied!</h3>
+                <p class="text-gray-600 mb-6">The shareable link has been copied to your clipboard. Share it with your friends!</p>
+                <button id="close-modal-btn" class="text-white font-semibold py-2 px-6 rounded-lg transition-colors" style="background-color: var(--course-primary-color);">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Utility function to shuffle an array (Fisher-Yates)
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+
+            const situations = [
+                {
+                    title: "The Allergic Reaction",
+                    situation: "A new client has a history of sensitive skin. During a facial, they begin to experience intense redness, itching, and a mild swelling around their eyes after you apply a new enzyme peel containing bromelain (pineapple).",
+                    options: [
+                        { text: "Immediately remove the product with cool water and a mild, soothing cleanser. Apply a cold compress and an anti-inflammatory serum (like chamomile or colloidal oatmeal). Document the reaction and recommend an antihistamine if necessary.", outcome: "You prioritize the client's safety and stop the reaction quickly. Your immediate, soothing action minimizes damage. This demonstrates excellent product knowledge and professional crisis management.", scoreChange: +40 },
+                        { text: "Apply a stronger neutralizer and continue the facial, assuring the client that 'a little redness is normal with this product.'", outcome: "You ignore clear signs of an adverse reaction, potentially causing burns or severe irritation. This is a severe breach of client safety and professional ethics.", scoreChange: -50 },
+                        { text: "Ask the client what they want you to do, saying you've never seen this before.", outcome: "You show a lack of confidence and training in handling adverse reactions. While you stop the product, your indecision increases the client's anxiety and lengthens the reaction time.", scoreChange: -25 },
+                        { text: "Massage the area to try and work the product deeper into the skin to calm the irritation.", outcome: "You worsen the reaction by increasing circulation and pushing the allergen further into the skin. A dangerous and counter-intuitive action.", scoreChange: -40 }
+                    ]
+                },
+                {
+                    title: "Acne Vulgaris Treatment",
+                    situation: "A young client comes in with Grade 3 Acne Vulgaris (numerous inflamed pustules, papules, and some nodules). They insist on a deep manual extraction session to clear everything immediately.",
+                    options: [
+                        { text: "Explain that aggressive manual extraction on inflamed nodules can cause scarring and spread bacteria. Recommend a gentle facial with LED blue light therapy and a high-frequency treatment, followed by a prescription-strength home-care regimen.", outcome: "You correctly assess the skin condition and choose a treatment focused on reducing inflammation and killing P. acnes bacteria without risking trauma or scarring. This demonstrates superior knowledge of acne management.", scoreChange: +35 },
+                        { text: "Perform the deep manual extractions as requested, hoping to satisfy the client's immediate desire for clearance.", outcome: "You cause significant trauma, leading to post-inflammatory hyperpigmentation (PIH) and potential permanent scarring, making the long-term problem worse. A poor professional decision.", scoreChange: -30 },
+                        { text: "Suggest an aggressive microdermabrasion to 'slough off the top layer' and immediately reduce the breakouts.", outcome: "Microdermabrasion can spread bacteria and should never be used over inflamed pustules. This would exacerbate the inflammation and risk serious infection.", scoreChange: -40 },
+                        { text: "Tell the client they need to see a dermatologist immediately and refuse any treatment.", outcome: "While a referral is appropriate, refusing all aesthetic treatment is poor service. You should offer supportive, non-invasive treatment while recommending the referral. A rigid and unhelpful response.", scoreChange: -15 }
+                    ]
+                },
+                {
+                    title: "Hyperpigmentation vs. Melasma",
+                    situation: "A client has patches of darker skin on her forehead and upper lip, which are more prominent after a recent summer vacation. She asks for the strongest available chemical peel to remove them.",
+                    options: [
+                        { text: "Determine if it's sun-induced hyperpigmentation or hormonal melasma. If Melasma, recommend a mild Kojic acid peel (30-45 days apart) combined with strict, daily, broad-spectrum sunscreen and a Vitamin C serum, explaining that strong peels can worsen melasma.", outcome: "You correctly differentiate the two conditions and understand that heat/inflammation (caused by strong peels) can trigger a rebound effect in melasma. Your holistic approach is safer and more effective for long-term management.", scoreChange: +35 },
+                        { text: "Apply a 50% Glycolic Acid peel immediately, assuming it's standard sun damage that needs an aggressive treatment.", outcome: "If the condition is melasma, the heat and trauma from the strong peel will cause a severe rebound effect, making the dark patches larger and darker than before. A major professional misstep.", scoreChange: -40 },
+                        { text: "Suggest a series of deep microneedling treatments to break up the pigment.", outcome: "Microneedling is inflammatory and can often worsen melasma/hyperpigmentation. It is too risky without pre-treating the pigment first. An inappropriate treatment choice.", scoreChange: -20 },
+                        { text: "Recommend she buy a brightening serum and just apply it daily for a few weeks without any professional treatment.", outcome: "You fail to provide the necessary professional intervention (like a peel or strong in-office products) required for significant pigment reduction. A passive and inadequate treatment plan.", scoreChange: -10 }
+                    ]
+                },
+                {
+                    title: "Contagious Condition Identification",
+                    situation: "During a consultation for a full body wax, you notice a cluster of small, dome-shaped, pearly papules on the client's inner thigh. The client says they are 'just blemishes.'",
+                    options: [
+                        { text: "Politely state that for safety, you cannot proceed with the wax in that area until the condition is diagnosed, as it resembles Molluscum Contagiosum, and refer them to a dermatologist.", outcome: "You correctly identify a potentially contagious viral skin condition (Molluscum) and adhere to strict sanitation protocols by refusing treatment. This protects the client from spreading it to other parts of their body and protects your tools/other clients. Excellent clinical and safety judgment.", scoreChange: +50 },
+                        { text: "Proceed with the wax, taking extra care not to remove any of the bumps, as 'the client is always right.'", outcome: "You risk tearing the lesions, which will shed the virus onto the waxing strip, potentially infecting the client further or contaminating your workspace. A severe breach of safety protocol.", scoreChange: -50 },
+                        { text: "Try to manually extract the contents of the bumps, thinking they are stubborn clogged pores.", outcome: "You actively rupture the viral lesions, causing them to spread immediately and contaminate your tools. A dangerous and completely inappropriate action.", scoreChange: -45 },
+                        { text: "Cover the area with a large bandage and proceed with the wax on the surrounding skin.", outcome: "While minimizing risk, you do not address the need for a medical referral, and the client may still be contagious or require separate treatment. An incomplete professional action.", scoreChange: -20 }
+                    ]
+                },
+                {
+                    title: "The Unrealistic Expectation",
+                    situation: "A 55-year-old client with significant sun damage and deep wrinkles books a single basic microcurrent session and expects it to achieve the results of a facelift.",
+                    options: [
+                        { text: "Provide a realistic consultation: explain that microcurrent offers subtle muscle toning and recommend a tailored package of 8-12 weekly sessions combined with a retinoid/peptide home-care plan to address their specific concerns.", outcome: "You manage expectations honestly, educate the client on the limitations of the treatment, and provide a clear, professional, multi-session plan for noticeable, sustainable results. Excellent sales and ethics.", scoreChange: +30 },
+                        { text: "Tell them the microcurrent treatment will definitely give them 'instant, youthful results' to secure the booking.", outcome: "You make false claims, leading to client dissatisfaction, a request for a refund, and damage to your reputation. A highly unethical and unprofessional sales tactic.", scoreChange: -40 },
+                        { text: "Suggest a much more expensive, invasive laser treatment that you don't offer, to shift the blame for the lack of results.", outcome: "You are unhelpful and fail to offer a constructive treatment path within your scope of practice. A poor service decision.", scoreChange: -20 },
+                        { text: "Perform the single session without saying anything, knowing they will be disappointed but at least you got the immediate revenue.", outcome: "You knowingly fail to deliver a necessary result, guaranteeing a one-time customer and poor word-of-mouth. A shortsighted and unprofessional choice.", scoreChange: -15 }
+                    ]
+                },
+                {
+                    title: "Post-Wax Ingrown Hairs",
+                    situation: "A long-time client calls you complaining of numerous painful, inflamed bumps and pus-filled pustules in the bikini area 48 hours after her Brazilian wax. She believes you did something wrong.",
+                    options: [
+                        { text: "Listen empathetically. Explain it's likely folliculitis or severe ingrown hairs. Recommend applying a cool compress, a mild salicylic acid product (or ingrown serum), and advise against picking. Invite her back for a complimentary follow-up check.", outcome: "You validate the client's concern, provide the correct advice (salicylic acid is excellent for exfoliation/inflammation), and offer a free check-in to ensure loyalty. This is the correct, professional, and empathetic response.", scoreChange: +35 },
+                        { text: "Tell her she must have used a cheap lotion or soap at home and that the issue is not your responsibility.", outcome: "You deflect blame, damage the client relationship, and fail to provide the necessary aftercare advice, leading to a loss of a long-term client. An unprofessional and poor service response.", scoreChange: -30 },
+                        { text: "Suggest immediately applying a thick, heavy moisturizer to soothe the inflammation.", outcome: "Thick, heavy moisturizers will clog the already inflamed hair follicles, making the condition worse. Inappropriate aftercare advice.", scoreChange: -25 },
+                        { text: "Suggest she use a pair of tweezers to dig out all the ingrown hairs immediately.", outcome: "Promoting self-extraction of ingrown hairs leads to severe infection, scarring, and post-inflammatory hyperpigmentation (PIH). A dangerous recommendation.", scoreChange: -40 }
+                    ]
+                },
+                {
+                    title: "Cross-Contamination during Extractions",
+                    situation: "You are performing extractions on a client. You accidentally touch the tip of your comedone extractor to the countertop before using it on a new area of the client’s face.",
+                    options: [
+                        { text: "Immediately stop, discard the extractor, and sanitize a new, sterile extractor tool before continuing. Verbally apologize to the client and explain the need to maintain a sanitary workspace.", outcome: "You recognize the cross-contamination risk, take immediate corrective action by replacing the tool, and communicate transparently. This upholds the highest standards of sanitation and client trust.", scoreChange: +40 },
+                        { text: "Quickly wipe the tip on a dry cotton pad and continue the extractions, hoping the client didn't notice the slip-up.", outcome: "Wiping a tool on a dry pad does not sanitize it. You risk transferring countertop bacteria to an open follicle, causing infection. A reckless breach of sanitation protocol.", scoreChange: -45 },
+                        { text: "Spray the tip with a mist of water and keep using the same tool to save time.", outcome: "Water does not sanitize. You are actively introducing moisture and bacteria into the service area. An incorrect and unsafe action.", scoreChange: -30 },
+                        { text: "Tell the client that your tools are 'self-cleaning' and continue as planned.", outcome: "You lie to the client, fail to maintain basic hygiene, and risk infection. Highly unethical and unprofessional.", scoreChange: -50 }
+                    ]
+                },
+                {
+                    title: "The Unlicensed Service Request",
+                    situation: "A new client asks you to perform a deep-level TCA chemical peel, which is a service requiring a medical license or a high-level advanced license that you do not possess.",
+                    options: [
+                        { text: "Politely decline, explaining that the requested peel is outside your scope of practice and licensing. Refer them to a board-certified dermatologist or plastic surgeon who can legally perform the procedure.", outcome: "You adhere to your professional license and ethical boundaries. Referral to an appropriate professional is the correct and responsible action.", scoreChange: +45 },
+                        { text: "Attempt the peel using a lower-grade product, but tell the client it is the strong TCA peel they requested.", outcome: "You deceive the client and risk a severe reaction by using a product whose effects you may not be prepared to manage. A major breach of ethics and safety regulations.", scoreChange: -50 },
+                        { text: "Agree to do the peel, but only if the client signs a waiver taking full responsibility for any side effects.", outcome: "Waivers do not absolve you of responsibility for operating outside your licensed scope of practice. This is illegal and highly dangerous for the client.", scoreChange: -50 },
+                        { text: "Suggest a microdermabrasion instead, without explaining why you can't do the peel.", outcome: "You fail to address the client's actual concern and avoid educating them on your professional limitations. A vague and unhelpful substitution.", scoreChange: -20 }
+                    ]
+                },
+                {
+                    title: "Client is Using Accutane",
+                    situation: "A client who has booked a full-face wax and dermaplaning treatment reveals during the intake form that they started using the prescription acne medication Accutane (isotretinoin) two weeks ago.",
+                    options: [
+                        { text: "Politely inform the client that due to the risk of severe skin tearing, flaking, and scarring, you must *cancel* both the wax and the dermaplaning. Recommend a calming facial treatment instead, or advise them to wait 6-12 months post-Accutane before scheduling those services.", outcome: "You correctly identify the absolute contraindication. Accutane thins and sensitizes the skin, making all abrasive or hair-removal services highly dangerous. This is the correct, safest, and most professional decision.", scoreChange: +50 },
+                        { text: "Just do the dermaplaning, but skip the waxing, believing the blade is gentler than the wax strip.", outcome: "Dermaplaning is still a form of exfoliation and abrasion that is highly dangerous on Accutane-sensitized skin, risking severe irritation and tearing. A major safety error.", scoreChange: -40 },
+                        { text: "Proceed with the wax but use a gentler, low-temperature wax.", outcome: "Even low-temperature wax will adhere too strongly to the thinned epidermis, likely causing the skin to lift and tear, resulting in painful raw patches. A severe safety risk.", scoreChange: -45 },
+                        { text: "Perform both services, but use the coolest setting on your steamer to try and soothe the skin during the treatment.", outcome: "Steaming will not mitigate the internal thinning effect of the Accutane and is irrelevant to the risk of tearing. A reckless continuation of treatment.", scoreChange: -30 }
+                    ]
+                },
+                {
+                    title: "Product Upsell Pressure",
+                    situation: "A client who just received a calming facial leaves without purchasing any of the recommended $200 home-care products, even though you know their cleanser is harsh and drying.",
+                    options: [
+                        { text: "Send a polite, follow-up email/text in 48 hours, highlighting *one* key product (like a mild cleanser) and its *direct benefit* to their skin goal (calming), along with a link to purchase it online.", outcome: "You respect the client's boundary while providing a thoughtful, targeted follow-up that educates them and gently encourages a future purchase. This is ethical, professional, and effective marketing.", scoreChange: +30 },
+                        { text: "Immediately call the client on their phone and tell them they are sabotaging their results by not buying the recommended line.", outcome: "You use high-pressure tactics that feel intrusive and aggressive, damaging the client relationship and ensuring they will not return. Highly unprofessional.", scoreChange: -40 },
+                        { text: "Leave it alone; if they want the products, they will come back for them.", outcome: "You miss a professional opportunity to educate the client and reinforce the importance of home-care, which is critical for their results and your long-term success. A passive and unhelpful response.", scoreChange: -15 },
+                        { text: "Mail them free samples of all the recommended products hoping to hook them.", outcome: "This is costly and unnecessary. A targeted, professional communication is more effective than giving away expensive product. An inefficient and unhelpful choice.", scoreChange: -20 }
+                    ]
+                }
+            ];
+
+            let score = 100;
+            let currentSituationIndex = 0;
+            let currentOptions = []; // Stores the shuffled options for the current question
+
+            const scoreElement = document.getElementById('score');
+            const situationNumberElement = document.getElementById('situation-number');
+            const situationTextElement = document.getElementById('situation-text');
+            const optionButtons = document.querySelectorAll('.option-btn');
+            const outcomeContainer = document.getElementById('outcome-container');
+            const outcomeTextElement = document.getElementById('outcome-text');
+            const nextSituationBtn = document.getElementById('next-situation-btn');
+            const scoreChangeIndicator = document.getElementById('score-change-indicator');
+            const shareBtn = document.getElementById('share-btn');
+            const gameContainer = document.getElementById('game-container');
+            const sharedScoreContainer = document.getElementById('shared-score-container');
+            const sharedScoreElement = document.getElementById('shared-score');
+            const playNowBtn = document.getElementById('play-now-btn');
+            const messageModal = document.getElementById('message-modal');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            const optionButtonsContainer = document.getElementById('option-buttons-container');
+
+            // Function to update the score display with a transition
+            function updateScoreDisplay(newScore, change) {
+                const isPositive = change > 0;
+                scoreElement.textContent = newScore;
+                scoreChangeIndicator.textContent = `${isPositive ? '+' : ''}${change}`;
+                scoreChangeIndicator.classList.remove('text-green-600', 'text-red-600', 'opacity-0');
+                scoreChangeIndicator.classList.add(isPositive ? 'text-green-600' : 'text-red-600', 'fade-in');
+                setTimeout(() => {
+                    scoreChangeIndicator.classList.add('opacity-0');
+                }, 1000);
+            }
+
+            // Function to load the current situation (UPDATED for randomization)
+            function loadSituation() {
+                if (currentSituationIndex >= situations.length) {
+                    showFinalScore();
+                    return;
+                }
+                const situation = situations[currentSituationIndex];
+                
+                // --- Shuffle the options for randomization ---
+                currentOptions = shuffleArray([...situation.options]);
+                // ---------------------------------------------
+                
+                // Hide outcome and button
+                outcomeContainer.classList.add('hidden');
+                nextSituationBtn.classList.add('hidden');
+                optionButtonsContainer.classList.remove('hidden'); // Ensure options are visible
+
+                // Reset buttons and their listeners
+                optionButtons.forEach(btn => {
+                    btn.disabled = false;
+                    btn.classList.remove('bg-gray-400', 'cursor-not-allowed', 'opacity-50');
+                    btn.classList.add('transition-colors', 'transform', 'hover:scale-105', 'duration-200');
+                    // Ensure the inline style for course color is reset
+                    btn.style.backgroundColor = 'var(--course-primary-color)'; 
+                });
+                
+                // Set situation number and text
+                situationNumberElement.textContent = currentSituationIndex + 1;
+                situationTextElement.classList.remove('fade-in');
+                void situationTextElement.offsetWidth; // Trigger reflow to restart animation
+                situationTextElement.textContent = situation.situation;
+                situationTextElement.classList.add('fade-in');
+
+                // Set option button texts using the SHUFFLED array
+                currentOptions.forEach((option, index) => {
+                    optionButtons[index].textContent = option.text;
+                });
+            }
+
+            // Function to handle option clicks (UPDATED for randomization)
+            function handleOptionClick(event) {
+                // Disable all option buttons after a choice is made
+                optionButtons.forEach(btn => {
+                    btn.disabled = true;
+                    btn.classList.remove('transition-colors', 'transform', 'hover:scale-105', 'duration-200');
+                    btn.classList.add('bg-gray-400', 'cursor-not-allowed', 'opacity-50');
+                    // Remove inline style on disabled buttons for neutral gray look
+                    btn.style.backgroundColor = ''; 
+                });
+                
+                const optionIndex = parseInt(event.target.dataset.optionIndex, 10);
+                
+                // --- Use the SHUFFLED options array to get the result ---
+                const chosenOption = currentOptions[optionIndex];
+                // --------------------------------------------------------
+                
+                // Update score and display change
+                score += chosenOption.scoreChange;
+                updateScoreDisplay(score, chosenOption.scoreChange);
+
+                // Display outcome
+                outcomeTextElement.textContent = chosenOption.outcome;
+                outcomeContainer.classList.remove('hidden');
+                nextSituationBtn.classList.remove('hidden');
+            }
+
+            // --- UPDATED FINAL SCORE FUNCTION ---
+            function showFinalScore() {
+                // Save the final score and the profession to local storage
+                localStorage.setItem('finalScore', score);
+                localStorage.setItem('profession', 'Esthetician Professional Simulator');
+                
+                // Redirect the user to the static results page
+                window.location.href = `/leaderlab-results/?score=${score}`;
+            }
+            // ----------------------------------------------
+            
+            // Function to show the share modal
+            function showShareModal() {
+                messageModal.classList.remove('hidden');
+            }
+
+            // Function to handle the fallback for copying to clipboard
+            function fallbackCopyTextToClipboard(text) {
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                textArea.style.position = "fixed";
+                textArea.style.top = "0";
+                textArea.style.left = "0";
+                textArea.style.opacity = "0";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                } catch (err) {
+                    console.error('Fallback: Oops, unable to copy', err);
+                }
+                document.body.removeChild(textArea);
+            }
+
+            // Share button event listener
+            shareBtn.addEventListener('click', () => {
+                const link = window.location.href;
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(link).then(() => {
+                        showShareModal();
+                    }, (err) => {
+                        fallbackCopyTextToClipboard(link);
+                        showShareModal();
+                    });
+                } else {
+                    fallbackCopyTextToClipboard(link);
+                    showShareModal();
+                }
+            });
+
+            // Close modal button event listener
+            closeModalBtn.addEventListener('click', () => {
+                messageModal.classList.add('hidden');
+            });
+
+            // --- URL Parameter Handling for Shared View ---
+            const urlParams = new URLSearchParams(window.location.search);
+            const sharedScore = urlParams.get('score');
+
+            if (sharedScore) {
+                gameContainer.classList.add('hidden');
+                sharedScoreContainer.classList.remove('hidden');
+                sharedScoreElement.textContent = sharedScore;
+                shareBtn.classList.add('hidden');
+            } else {
+                gameContainer.classList.remove('hidden');
+                sharedScoreContainer.classList.add('hidden');
+                shareBtn.classList.remove('hidden');
+            }
+
+            // Play Now button action (for the shared view)
+            playNowBtn.addEventListener('click', () => {
+                window.location.href = window.location.pathname; // Reload the page without the score parameter
+            });
+            // ----------------------------------------------
+
+            // Attach event listeners for the game
+            optionButtons.forEach(btn => {
+                btn.addEventListener('click', handleOptionClick);
+            });
+
+            nextSituationBtn.addEventListener('click', () => {
+                currentSituationIndex++;
+                loadSituation();
+            });
+
+            // Initial load only if not in shared view
+            if (!sharedScore) {
+                loadSituation();
+            }
+        });
+    </script>
+</div>
