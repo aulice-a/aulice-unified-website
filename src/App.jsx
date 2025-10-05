@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
 // ========================
-// --- DATA DEFINITIONS ---
+// --- DATA ---
 // ========================
-
 const COLOR_MAP = {
   banking: { bg: 'bg-[#21436E]', text: 'text-white', iconBg: 'bg-[#21436E]', accent: 'text-indigo-300' },
   logistics: { bg: 'bg-gray-700', text: 'text-white', iconBg: 'bg-gray-700', accent: 'text-gray-300' },
@@ -33,78 +32,6 @@ const COURSES_DATA = [
   { id: 'younggenius', title: 'Young Geniuses Track', logo: '👶', desc: 'Tailor-made English programs for aspiring young professionals.', type: 'ondemand' },
   { id: 'customtrack', title: 'Custom Track Design', logo: '💡', desc: 'We build custom learning paths to help you achieve your specific career goals.', type: 'ondemand' },
 ];
-
-// ========================
-// --- COURSE CONTENT DATA ---
-// ========================
-
-const DEMO_SCENARIOS = {
-  banking: {
-    title: "Financial Portfolio Crisis (Demo)",
-    headline: "📊 Sudden Market Volatility",
-    description: "You are the CFO... A key economic sector has collapsed, putting your largest loan portfolio at risk.",
-    situation: "The entire energy sector is facing a liquidity crisis... You must act to protect the bank's assets and reputation.",
-    options: [
-      { id: 'restructure', label: '🤝 Restructure client loans' },
-      { id: 'sell', label: '📉 Sell off the high-risk portfolio' },
-      { id: 'liquidate', label: '🚨 Immediately liquidate assets' },
-      { id: 'wait', label: '⏱️ Wait for more data analysis' }
-    ],
-    feedback: {
-      restructure: { title: "Strategic and Client-Focused", text: "This is a strong leadership move. It demonstrates a commitment to long-term client relationships and can save a significant portion of the loan value, minimizing immediate losses and protecting the bank's reputation.", style: "border-green-500 bg-green-100 text-green-900" },
-      sell: { title: "Risk Aversion, at a Cost", text: "This action removes the risk from your balance sheet, but you'll likely sell at a major loss. While it protects the bank, it signals a lack of confidence and could erode trust with investors.", style: "border-yellow-500 bg-yellow-100 text-yellow-900" },
-      liquidate: { title: "Extreme, High-Impact Action", text: "This is a drastic measure that would severely damage client relationships and could trigger a wave of defaults, magnifying the crisis. It's a last resort that shows a lack of a cohesive strategy.", style: "border-red-500 bg-red-100 text-red-900" },
-      wait: { title: "Potentially Fatal Delay", text: "In a rapidly unfolding crisis, waiting for more data can be a catastrophic mistake. The market could deteriorate further, making any future action far less effective and more costly. Action, even if imperfect, is often better than inaction.", style: "border-purple-500 bg-purple-100 text-purple-900" }
-    }
-  },
-  medical: {
-    title: "Medical Triage Simulator",
-    headline: "🚨 Multiple Casualties Arriving",
-    description: "You are the Lead Physician in the ER. An ambulance is arriving with four victims from a major traffic incident.",
-    situation: "The paramedic gives you a quick rundown of the patients. Based on the initial report, you must decide who to treat first.",
-    options: [
-      { id: 'patient1', label: '🩻 Triage Patient 1' },
-      { id: 'patient2', label: '🩹 Triage Patient 2' },
-      { id: 'patient3', label: '🚶 Triage Patient 3' },
-      { id: 'patient4', label: '🚫 Triage Patient 4' }
-    ],
-    feedback: {
-      patient1: { title: "Immediate Priority", text: "Correct. This patient has a severe, life-threatening injury that is still treatable. They fall into the 'immediate' or 'red' category of triage, requiring your attention first to save their life.", style: "border-green-500 bg-green-100 text-green-900" },
-      patient2: { title: "Delayed Care", text: "Incorrect. While this patient is in pain, their injuries are not immediately life-threatening. They would be triaged into the 'delayed' or 'yellow' category, meaning they can wait for care until the most critical patients are stabilized.", style: "border-yellow-500 bg-yellow-100 text-yellow-900" },
-      patient3: { title: "Minor Injuries", text: "Incorrect. This patient is considered 'minor' or 'green' in triage. They can be treated last, as their injuries do not pose a serious risk to their life.", style: "border-blue-500 bg-blue-100 text-blue-900" },
-      patient4: { title: "Deceased or Expectant", text: "Incorrect. In a multi-casualty incident, a patient with no pulse or breathing is considered 'expectant' or 'black.' Your resources would be spent on patients who have a chance of survival.", style: "border-red-500 bg-red-100 text-red-900" }
-    }
-  }
-};
-
-const EXAM_DATA_BY_COURSE = {
-  banking: {
-    courseName: "Banking Professional",
-    icon: "🏦",
-    situations: [
-      { id: 1, scenario: "A long-standing, high-net-worth client with a history of sporadic, large cash deposits attempts to deposit $15,000 in cash, stating it's for a 'personal debt repayment.' This exceeds the Cash Transaction Report (CTR) threshold.", options: [ { text: "Complete the transaction and immediately file a mandatory Currency Transaction Report (CTR) with FinCEN.", score: 125, outcome: "This is the correct regulatory action. Transactions over $10,000 must be reported regardless of the client's relationship, adhering to BSA/AML compliance." }, { text: "Refuse the deposit and ask the client to return with a wire transfer instead.", score: 50, outcome: "Refusing the deposit is unnecessary and impacts client relations. The focus should be on compliance, not avoidance." }, { text: "Process the deposit without filing a report, based on the client's reliable history.", score: 0, outcome: "Failing to file a CTR is a severe violation of banking regulations (BSA) and compliance protocols." }, { text: "Suggest the client deposit $8,000 today and $7,000 tomorrow to avoid the reporting requirement.", score: 25, outcome: "This constitutes 'structuring,' a felony under money laundering laws. Facilitating structuring is a serious compliance failure." } ] },
-      // ... (other 9 banking scenarios as in your file)
-      { id: 10, scenario: "You discover a pattern of gender-biased pay disparity among senior staff, which is not illegal but is against the bank’s stated corporate values of equity.", options: [ { text: "Privately present the data and a proposal for a phased correction to the head of HR and the executive management team.", score: 100, outcome: "Addressing ethical disparities through formal channels is the most effective way to uphold corporate values without violating privacy or causing internal chaos." }, { text: "Confront the executives responsible publicly during the next town hall meeting.", score: 25, outcome: "Public confrontation is unprofessional and likely to result in retaliation without solving the underlying issue." }, { text: "Ignore the disparity, stating that if it were illegal, HR would have already addressed it.", score: 0, outcome: "Ignoring clear evidence of unfairness violates the bank's stated values and your professional ethical obligation." }, { text: "Leak the anonymous pay data to the entire company via an internal email.", score: 50, outcome: "While high impact, leaking data violates confidentiality and makes you vulnerable to termination for inappropriate communication." } ] }
-    ]
-  },
-  medical: {
-    courseName: "Medical Professional",
-    icon: "⚕️",
-    situations: [
-      {
-        id: 1,
-        scenario: "A patient in the ER is unconscious with a medical alert bracelet indicating a severe penicillin allergy. The team is preparing to administer amoxicillin for a suspected infection.",
-        options: [
-          { text: "Immediately stop the team and verify the allergy, then suggest an alternative antibiotic.", score: 125, outcome: "Correct. Patient safety and allergy protocols are paramount in emergency care." },
-          { text: "Assume the team knows and stay silent to avoid disrupting workflow.", score: 0, outcome: "Failing to speak up about a known life-threatening allergy is a critical error." },
-          { text: "Wait to see if the patient reacts before intervening.", score: 25, outcome: "Waiting could be fatal. Proactive intervention is required." },
-          { text: "Ask a senior doctor privately after the dose is given.", score: 50, outcome: "Too late. The error must be prevented, not reported after." }
-        ]
-      }
-      // Add 9 more medical scenarios here when ready
-    ]
-  }
-};
 
 // ========================
 // --- PAGE COMPONENTS ---
@@ -168,62 +95,106 @@ const HomePage = ({ setCurrentPage, setActiveCourse }) => {
   );
 };
 
+// ========================
+// --- DEMO SIMULATOR (Banking + Medical) ---
+// ========================
 const DemoSimulatorPage = ({ course }) => {
-  const scenario = DEMO_SCENARIOS[course.id] || DEMO_SCENARIOS.banking;
   const [feedback, setFeedback] = useState(null);
 
-  const chooseOption = (choiceId) => {
-    setFeedback(scenario.feedback[choiceId]);
-  };
+  if (course.id === 'medical') {
+    const chooseOption = (choice) => {
+      let feedbackData = {};
+      switch (choice) {
+        case 'patient1':
+          feedbackData = { title: "Immediate Priority", text: "Correct. This patient has a severe, life-threatening injury that is still treatable. They fall into the 'immediate' or 'red' category of triage, requiring your attention first to save their life.", style: "border-green-500 bg-green-100 text-green-900" };
+          break;
+        case 'patient2':
+          feedbackData = { title: "Delayed Care", text: "Incorrect. While this patient is in pain, their injuries are not immediately life-threatening. They would be triaged into the 'delayed' or 'yellow' category, meaning they can wait for care until the most critical patients are stabilized.", style: "border-yellow-500 bg-yellow-100 text-yellow-900" };
+          break;
+        case 'patient3':
+          feedbackData = { title: "Minor Injuries", text: "Incorrect. This patient is considered 'minor' or 'green' in triage. They can be treated last, as their injuries do not pose a serious risk to their life.", style: "border-blue-500 bg-blue-100 text-blue-900" };
+          break;
+        case 'patient4':
+          feedbackData = { title: "Deceased or Expectant", text: "Incorrect. In a multi-casualty incident, a patient with no pulse or breathing is considered 'expectant' or 'black.' Your resources would be spent on patients who have a chance of survival.", style: "border-red-500 bg-red-100 text-red-900" };
+          break;
+        default:
+          feedbackData = null;
+      }
+      setFeedback(feedbackData);
+    };
 
-  return (
-    <div className="flex items-center justify-center p-4 min-h-screen"
-      style={{
-        backgroundImage: `url('https://images.unsplash.com/photo-1579621970795-87facc2f976d?q=80&w=2940&auto=format&fit=crop')`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundAttachment: 'fixed'
-      }}>
-      <div className="bg-gray-900/80 backdrop-blur-sm shadow-2xl rounded-3xl p-8 max-w-2xl w-full text-center text-white">
-        <div className={`rounded-t-3xl -mt-8 -mx-8 px-8 py-6 shadow-xl border-b-4 border-white ${course.id === 'medical' ? 'bg-red-800' : 'bg-blue-800'}`}>
-          <h2 className="text-xl font-bold tracking-wide">{scenario.title}</h2>
-          <h3 className="text-sm opacity-80">{course.title}</h3>
-        </div>
-        <div className="p-4 mt-6">
-          <h1 className="text-3xl font-extrabold text-white mb-2">{scenario.headline}</h1>
-          <p className="text-lg text-gray-300 mb-6">{scenario.description}</p>
-          <div className="bg-gray-800 p-6 rounded-2xl shadow-inner text-left mb-6 border-l-4 border-white">
-            <h3 className="text-xl font-bold mb-2">{course.id === 'medical' ? '⚠️ Situation' : '📉 Situation'}</h3>
-            <p className="text-gray-300">{scenario.situation}</p>
-            {course.id === 'medical' && (
+    return (
+      <div className="flex items-center justify-center p-4 min-h-screen" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=2940&auto=format&fit=crop')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed' }}>
+        <div className="bg-gray-900/80 backdrop-blur-sm shadow-2xl rounded-3xl p-8 max-w-2xl w-full text-center text-white">
+          <div className="bg-red-800 rounded-t-3xl -mt-8 -mx-8 px-8 py-6 shadow-xl border-b-4 border-white">
+            <h2 className="text-xl font-bold tracking-wide">Medical Triage Simulator</h2>
+            <h3 className="text-sm opacity-80">{course.title}</h3>
+          </div>
+          <div className="p-4 mt-6">
+            <h1 className="text-3xl font-extrabold text-white mb-2">🚨 Multiple Casualties Arriving</h1>
+            <p className="text-lg text-gray-300 mb-6">You are the Lead Physician in the ER. An ambulance is arriving with four victims from a major traffic incident.</p>
+            <div className="bg-gray-800 p-6 rounded-2xl shadow-inner text-left mb-6 border-l-4 border-white">
+              <h3 className="text-xl font-bold mb-2">⚠️ Situation</h3>
+              <p className="text-gray-300">The paramedic gives you a quick rundown of the patients. Based on the initial report, you must decide who to treat first.</p>
               <ul className="list-disc list-inside mt-4 space-y-2">
                 <li><span className="font-semibold text-yellow-300">Patient 1:</span> Unconscious, severe head trauma, breathing erratically.</li>
                 <li><span className="font-semibold text-green-300">Patient 2:</span> Conscious, multiple broken bones, in severe pain but stable.</li>
                 <li><span className="font-semibold text-blue-300">Patient 3:</span> Minor cuts and bruises, walking and talking.</li>
                 <li><span className="font-semibold text-red-300">Patient 4:</span> Unconscious, no breathing detected, no pulse.</li>
               </ul>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <button onClick={() => chooseOption('patient1')} className="w-full py-3 px-6 bg-red-600 text-white font-bold rounded-xl text-lg shadow-lg hover:bg-red-700 transition-transform duration-200 transform hover:scale-105">🩻 Triage Patient 1</button>
+              <button onClick={() => chooseOption('patient2')} className="w-full py-3 px-6 bg-blue-600 text-white font-bold rounded-xl text-lg shadow-lg hover:bg-blue-700 transition-transform duration-200 transform hover:scale-105">🩹 Triage Patient 2</button>
+              <button onClick={() => chooseOption('patient3')} className="w-full py-3 px-6 bg-green-600 text-white font-bold rounded-xl text-lg shadow-lg hover:bg-green-700 transition-transform duration-200 transform hover:scale-105">🚶 Triage Patient 3</button>
+              <button onClick={() => chooseOption('patient4')} className="w-full py-3 px-6 bg-purple-600 text-white font-bold rounded-xl text-lg shadow-lg hover:bg-purple-700 transition-transform duration-200 transform hover:scale-105">🚫 Triage Patient 4</button>
+            </div>
+            {feedback && (
+              <div className="mt-8">
+                <div className={`p-6 rounded-2xl text-left shadow-xl border-l-4 ${feedback.style}`}>
+                  <h4 className="text-xl font-bold mb-2">💡 {feedback.title}</h4>
+                  <p className="font-semibold">{feedback.text}</p>
+                </div>
+              </div>
             )}
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Default: Banking
+  const chooseOption = (choice) => {
+    let feedbackData = {};
+    switch (choice) {
+      case 'restructure': feedbackData = { title: "Strategic and Client-Focused", text: "This is a strong leadership move...", style: "border-green-500 bg-green-100 text-green-900" }; break;
+      case 'sell': feedbackData = { title: "Risk Aversion, at a Cost", text: "This action removes the risk...", style: "border-yellow-500 bg-yellow-100 text-yellow-900" }; break;
+      case 'liquidate': feedbackData = { title: "Extreme, High-Impact Action", text: "This is a drastic measure...", style: "border-red-500 bg-red-100 text-red-900" }; break;
+      case 'wait': feedbackData = { title: "Potentially Fatal Delay", text: "In a rapidly unfolding crisis...", style: "border-purple-500 bg-purple-100 text-purple-900" }; break;
+      default: feedbackData = null;
+    }
+    setFeedback(feedbackData);
+  };
+
+  return (
+    <div className="flex items-center justify-center p-4 min-h-screen" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1579621970795-87facc2f976d?q=80&w=2940&auto=format&fit=crop')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed' }}>
+      <div className="bg-gray-900/80 backdrop-blur-sm shadow-2xl rounded-3xl p-8 max-w-2xl w-full text-center text-white">
+        <div className="bg-blue-800 rounded-t-3xl -mt-8 -mx-8 px-8 py-6 shadow-xl border-b-4 border-white">
+          <h2 className="text-xl font-bold tracking-wide">Financial Portfolio Crisis (Demo)</h2>
+          <h3 className="text-sm opacity-80">{course.title}</h3>
+        </div>
+        <div className="p-4 mt-6">
+          <h1 className="text-3xl font-extrabold text-white mb-2">📊 Sudden Market Volatility</h1>
+          <p className="text-lg text-gray-300 mb-6">You are the CFO... A key economic sector has collapsed...</p>
+          <div className="bg-gray-800 p-6 rounded-2xl shadow-inner text-left mb-6 border-l-4 border-white">
+            <h3 className="text-xl font-bold text-blue-400 mb-2">📉 Situation</h3>
+            <p className="text-gray-300">The entire energy sector is facing a liquidity crisis...</p>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {scenario.options.map((opt) => (
-              <button
-                key={opt.id}
-                onClick={() => chooseOption(opt.id)}
-                className={`w-full py-3 px-6 font-bold rounded-xl text-lg shadow-lg transition-transform duration-200 transform hover:scale-105 ${
-                  opt.id.startsWith('patient')
-                    ? opt.id === 'patient1' ? 'bg-red-600 hover:bg-red-700'
-                    : opt.id === 'patient2' ? 'bg-blue-600 hover:bg-blue-700'
-                    : opt.id === 'patient3' ? 'bg-green-600 hover:bg-green-700'
-                    : 'bg-purple-600 hover:bg-purple-700'
-                    : opt.id === 'restructure' ? 'bg-green-600 hover:bg-green-700'
-                    : opt.id === 'sell' ? 'bg-yellow-600 hover:bg-yellow-700'
-                    : opt.id === 'liquidate' ? 'bg-red-600 hover:bg-red-700'
-                    : 'bg-purple-600 hover:bg-purple-700'
-                } text-white`}
-              >
-                {opt.label}
-              </button>
-            ))}
+            <button onClick={() => chooseOption('restructure')} className="w-full py-3 px-6 bg-green-600 text-white font-bold rounded-xl text-lg shadow-lg hover:bg-green-700 transition-transform duration-200 transform hover:scale-105">🤝 Restructure client loans</button>
+            <button onClick={() => chooseOption('sell')} className="w-full py-3 px-6 bg-yellow-600 text-white font-bold rounded-xl text-lg shadow-lg hover:bg-yellow-700 transition-transform duration-200 transform hover:scale-105">📉 Sell off the high-risk portfolio</button>
+            <button onClick={() => chooseOption('liquidate')} className="w-full py-3 px-6 bg-red-600 text-white font-bold rounded-xl text-lg shadow-lg hover:bg-red-700 transition-transform duration-200 transform hover:scale-105">🚨 Immediately liquidate assets</button>
+            <button onClick={() => chooseOption('wait')} className="w-full py-3 px-6 bg-purple-600 text-white font-bold rounded-xl text-lg shadow-lg hover:bg-purple-700 transition-transform duration-200 transform hover:scale-105">⏱️ Wait for more data analysis</button>
           </div>
           {feedback && (
             <div className="mt-8">
@@ -239,10 +210,43 @@ const DemoSimulatorPage = ({ course }) => {
   );
 };
 
+// ========================
+// --- EXAM SIMULATOR (Banking + Medical placeholder) ---
+// ========================
 const ExamSimulatorPage = ({ course }) => {
-  const EXAM_DATA = EXAM_DATA_BY_COURSE[course.id] || EXAM_DATA_BY_COURSE.banking;
-  const MAX_SCORE = EXAM_DATA.situations.reduce((sum, s) => sum + Math.max(...s.options.map(o => o.score)), 0);
+  if (course.id === 'medical') {
+    return (
+      <div className="p-8 text-center">
+        <h2 className="text-3xl font-bold text-red-800">🩺 Medical Professional Exam</h2>
+        <p className="mt-4 text-gray-600">Realistic 10-scenario exam coming soon. This is a placeholder with matching layout and styling.</p>
+        <div className="mt-8 space-y-4 max-w-2xl mx-auto">
+          <div className="h-24 bg-gray-100 rounded-lg border"></div>
+          <div className="h-24 bg-gray-100 rounded-lg border"></div>
+          <div className="h-24 bg-gray-100 rounded-lg border"></div>
+        </div>
+      </div>
+    );
+  }
 
+  // Banking Exam (full)
+  const EXAM_DATA = {
+    courseName: "Banking Professional",
+    icon: "🏦",
+    situations: [
+      { id: 1, scenario: "A long-standing, high-net-worth client with a history of sporadic, large cash deposits attempts to deposit $15,000 in cash...", options: [ { text: "Complete the transaction and immediately file a mandatory Currency Transaction Report (CTR) with FinCEN.", score: 125, outcome: "This is the correct regulatory action..." }, { text: "Refuse the deposit...", score: 50, outcome: "Refusing the deposit is unnecessary..." }, { text: "Process the deposit without filing a report...", score: 0, outcome: "Failing to file a CTR is a severe violation..." }, { text: "Suggest the client deposit $8,000 today...", score: 25, outcome: "This constitutes 'structuring,' a felony..." } ] },
+      { id: 2, scenario: "A corporate client is requesting a large, complex loan...", options: [ { text: "Document the discrepancies...", score: 125, outcome: "Thorough risk assessment and transparency are essential..." }, { text: "Ignore the minor discrepancies...", score: 0, outcome: "This sacrifices the bank's integrity..." }, { text: "Approve the loan quickly...", score: 75, outcome: "While charging a premium for risk is standard..." }, { text: "Refer the client to a competitor...", score: 25, outcome: "Turning away a potentially viable client..." } ] },
+      { id: 3, scenario: "You receive an urgent subpoena for client financial records...", options: [ { text: "Verify the subpoena’s authenticity...", score: 100, outcome: "Releasing client information must adhere to strict internal protocols..." }, { text: "Immediately release the documents...", score: 50, outcome: "Releasing documents without internal review risks violating privacy laws..." }, { text: "Contact the clients whose records are requested...", score: 75, outcome: "While transparency is good..." }, { text: "Refuse to comply...", score: 0, outcome: "A valid subpoena overrides client confidentiality..." } ] },
+      { id: 4, scenario: "You are preparing a pitch for a major institutional investor...", options: [ { text: "Review the research with the Compliance team...", score: 125, outcome: "Using internal research without compliance clearance risks leaking Material Non-Public Information..." }, { text: "Include the research immediately...", score: 0, outcome: "This is a direct violation of information barriers..." }, { text: "Only use the research to inform your argument...", score: 50, outcome: "While better, the research might still contain MNPI..." }, { text: "Exclude the research entirely...", score: 75, outcome: "This is the safest option..." } ] },
+      { id: 5, scenario: "A junior colleague notices an anomaly in a trading algorithm...", options: [ { text: "Immediately report the loophole...", score: 125, outcome: "Reporting the flaw protects the bank's system integrity..." }, { text: "Exploit the loophole once for $50,000...", score: 0, outcome: "Unauthorized trading using non-public information..." }, { text: "Tell the colleague to ignore it...", score: 25, outcome: "Ignoring a known flaw is negligent..." }, { text: "Discuss the potential profit with a senior colleague...", score: 50, outcome: "This spreads the knowledge of the flaw..." } ] },
+      { id: 6, scenario: "You are analyzing a client's portfolio performance...", options: [ { text: "Follow the bank's Anti-Money Laundering (AML) procedure...", score: 125, outcome: "Compliance with AML/KYC regulations is paramount..." }, { text: "Contact the client and ask them for a detailed explanation...", score: 25, outcome: "Notifying the client of an SAR (known as 'tipping off') is illegal..." }, { text: "Ignore the flag...", score: 0, outcome: "Prioritizing client relationship over AML compliance..." }, { text: "Wait a few weeks...", score: 50, outcome: "Delaying an SAR compromises the investigation..." } ] },
+      { id: 7, scenario: "Your team is under immense pressure to meet quarterly sales targets...", options: [ { text: "Express concern to your manager...", score: 125, outcome: "The duty of suitability requires that products sold match..." }, { text: "Follow the manager's direction...", score: 0, outcome: "Waivers do not absolve the bank of suitability duty..." }, { text: "Only offer the products to clients who ask...", score: 75, outcome: "While better, you still have an affirmative duty..." }, { text: "Sell the products, but verbally warn the clients...", score: 50, outcome: "A verbal warning is insufficient..." } ] },
+      { id: 8, scenario: "A private equity client asks for your bank to finance a leveraged buyout...", options: [ { text: "Provide the financing if the deal meets all regulatory and credit risk criteria...", score: 100, outcome: "While social responsibility is a factor..." }, { text: "Refuse the financing to protect the bank's public reputation...", score: 50, outcome: "This is a decision based on social responsibility..." }, { text: "Insist on a lower leverage ratio...", score: 75, outcome: "Focusing on credit risk is always correct..." }, { text: "Anonymously inform the press...", score: 0, outcome: "Leaking client deal information is a severe breach..." } ] },
+      { id: 9, scenario: "You are the manager of a small branch...", options: [ { text: "Reassign the employee to a non-critical administrative role...", score: 125, outcome: "This balances the needs of the business..." }, { text: "Fire the employee immediately...", score: 50, outcome: "While efficiency is restored..." }, { text: "Place the underperforming employee in the critical compliance role...", score: 0, outcome: "Placing an underperforming employee in a critical compliance role..." }, { text: "Keep the employee in their current role...", score: 25, outcome: "This is fiscally irresponsible..." } ] },
+      { id: 10, scenario: "You discover a pattern of gender-biased pay disparity...", options: [ { text: "Privately present the data and a proposal...", score: 100, outcome: "Addressing ethical disparities through formal channels..." }, { text: "Confront the executives responsible publicly...", score: 25, outcome: "Public confrontation is unprofessional..." }, { text: "Ignore the disparity...", score: 0, outcome: "Ignoring clear evidence of unfairness..." }, { text: "Leak the anonymous pay data...", score: 50, outcome: "While high impact, leaking data violates confidentiality..." } ] }
+    ]
+  };
+
+  const MAX_SCORE = EXAM_DATA.situations.reduce((sum, s) => sum + Math.max(...s.options.map(o => o.score)), 0);
   const [examState, setExamState] = useState('progress');
   const [currentSituationIndex, setCurrentSituationIndex] = useState(0);
   const [finalScore, setFinalScore] = useState(0);
@@ -283,10 +287,10 @@ const ExamSimulatorPage = ({ course }) => {
 
   const getFeedback = (score) => {
     const percentage = (score / MAX_SCORE) * 100;
-    if (percentage >= 90) return { title: "Expert", description: "Your judgment is exceptional.", color: "text-green-600", icon: "✅" };
-    if (percentage >= 70) return { title: "Competent", description: "Strong reasoning with room to refine.", color: "text-blue-600", icon: "👍" };
-    if (percentage >= 50) return { title: "Developing", description: "You understand basics but missed key protocols.", color: "text-yellow-600", icon: "⚠️" };
-    return { title: "Needs Supervision", description: "Critical gaps in protocol adherence.", color: "text-red-600", icon: "🛑" };
+    if (percentage >= 90) return { title: "Master Compliance Officer", description: "Your judgment is excellent...", color: "text-green-600", icon: "✅" };
+    if (percentage >= 70) return { title: "Skilled Banker", description: "You possess a solid understanding...", color: "text-blue-600", icon: "👍" };
+    if (percentage >= 50) return { title: "Developing Analyst", description: "Your fundamentals are sound...", color: "text-yellow-600", icon: "⚠️" };
+    return { title: "Needs Review", description: "Many decisions resulted in low scores...", color: "text-red-600", icon: "🛑" };
   };
 
   const handleSubscription = async () => {
@@ -310,16 +314,8 @@ const ExamSimulatorPage = ({ course }) => {
         <h3 className="text-2xl font-bold text-gray-700 mb-4 border-t pt-6 mt-6">Unlock Your Detailed Performance Report</h3>
         {!isSubmitting ? (
           <div className="mx-auto max-w-sm">
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Your Professional Email"
-              className="w-full p-3 mb-4 border border-gray-300 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 text-center"
-            />
-            <button onClick={handleSubscription} className="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-full shadow-lg hover:bg-blue-700 transition">
-              Get Detailed Report
-            </button>
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Your Professional Email" className="w-full p-3 mb-4 border border-gray-300 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 text-center" />
+            <button onClick={handleSubscription} className="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-full shadow-lg hover:bg-blue-700 transition">Get Detailed Report</button>
             {subscriptionMessage.text && <p className={`mt-4 text-sm font-semibold text-${subscriptionMessage.type}-600`}>{subscriptionMessage.text}</p>}
           </div>
         ) : (
@@ -348,7 +344,7 @@ const ExamSimulatorPage = ({ course }) => {
       <div className="container mx-auto px-4 max-w-4xl">
         <div className="mb-10 text-center">
           <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-2">{EXAM_DATA.icon} {EXAM_DATA.courseName} Simulator</h1>
-          <p className="text-lg md:text-xl text-gray-600">Test your professional judgment.</p>
+          <p className="text-lg md:text-xl text-gray-600">Test your compliance knowledge, risk management, and financial ethics.</p>
         </div>
         <div className="bg-white p-6 md:p-10 rounded-3xl shadow-2xl border border-gray-100">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 border-b pb-4">
@@ -398,157 +394,155 @@ const ExamSimulatorPage = ({ course }) => {
   );
 };
 
-// --- Banking-only pages (to be generalized later) ---
-const PathwayPage = ({ course }) => {
-  const NavLinks = ({ className }) => (
-    <div className={`nav-links text-center my-8 ${className}`}>
-      <a href="https://aulice-main-hub.netlify.app/" className="mx-2 font-bold no-underline">Home</a>
-      <a href="https://aulice-about.netlify.app/" className="mx-2 font-bold no-underline">About us</a>
-      <a href="https://aulice-pricing-plans.netlify.app/" className="mx-2 font-bold no-underline">Pricing Plans</a>
-      <a href="https://aulice-lexicon.netlify.app/" className="mx-2 font-bold no-underline">Lexicon</a>
-      <a href="https://aulice-teacher-dashboard.netlify.app/" className="mx-2 font-bold no-underline">Teacher</a>
-      <a href="https://aulice-contact.netlify.app/" className="mx-2 font-bold no-underline">Contact</a>
+// ========================
+// --- GENERIC PLACEHOLDER PAGES ---
+// ========================
+const PlaceholderPage = ({ pageTitle, course }) => (
+  <div className="p-8 max-w-4xl mx-auto">
+    <h1 className="text-3xl font-bold text-gray-800 text-center">{pageTitle}</h1>
+    <h2 className="text-xl font-semibold text-gray-700 text-center mt-2">Course: {course.title}</h2>
+    <div className="mt-8 bg-white p-8 rounded-xl shadow-lg">
+      <p className="text-gray-600 text-center mb-6">Real content coming soon. This is a realistic placeholder with matching layout and styling.</p>
+      <div className="space-y-4">
+        <div className="h-16 bg-gray-100 rounded-lg"></div>
+        <div className="h-16 bg-gray-100 rounded-lg"></div>
+        <div className="h-16 bg-gray-100 rounded-lg"></div>
+      </div>
     </div>
-  );
-  return (
-    <div className="font-['Segoe_UI',_sans-serif] bg-[#f7f9fc] text-[#2c3e50] leading-relaxed">
-      <style>{`
-                .nav-links a { text-decoration: none; }
-                header .nav-links a, footer .nav-links a { color: white; }
-            `}</style>
-      <header className="text-center py-10 px-5 bg-[#1a365d] text-white">
-        <NavLinks />
-        <h1 className="text-3xl font-bold">💼 Banking Mastery Pathway</h1>
-        <p>A 150-Session Program for Global Professionals</p>
-      </header>
-      <div className="max-w-5xl my-10 mx-auto p-8">
-        <div className="bg-white p-8 rounded-xl shadow-lg">
-          <p>This pathway is designed to transform students into highly skilled banking professionals...</p>
-          {/* Keep your full Banking Pathway content here */}
-          <div className="my-8 p-5 bg-[#f0f3ff] border-l-4 border-[#1a365d] rounded-lg">
-            <h3 className="text-[#1a365d] text-xl font-bold">Phase 1: Financial System & Fundamentals (Units 1–25)</h3>
-            <p><strong>English Focus:</strong> Present Simple for facts and routines...</p>
+  </div>
+);
+
+const PathwayPage = ({ course }) => {
+  if (course.id === 'banking') {
+    return (
+      <div className="font-['Segoe_UI',_sans-serif] bg-[#f7f9fc] text-[#2c3e50] leading-relaxed">
+        <style>{`
+          .nav-links a { text-decoration: none; }
+          header .nav-links a, footer .nav-links a { color: white; }
+        `}</style>
+        <header className="text-center py-10 px-5 bg-[#1a365d] text-white">
+          <div className="nav-links text-center my-8">
+            <a href="https://aulice-main-hub.netlify.app/" className="mx-2 font-bold no-underline">Home</a>
+            <a href="https://aulice-about.netlify.app/" className="mx-2 font-bold no-underline">About us</a>
+            <a href="https://aulice-pricing-plans.netlify.app/" className="mx-2 font-bold no-underline">Pricing Plans</a>
+            <a href="https://aulice-lexicon.netlify.app/" className="mx-2 font-bold no-underline">Lexicon</a>
+            <a href="https://aulice-teacher-dashboard.netlify.app/" className="mx-2 font-bold no-underline">Teacher</a>
+            <a href="https://aulice-contact.netlify.app/" className="mx-2 font-bold no-underline">Contact</a>
+          </div>
+          <h1 className="text-3xl font-bold">💼 Banking Mastery Pathway</h1>
+          <p>A 150-Session Program for Global Professionals</p>
+        </header>
+        <div className="max-w-5xl my-10 mx-auto p-8">
+          <div className="bg-white p-8 rounded-xl shadow-lg">
+            <p>This pathway is designed to transform students into highly skilled banking professionals...</p>
+            <div className="my-8 p-5 bg-[#f0f3ff] border-l-4 border-[#1a365d] rounded-lg">
+              <h3 className="text-[#1a365d] text-xl font-bold">Phase 1: Financial System & Fundamentals (Units 1–25)</h3>
+              <ul className="my-2 pl-5 list-disc">
+                <li><strong>Units 1–5:</strong> Introduction to Banking</li>
+                <li><strong>Units 6–10:</strong> The Financial Ecosystem</li>
+              </ul>
+            </div>
           </div>
         </div>
+        <footer className="text-center py-10 bg-[#1a365d] text-white mt-16">
+          <div className="nav-links text-center my-8">
+            <a href="https://aulice-main-hub.netlify.app/" className="mx-2 font-bold no-underline">Home</a>
+            <a href="https://aulice-about.netlify.app/" className="mx-2 font-bold no-underline">About us</a>
+            <a href="https://aulice-pricing-plans.netlify.app/" className="mx-2 font-bold no-underline">Pricing Plans</a>
+            <a href="https://aulice-lexicon.netlify.app/" className="mx-2 font-bold no-underline">Lexicon</a>
+            <a href="https://aulice-teacher-dashboard.netlify.app/" className="mx-2 font-bold no-underline">Teacher</a>
+            <a href="https://aulice-contact.netlify.app/" className="mx-2 font-bold no-underline">Contact</a>
+          </div>
+          <p>© 2025 Aulice Academy.</p>
+        </footer>
       </div>
-      <footer className="text-center py-10 bg-[#1a365d] text-white mt-16">
-        <NavLinks />
-        <p>© 2025 Aulice Academy. Reality is programmable. Smart people are its architects.</p>
-      </footer>
-    </div>
-  );
+    );
+  }
+  return <PlaceholderPage pageTitle="Mastery Pathway" course={course} />;
 };
 
 const ScenarioPage = ({ course }) => {
-  const [answers, setAnswers] = useState({});
-  const [feedbacks, setFeedbacks] = useState({});
-  const handleInputChange = (e, id) => setAnswers({ ...answers, [id]: e.target.value });
-  const submitAnswer = (id) => {
-    const answer = answers[id] || '';
-    const feedbackText = answer.trim().length < 20
-      ? "<strong>💡 Tip:</strong> Be specific. Include empathy, procedure, and safety focus."
-      : "<strong>✅ Well done!</strong> Your response shows professionalism under pressure.";
-    setFeedbacks({ ...feedbacks, [id]: feedbackText });
-  };
-  const scenarios = [
-    { id: 'q1', title: "1. A client loses money on an investment. How do you respond?", prompt: "How do you show empathy? Do you offer a solution?" },
-    // ... (keep your 20 banking scenarios)
-  ];
-  const NavLinks = ({ inHeader }) => (
-    <div className="text-center my-8">
-      <a href="https://aulice-main-hub.netlify.app/" className={`mx-2 font-bold no-underline ${inHeader ? 'text-white' : ''}`}>Home</a>
-      {/* ... other links */}
-    </div>
-  );
-  return (
-    <div className="font-['Segoe_UI',_sans-serif] bg-[#f7f9fc] text-[#2c3e50] leading-relaxed">
-      <style>{`.btn { display: inline-block; padding: 10px 20px; background: #1a365d; color: white; border: none; border-radius: 6px; cursor: pointer; margin: 10px 0; font-size: 14px; }`}</style>
-      <header className="text-center py-10 px-5 bg-[#1a365d] text-white">
-        <NavLinks inHeader={true} />
-        <h1 className="text-3xl font-bold">💼 Professional Practice Scenarios: Banking Professionals</h1>
-        <p>Solve real operational challenges using English as your tool.</p>
-      </header>
-      <div className="max-w-4xl my-10 mx-auto p-8 bg-white rounded-xl shadow-lg">
-        <h2 className="text-2xl font-bold text-[#1a365d]">🎯 After completing this lesson, you will be able to:</h2>
-        <ul className="my-2 pl-5 list-disc">
-          <li>Explain financial products clearly.</li>
-          {/* ... */}
-        </ul>
-        {scenarios.map(({ id, title, prompt }) => (
-          <div key={id} className="bg-[#f8f9fa] p-5 my-5 border-l-4 border-[#1a365d] rounded-r-lg">
-            <h3 className="text-lg font-bold text-[#1a365d]">{title}</h3>
-            <p><strong>Think about:</strong> {prompt}</p>
-            <textarea
-              id={id}
-              value={answers[id] || ''}
-              onChange={(e) => handleInputChange(e, id)}
-              placeholder="Your response..."
-              className="w-full p-2 my-2 border border-gray-300 rounded"
-            ></textarea>
-            <button onClick={() => submitAnswer(id)} className="btn">✅ Submit</button>
-            {feedbacks[id] && (
-              <div
-                id={`${id}Feedback`}
-                className="my-2 p-2 bg-[#e8f4f8] rounded"
-                dangerouslySetInnerHTML={{ __html: feedbacks[id] }}
-              ></div>
-            )}
+  if (course.id === 'banking') {
+    return (
+      <div className="font-['Segoe_UI',_sans-serif] bg-[#f7f9fc] text-[#2c3e50] leading-relaxed">
+        <style>{`.btn { display: inline-block; padding: 10px 20px; background: #1a365d; color: white; border: none; border-radius: 6px; cursor: pointer; margin: 10px 0; font-size: 14px; }`}</style>
+        <header className="text-center py-10 px-5 bg-[#1a365d] text-white">
+          <div className="text-center my-8">
+            <a href="https://aulice-main-hub.netlify.app/" className="mx-2 font-bold no-underline text-white">Home</a>
+            <a href="https://aulice-about.netlify.app/" className="mx-2 font-bold no-underline text-white">About us</a>
+            <a href="https://aulice-pricing-plans.netlify.app/" className="mx-2 font-bold no-underline text-white">Pricing Plans</a>
+            <a href="https://aulice-lexicon.netlify.app/" className="mx-2 font-bold no-underline text-white">Lexicon</a>
+            <a href="https://aulice-teacher-dashboard.netlify.app/" className="mx-2 font-bold no-underline text-white">Teacher</a>
+            <a href="https://aulice-contact.netlify.app/" className="mx-2 font-bold no-underline text-white">Contact</a>
           </div>
-        ))}
+          <h1 className="text-3xl font-bold">💼 Professional Practice Scenarios: Banking Professionals</h1>
+          <p>Solve real operational challenges using English as your tool.</p>
+        </header>
+        <div className="max-w-4xl my-10 mx-auto p-8 bg-white rounded-xl shadow-lg">
+          <h2 className="text-2xl font-bold text-[#1a365d]">🎯 After completing this lesson, you will be able to:</h2>
+          <ul className="my-2 pl-5 list-disc">
+            <li>Explain financial products clearly.</li>
+            <li>Handle client complaints with empathy.</li>
+          </ul>
+          <div className="bg-[#f8f9fa] p-5 my-5 border-l-4 border-[#1a365d] rounded-r-lg">
+            <h3 className="text-lg font-bold text-[#1a365d]">1. A client loses money on an investment. How do you respond?</h3>
+            <textarea placeholder="Your response..." className="w-full p-2 my-2 border border-gray-300 rounded"></textarea>
+            <button className="btn">✅ Submit</button>
+          </div>
+        </div>
+        <footer className="text-center py-10 bg-[#1a365d] text-white mt-16">
+          <div className="text-center my-8">
+            <a href="https://aulice-main-hub.netlify.app/" className="mx-2 font-bold no-underline text-white">Home</a>
+            <a href="https://aulice-about.netlify.app/" className="mx-2 font-bold no-underline text-white">About us</a>
+            <a href="https://aulice-pricing-plans.netlify.app/" className="mx-2 font-bold no-underline text-white">Pricing Plans</a>
+            <a href="https://aulice-lexicon.netlify.app/" className="mx-2 font-bold no-underline text-white">Lexicon</a>
+            <a href="https://aulice-teacher-dashboard.netlify.app/" className="mx-2 font-bold no-underline text-white">Teacher</a>
+            <a href="https://aulice-contact.netlify.app/" className="mx-2 font-bold no-underline text-white">Contact</a>
+          </div>
+          <p>© 2025 Aulice Academy.</p>
+        </footer>
       </div>
-      <footer className="text-center py-10 bg-[#1a365d] text-white mt-16">
-        <NavLinks inHeader={true} />
-        <p>© 2025 Aulice Academy. Reality is programmable. Smart people are its architects.</p>
-      </footer>
-    </div>
-  );
+    );
+  }
+  return <PlaceholderPage pageTitle="Professional Practice Scenarios" course={course} />;
 };
 
 const Unit1Page = ({ course }) => {
-  const NavLinks = () => (
-    <div className="text-center my-8">
-      <a href="https://www.aulice.ca" className="mx-2 text-[#1a365d] font-bold no-underline">🏠 Home</a>
-      <a href="https://aulislab.netlify.app" className="mx-2 text-[#1a365d] font-bold no-underline">🧩 Aulice Lab</a>
-      <a href="https://aulice-lexicon.netlify.app" className="mx-2 text-[#1a365d] font-bold no-underline">📘 Lexicon</a>
-      <a href="https://teacher-aulice.netlify.app" className="mx-2 text-[#1a365d] font-bold no-underline">👨‍🏫 Teacher Dashboard</a>
-    </div>
-  );
-  const Exercise = ({ title, children }) => (
-    <div className="bg-[#f8f9fa] p-5 my-5 border-l-4 border-[#1a365d] rounded-r-lg">
-      <h3 className="text-xl font-bold text-[#1a365d] mb-4">{title}</h3>
-      {children}
-    </div>
-  );
-  return (
-    <div className="font-['Segoe_UI',_sans-serif] bg-[#f7f9fc] text-[#2c3e50] leading-relaxed">
-      <style>{`
-              .inline-input { 
-                width: 200px; padding: 6px 10px; margin: 0 5px; border: 2px solid #1a365d; 
-                border-radius: 4px; font-size: 16px; color: #1a365d; background: #f8f9fa; 
-              }
-              .inline-input:focus { outline: none; background: white; box-shadow: 0 0 0 2px rgba(26, 54, 93, 0.3); }
-              .btn { display: inline-block; padding: 10px 20px; background: #1a365d; color: white; border: none; border-radius: 6px; cursor: pointer; margin-top: 10px; font-size: 14px; }
-            `}</style>
-      <header className="text-center py-10 px-5 bg-[#1a365d] text-white">
-        <h1 className="text-3xl font-bold">💼 Unit 1: Introduction to Banking & the Financial System</h1>
-        <p>Foundations of Global Finance</p>
-      </header>
-      <div className="max-w-4xl my-10 mx-auto p-8 bg-white rounded-xl shadow-lg">
-        <h2 className="text-2xl font-bold text-[#1a365d]">🎯 After completing this unit, you will be able to:</h2>
-        <ul className="my-2 pl-5 list-disc space-y-1">
-          <li>Define and use core banking terms like deposit, loan, and interest.</li>
-          {/* ... */}
-        </ul>
-        <Exercise title="Lesson 1: Vocabulary & Core Concepts">
-          {/* ... your exercises */}
-        </Exercise>
-        <NavLinks />
+  if (course.id === 'banking') {
+    return (
+      <div className="font-['Segoe_UI',_sans-serif] bg-[#f7f9fc] text-[#2c3e50] leading-relaxed">
+        <style>{`
+          .inline-input { width: 200px; padding: 6px 10px; margin: 0 5px; border: 2px solid #1a365d; border-radius: 4px; font-size: 16px; color: #1a365d; background: #f8f9fa; }
+          .btn { display: inline-block; padding: 10px 20px; background: #1a365d; color: white; border: none; border-radius: 6px; cursor: pointer; margin-top: 10px; font-size: 14px; }
+        `}</style>
+        <header className="text-center py-10 px-5 bg-[#1a365d] text-white">
+          <h1 className="text-3xl font-bold">💼 Unit 1: Introduction to Banking & the Financial System</h1>
+          <p>Foundations of Global Finance</p>
+        </header>
+        <div className="max-w-4xl my-10 mx-auto p-8 bg-white rounded-xl shadow-lg">
+          <h2 className="text-2xl font-bold text-[#1a365d]">🎯 After completing this unit, you will be able to:</h2>
+          <ul className="my-2 pl-5 list-disc space-y-1">
+            <li>Define and use core banking terms like deposit, loan, and interest.</li>
+          </ul>
+          <div className="bg-[#f8f9fa] p-5 my-5 border-l-4 border-[#1a365d] rounded-r-lg">
+            <h3 className="text-xl font-bold text-[#1a365d] mb-4">Lesson 1: Vocabulary & Core Concepts</h3>
+            <textarea placeholder="Write your answers..." className="w-full mt-4 p-2 border rounded"></textarea>
+            <button className="btn">✅ Submit</button>
+          </div>
+          <div className="text-center my-8">
+            <a href="https://www.aulice.ca" className="mx-2 text-[#1a365d] font-bold no-underline">🏠 Home</a>
+            <a href="https://aulislab.netlify.app" className="mx-2 text-[#1a365d] font-bold no-underline">🧩 Aulice Lab</a>
+            <a href="https://aulice-lexicon.netlify.app" className="mx-2 text-[#1a365d] font-bold no-underline">📘 Lexicon</a>
+            <a href="https://teacher-aulice.netlify.app" className="mx-2 text-[#1a365d] font-bold no-underline">👨‍🏫 Teacher Dashboard</a>
+          </div>
+        </div>
+        <footer className="text-center py-10 bg-[#1a365d] text-white mt-16">
+          <p>© 2025 Aulice Academy.</p>
+        </footer>
       </div>
-      <footer className="text-center py-10 bg-[#1a365d] text-white mt-16">
-        <p>© 2025 Aulice Academy. Reality is programmable. Smart people are its architects.</p>
-      </footer>
-    </div>
-  );
+    );
+  }
+  return <PlaceholderPage pageTitle="Unit 1" course={course} />;
 };
 
 const PricingOptionsPage = ({ course }) => {
@@ -598,21 +592,13 @@ const PricingOptionsPage = ({ course }) => {
   );
 };
 
-const PlaceholderPage = ({ pageTitle }) => (
-  <div className="p-8">
-    <h1 className="text-3xl font-bold text-gray-800">{pageTitle}</h1>
-    <p className="mt-4 text-gray-600">This is a placeholder page. Content will be added here.</p>
-  </div>
-);
-
-const YoungGeniusQuizPage = () => <PlaceholderPage pageTitle="Young Genius Quiz" />;
-const CustomTrackFormPage = () => <PlaceholderPage pageTitle="Custom Track Form" />;
-const YoungGeniusFormPage = () => <PlaceholderPage pageTitle="Young Genius Form" />;
+const YoungGeniusQuizPage = () => <PlaceholderPage pageTitle="Young Genius Quiz" course={{ title: "Young Geniuses Track" }} />;
+const CustomTrackFormPage = () => <PlaceholderPage pageTitle="Custom Track Form" course={{ title: "Custom Track Design" }} />;
+const YoungGeniusFormPage = () => <PlaceholderPage pageTitle="Young Genius Form" course={{ title: "Young Geniuses Track" }} />;
 
 // ========================
 // --- MAIN APP ---
 // ========================
-
 export default function App() {
   const [page, setPage] = useState('home');
   const [activeCourse, setActiveCourse] = useState(COURSES_DATA[0]);
