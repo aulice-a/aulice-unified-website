@@ -1,0 +1,1 @@
+npm install -D vite @vitejs/plugin-react tailwindcss postcss autoprefixer
