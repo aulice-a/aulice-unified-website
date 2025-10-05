@@ -1,3 +1,4 @@
+// App.jsx
 import React, { useState, useEffect } from 'react';
 
 // ========================
@@ -36,7 +37,6 @@ const COURSES_DATA = [
 // ========================
 // --- PAGE COMPONENTS ---
 // ========================
-
 const CourseCard = ({ course, handleButtonClick }) => {
   const colorStyle = COLOR_MAP[course.id] || {};
   const isPro = course.type === 'pro';
@@ -100,7 +100,6 @@ const HomePage = ({ setCurrentPage, setActiveCourse }) => {
 // ========================
 const DemoSimulatorPage = ({ course }) => {
   const [feedback, setFeedback] = useState(null);
-
   if (course.id === 'medical') {
     const chooseOption = (choice) => {
       let feedbackData = {};
@@ -122,7 +121,6 @@ const DemoSimulatorPage = ({ course }) => {
       }
       setFeedback(feedbackData);
     };
-
     return (
       <div className="flex items-center justify-center p-4 min-h-screen" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=2940&auto=format&fit=crop')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed' }}>
         <div className="bg-gray-900/80 backdrop-blur-sm shadow-2xl rounded-3xl p-8 max-w-2xl w-full text-center text-white">
@@ -162,7 +160,6 @@ const DemoSimulatorPage = ({ course }) => {
       </div>
     );
   }
-
   // Default: Banking
   const chooseOption = (choice) => {
     let feedbackData = {};
@@ -175,7 +172,6 @@ const DemoSimulatorPage = ({ course }) => {
     }
     setFeedback(feedbackData);
   };
-
   return (
     <div className="flex items-center justify-center p-4 min-h-screen" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1579621970795-87facc2f976d?q=80&w=2940&auto=format&fit=crop')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed' }}>
       <div className="bg-gray-900/80 backdrop-blur-sm shadow-2xl rounded-3xl p-8 max-w-2xl w-full text-center text-white">
@@ -227,7 +223,6 @@ const ExamSimulatorPage = ({ course }) => {
       </div>
     );
   }
-
   // Banking Exam (full)
   const EXAM_DATA = {
     courseName: "Banking Professional",
@@ -245,7 +240,6 @@ const ExamSimulatorPage = ({ course }) => {
       { id: 10, scenario: "You discover a pattern of gender-biased pay disparity...", options: [ { text: "Privately present the data and a proposal...", score: 100, outcome: "Addressing ethical disparities through formal channels..." }, { text: "Confront the executives responsible publicly...", score: 25, outcome: "Public confrontation is unprofessional..." }, { text: "Ignore the disparity...", score: 0, outcome: "Ignoring clear evidence of unfairness..." }, { text: "Leak the anonymous pay data...", score: 50, outcome: "While high impact, leaking data violates confidentiality..." } ] }
     ]
   };
-
   const MAX_SCORE = EXAM_DATA.situations.reduce((sum, s) => sum + Math.max(...s.options.map(o => o.score)), 0);
   const [examState, setExamState] = useState('progress');
   const [currentSituationIndex, setCurrentSituationIndex] = useState(0);
@@ -284,17 +278,9 @@ const ExamSimulatorPage = ({ course }) => {
       setExamState('results');
     }
   };
-// Exam Simulators — one per course
-import BankingExamSimulatorPage from './components/BankingExamSimulatorPage';
-import LogisticsExamSimulatorPage from './components/LogisticsExamSimulatorPage';
-import MedicalExamSimulatorPage from './components/MedicalExamSimulatorPage';
-import OilGasExamSimulatorPage from './components/OilGasExamSimulatorPage';
-import MiningExamSimulatorPage from './components/MiningExamSimulatorPage';
-import PilotExamSimulatorPage from './components/PilotExamSimulatorPage';
-import AestheticianExamSimulatorPage from './components/AestheticianExamSimulatorPage';
-import LegalExamSimulatorPage from './components/LegalExamSimulatorPage';
-import HospitalityExamSimulatorPage from './components/HospitalityExamSimulatorPage';
-import CabinCrewExamSimulatorPage from './components/CabinCrewExamSimulatorPage';
+
+  // ✅ REMOVED INVALID IMPORTS THAT WERE INSIDE THIS FUNCTION
+
   const getFeedback = (score) => {
     const percentage = (score / MAX_SCORE) * 100;
     if (percentage >= 90) return { title: "Master Compliance Officer", description: "Your judgment is excellent...", color: "text-green-600", icon: "✅" };
@@ -312,7 +298,6 @@ import CabinCrewExamSimulatorPage from './components/CabinCrewExamSimulatorPage'
     const feedback = getFeedback(finalScore);
     const percentage = Math.round((finalScore / MAX_SCORE) * 100);
     const shareText = `I scored ${percentage}% on the ${EXAM_DATA.courseName} Simulator!`;
-
     return (
       <div className="bg-white p-6 md:p-10 rounded-3xl shadow-2xl border border-gray-100 text-center max-w-4xl mx-auto my-10">
         <h2 className="text-5xl font-extrabold text-indigo-600 mb-4">Assessment Complete!</h2>
