@@ -1,5 +1,15 @@
 import React, { useState, useEffect } from 'react';
-
+/ Exam Simulators — one per course
+import BankingExamSimulatorPage from './components/BankingExamSimulatorPage';
+import LogisticsExamSimulatorPage from './components/LogisticsExamSimulatorPage';
+import MedicalExamSimulatorPage from './components/MedicalExamSimulatorPage';
+import OilGasExamSimulatorPage from './components/OilGasExamSimulatorPage';
+import MiningExamSimulatorPage from './components/MiningExamSimulatorPage';
+import PilotExamSimulatorPage from './components/PilotExamSimulatorPage';
+import AestheticianExamSimulatorPage from './components/AestheticianExamSimulatorPage';
+import LegalExamSimulatorPage from './components/LegalExamSimulatorPage';
+import HospitalityExamSimulatorPage from './components/HospitalityExamSimulatorPage';
+import CabinCrewExamSimulatorPage from './components/CabinCrewExamSimulatorPage';
 // ========================
 // --- DATA ---
 // ========================
@@ -284,17 +294,7 @@ const ExamSimulatorPage = ({ course }) => {
       setExamState('results');
     }
   };
-// Exam Simulators — one per course
-import BankingExamSimulatorPage from './components/BankingExamSimulatorPage';
-import LogisticsExamSimulatorPage from './components/LogisticsExamSimulatorPage';
-import MedicalExamSimulatorPage from './components/MedicalExamSimulatorPage';
-import OilGasExamSimulatorPage from './components/OilGasExamSimulatorPage';
-import MiningExamSimulatorPage from './components/MiningExamSimulatorPage';
-import PilotExamSimulatorPage from './components/PilotExamSimulatorPage';
-import AestheticianExamSimulatorPage from './components/AestheticianExamSimulatorPage';
-import LegalExamSimulatorPage from './components/LegalExamSimulatorPage';
-import HospitalityExamSimulatorPage from './components/HospitalityExamSimulatorPage';
-import CabinCrewExamSimulatorPage from './components/CabinCrewExamSimulatorPage';
+/
   const getFeedback = (score) => {
     const percentage = (score / MAX_SCORE) * 100;
     if (percentage >= 90) return { title: "Master Compliance Officer", description: "Your judgment is excellent...", color: "text-green-600", icon: "✅" };
