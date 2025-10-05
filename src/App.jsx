@@ -1,15 +1,4 @@
 import React, { useState, useEffect } from 'react';
-/ Exam Simulators — one per course
-import BankingExamSimulatorPage from './components/BankingExamSimulatorPage';
-import LogisticsExamSimulatorPage from './components/LogisticsExamSimulatorPage';
-import MedicalExamSimulatorPage from './components/MedicalExamSimulatorPage';
-import OilGasExamSimulatorPage from './components/OilGasExamSimulatorPage';
-import MiningExamSimulatorPage from './components/MiningExamSimulatorPage';
-import PilotExamSimulatorPage from './components/PilotExamSimulatorPage';
-import AestheticianExamSimulatorPage from './components/AestheticianExamSimulatorPage';
-import LegalExamSimulatorPage from './components/LegalExamSimulatorPage';
-import HospitalityExamSimulatorPage from './components/HospitalityExamSimulatorPage';
-import CabinCrewExamSimulatorPage from './components/CabinCrewExamSimulatorPage';
 // ========================
 // --- DATA ---
 // ========================
