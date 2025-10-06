@@ -1,4 +1,19 @@
+// App.jsx
 import React, { useState, useEffect } from 'react';
+
+// ========================
+// --- IMPORT ALL EXAM SIMULATORS ---
+// ========================
+import BankingExamSimulatorPage from './pages/BankingExamSimulatorPage.jsx';
+import LogisticsExamSimulatorPage from './pages/LogisticsExamSimulatorPage.jsx';
+import MedicalExamSimulatorPage from './pages/MedicalExamSimulatorPage.jsx';
+import OilGasExamSimulatorPage from './pages/OilGasExamSimulatorPage.jsx';
+import MiningExamSimulatorPage from './pages/MiningExamSimulatorPage.jsx';
+import PilotExamSimulatorPage from './pages/PilotExamSimulatorPage.jsx';
+import AestheticianExamSimulatorPage from './pages/AestheticianExamSimulatorPage.jsx';
+import LegalExamSimulatorPage from './pages/LegalExamSimulatorPage.jsx';
+import HospitalityExamSimulatorPage from './pages/HospitalityExamSimulatorPage.jsx';
+import CabinCrewExamSimulatorPage from './pages/CabinCrewExamSimulatorPage.jsx';
 
 // ========================
 // --- DATA ---
@@ -104,16 +119,16 @@ const DemoSimulatorPage = ({ course }) => {
       let feedbackData = {};
       switch (choice) {
         case 'patient1':
-          feedbackData = { title: "Immediate Priority", text: "Correct. This patient has a severe, life-threatening injury that is still treatable. They fall into the 'immediate' or 'red' category of triage, requiring your attention first to save their life.", style: "border-green-500 bg-green-100 text-green-900" };
+          feedbackData = { title: "Immediate Priority", text: "Correct. This patient has a severe, life-threatening injury that is still treatable...", style: "border-green-500 bg-green-100 text-green-900" };
           break;
         case 'patient2':
-          feedbackData = { title: "Delayed Care", text: "Incorrect. While this patient is in pain, their injuries are not immediately life-threatening. They would be triaged into the 'delayed' or 'yellow' category, meaning they can wait for care until the most critical patients are stabilized.", style: "border-yellow-500 bg-yellow-100 text-yellow-900" };
+          feedbackData = { title: "Delayed Care", text: "Incorrect. While this patient is in pain, their injuries are not immediately life-threatening...", style: "border-yellow-500 bg-yellow-100 text-yellow-900" };
           break;
         case 'patient3':
-          feedbackData = { title: "Minor Injuries", text: "Incorrect. This patient is considered 'minor' or 'green' in triage. They can be treated last, as their injuries do not pose a serious risk to their life.", style: "border-blue-500 bg-blue-100 text-blue-900" };
+          feedbackData = { title: "Minor Injuries", text: "Incorrect. This patient is considered 'minor' or 'green' in triage...", style: "border-blue-500 bg-blue-100 text-blue-900" };
           break;
         case 'patient4':
-          feedbackData = { title: "Deceased or Expectant", text: "Incorrect. In a multi-casualty incident, a patient with no pulse or breathing is considered 'expectant' or 'black.' Your resources would be spent on patients who have a chance of survival.", style: "border-red-500 bg-red-100 text-red-900" };
+          feedbackData = { title: "Deceased or Expectant", text: "Incorrect. In a multi-casualty incident, a patient with no pulse or breathing is considered 'expectant'...", style: "border-red-500 bg-red-100 text-red-900" };
           break;
         default:
           feedbackData = null;
@@ -129,15 +144,15 @@ const DemoSimulatorPage = ({ course }) => {
           </div>
           <div className="p-4 mt-6">
             <h1 className="text-3xl font-extrabold text-white mb-2">🚨 Multiple Casualties Arriving</h1>
-            <p className="text-lg text-gray-300 mb-6">You are the Lead Physician in the ER. An ambulance is arriving with four victims from a major traffic incident.</p>
+            <p className="text-lg text-gray-300 mb-6">You are the Lead Physician in the ER...</p>
             <div className="bg-gray-800 p-6 rounded-2xl shadow-inner text-left mb-6 border-l-4 border-white">
               <h3 className="text-xl font-bold mb-2">⚠️ Situation</h3>
-              <p className="text-gray-300">The paramedic gives you a quick rundown of the patients. Based on the initial report, you must decide who to treat first.</p>
+              <p className="text-gray-300">The paramedic gives you a quick rundown...</p>
               <ul className="list-disc list-inside mt-4 space-y-2">
-                <li><span className="font-semibold text-yellow-300">Patient 1:</span> Unconscious, severe head trauma, breathing erratically.</li>
-                <li><span className="font-semibold text-green-300">Patient 2:</span> Conscious, multiple broken bones, in severe pain but stable.</li>
-                <li><span className="font-semibold text-blue-300">Patient 3:</span> Minor cuts and bruises, walking and talking.</li>
-                <li><span className="font-semibold text-red-300">Patient 4:</span> Unconscious, no breathing detected, no pulse.</li>
+                <li><span className="font-semibold text-yellow-300">Patient 1:</span> Unconscious, severe head trauma...</li>
+                <li><span className="font-semibold text-green-300">Patient 2:</span> Conscious, multiple broken bones...</li>
+                <li><span className="font-semibold text-blue-300">Patient 3:</span> Minor cuts and bruises...</li>
+                <li><span className="font-semibold text-red-300">Patient 4:</span> Unconscious, no breathing detected...</li>
               </ul>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -197,187 +212,6 @@ const DemoSimulatorPage = ({ course }) => {
                 <h4 className="text-xl font-bold mb-2">💡 {feedback.title}</h4>
                 <p className="font-semibold">{feedback.text}</p>
               </div>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// ========================
-// --- EXAM SIMULATOR (Banking + Medical placeholder) ---
-// ========================
-const ExamSimulatorPage = ({ course }) => {
-  if (course.id === 'medical') {
-    return (
-      <div className="p-8 text-center">
-        <h2 className="text-3xl font-bold text-red-800">🩺 Medical Professional Exam</h2>
-        <p className="mt-4 text-gray-600">Realistic 10-scenario exam coming soon. This is a placeholder with matching layout and styling.</p>
-        <div className="mt-8 space-y-4 max-w-2xl mx-auto">
-          <div className="h-24 bg-gray-100 rounded-lg border"></div>
-          <div className="h-24 bg-gray-100 rounded-lg border"></div>
-          <div className="h-24 bg-gray-100 rounded-lg border"></div>
-        </div>
-      </div>
-    );
-  }
-  // Banking Exam (full)
-  const EXAM_DATA = {
-    courseName: "Banking Professional",
-    icon: "🏦",
-    situations: [
-      { id: 1, scenario: "A long-standing, high-net-worth client with a history of sporadic, large cash deposits attempts to deposit $15,000 in cash...", options: [ { text: "Complete the transaction and immediately file a mandatory Currency Transaction Report (CTR) with FinCEN.", score: 125, outcome: "This is the correct regulatory action..." }, { text: "Refuse the deposit...", score: 50, outcome: "Refusing the deposit is unnecessary..." }, { text: "Process the deposit without filing a report...", score: 0, outcome: "Failing to file a CTR is a severe violation..." }, { text: "Suggest the client deposit $8,000 today...", score: 25, outcome: "This constitutes 'structuring,' a felony..." } ] },
-      { id: 2, scenario: "A corporate client is requesting a large, complex loan...", options: [ { text: "Document the discrepancies...", score: 125, outcome: "Thorough risk assessment and transparency are essential..." }, { text: "Ignore the minor discrepancies...", score: 0, outcome: "This sacrifices the bank's integrity..." }, { text: "Approve the loan quickly...", score: 75, outcome: "While charging a premium for risk is standard..." }, { text: "Refer the client to a competitor...", score: 25, outcome: "Turning away a potentially viable client..." } ] },
-      { id: 3, scenario: "You receive an urgent subpoena for client financial records...", options: [ { text: "Verify the subpoena’s authenticity...", score: 100, outcome: "Releasing client information must adhere to strict internal protocols..." }, { text: "Immediately release the documents...", score: 50, outcome: "Releasing documents without internal review risks violating privacy laws..." }, { text: "Contact the clients whose records are requested...", score: 75, outcome: "While transparency is good..." }, { text: "Refuse to comply...", score: 0, outcome: "A valid subpoena overrides client confidentiality..." } ] },
-      { id: 4, scenario: "You are preparing a pitch for a major institutional investor...", options: [ { text: "Review the research with the Compliance team...", score: 125, outcome: "Using internal research without compliance clearance risks leaking Material Non-Public Information..." }, { text: "Include the research immediately...", score: 0, outcome: "This is a direct violation of information barriers..." }, { text: "Only use the research to inform your argument...", score: 50, outcome: "While better, the research might still contain MNPI..." }, { text: "Exclude the research entirely...", score: 75, outcome: "This is the safest option..." } ] },
-      { id: 5, scenario: "A junior colleague notices an anomaly in a trading algorithm...", options: [ { text: "Immediately report the loophole...", score: 125, outcome: "Reporting the flaw protects the bank's system integrity..." }, { text: "Exploit the loophole once for $50,000...", score: 0, outcome: "Unauthorized trading using non-public information..." }, { text: "Tell the colleague to ignore it...", score: 25, outcome: "Ignoring a known flaw is negligent..." }, { text: "Discuss the potential profit with a senior colleague...", score: 50, outcome: "This spreads the knowledge of the flaw..." } ] },
-      { id: 6, scenario: "You are analyzing a client's portfolio performance...", options: [ { text: "Follow the bank's Anti-Money Laundering (AML) procedure...", score: 125, outcome: "Compliance with AML/KYC regulations is paramount..." }, { text: "Contact the client and ask them for a detailed explanation...", score: 25, outcome: "Notifying the client of an SAR (known as 'tipping off') is illegal..." }, { text: "Ignore the flag...", score: 0, outcome: "Prioritizing client relationship over AML compliance..." }, { text: "Wait a few weeks...", score: 50, outcome: "Delaying an SAR compromises the investigation..." } ] },
-      { id: 7, scenario: "Your team is under immense pressure to meet quarterly sales targets...", options: [ { text: "Express concern to your manager...", score: 125, outcome: "The duty of suitability requires that products sold match..." }, { text: "Follow the manager's direction...", score: 0, outcome: "Waivers do not absolve the bank of suitability duty..." }, { text: "Only offer the products to clients who ask...", score: 75, outcome: "While better, you still have an affirmative duty..." }, { text: "Sell the products, but verbally warn the clients...", score: 50, outcome: "A verbal warning is insufficient..." } ] },
-      { id: 8, scenario: "A private equity client asks for your bank to finance a leveraged buyout...", options: [ { text: "Provide the financing if the deal meets all regulatory and credit risk criteria...", score: 100, outcome: "While social responsibility is a factor..." }, { text: "Refuse the financing to protect the bank's public reputation...", score: 50, outcome: "This is a decision based on social responsibility..." }, { text: "Insist on a lower leverage ratio...", score: 75, outcome: "Focusing on credit risk is always correct..." }, { text: "Anonymously inform the press...", score: 0, outcome: "Leaking client deal information is a severe breach..." } ] },
-      { id: 9, scenario: "You are the manager of a small branch...", options: [ { text: "Reassign the employee to a non-critical administrative role...", score: 125, outcome: "This balances the needs of the business..." }, { text: "Fire the employee immediately...", score: 50, outcome: "While efficiency is restored..." }, { text: "Place the underperforming employee in the critical compliance role...", score: 0, outcome: "Placing an underperforming employee in a critical compliance role..." }, { text: "Keep the employee in their current role...", score: 25, outcome: "This is fiscally irresponsible..." } ] },
-      { id: 10, scenario: "You discover a pattern of gender-biased pay disparity...", options: [ { text: "Privately present the data and a proposal...", score: 100, outcome: "Addressing ethical disparities through formal channels..." }, { text: "Confront the executives responsible publicly...", score: 25, outcome: "Public confrontation is unprofessional..." }, { text: "Ignore the disparity...", score: 0, outcome: "Ignoring clear evidence of unfairness..." }, { text: "Leak the anonymous pay data...", score: 50, outcome: "While high impact, leaking data violates confidentiality..." } ] }
-    ]
-  };
-  const MAX_SCORE = EXAM_DATA.situations.reduce((sum, s) => sum + Math.max(...s.options.map(o => o.score)), 0);
-  const [examState, setExamState] = useState('progress');
-  const [currentSituationIndex, setCurrentSituationIndex] = useState(0);
-  const [finalScore, setFinalScore] = useState(0);
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [shuffledOptions, setShuffledOptions] = useState([]);
-  const [email, setEmail] = useState("");
-  const [subscriptionMessage, setSubscriptionMessage] = useState({ text: "", type: "" });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  useEffect(() => {
-    const currentOptions = EXAM_DATA.situations[currentSituationIndex].options;
-    setShuffledOptions(shuffleArray(currentOptions));
-  }, [currentSituationIndex]);
-
-  const shuffleArray = (array) => {
-    const newArray = [...array];
-    for (let i = newArray.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-    }
-    return newArray;
-  };
-
-  const handleDecision = (option) => {
-    if (selectedOption) return;
-    setFinalScore(prevScore => prevScore + option.score);
-    setSelectedOption(option);
-  };
-
-  const handleNext = () => {
-    if (currentSituationIndex < EXAM_DATA.situations.length - 1) {
-      setCurrentSituationIndex(prevIndex => prevIndex + 1);
-      setSelectedOption(null);
-    } else {
-      setExamState('results');
-    }
-  };
-
-  const getFeedback = (score) => {
-    const percentage = (score / MAX_SCORE) * 100;
-    if (percentage >= 90) return { title: "Master Compliance Officer", description: "Your judgment is excellent...", color: "text-green-600", icon: "✅" };
-    if (percentage >= 70) return { title: "Skilled Banker", description: "You possess a solid understanding...", color: "text-blue-600", icon: "👍" };
-    if (percentage >= 50) return { title: "Developing Analyst", description: "Your fundamentals are sound...", color: "text-yellow-600", icon: "⚠️" };
-    return { title: "Needs Review", description: "Many decisions resulted in low scores...", color: "text-red-600", icon: "🛑" };
-  };
-
-  const handleSubscription = async () => {
-    setIsSubmitting(true);
-    setSubscriptionMessage({ text: "Success! Check your inbox for your detailed performance report.", type: "green" });
-  };
-
-  if (examState === 'results') {
-    const feedback = getFeedback(finalScore);
-    const percentage = Math.round((finalScore / MAX_SCORE) * 100);
-    const shareText = `I scored ${percentage}% on the ${EXAM_DATA.courseName} Simulator!`;
-    return (
-      <div className="bg-white p-6 md:p-10 rounded-3xl shadow-2xl border border-gray-100 text-center max-w-4xl mx-auto my-10">
-        <h2 className="text-5xl font-extrabold text-indigo-600 mb-4">Assessment Complete!</h2>
-        <p className="text-3xl font-bold text-gray-800 mb-6">Total Score: {finalScore} / {MAX_SCORE} ({percentage}%)</p>
-        <div className="mx-auto max-w-2xl bg-gray-50 p-6 rounded-2xl border-2 border-dashed border-indigo-200 shadow-lg">
-          <h3 className={`text-3xl font-extrabold ${feedback.color} mb-2`}>{feedback.icon} {feedback.title}</h3>
-          <p className="text-xl text-gray-700">{feedback.description}</p>
-        </div>
-        <h3 className="text-2xl font-bold text-gray-700 mb-4 border-t pt-6 mt-6">Unlock Your Detailed Performance Report</h3>
-        {!isSubmitting ? (
-          <div className="mx-auto max-w-sm">
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Your Professional Email" className="w-full p-3 mb-4 border border-gray-300 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 text-center" />
-            <button onClick={handleSubscription} className="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-full shadow-lg hover:bg-blue-700 transition">Get Detailed Report</button>
-            {subscriptionMessage.text && <p className={`mt-4 text-sm font-semibold text-${subscriptionMessage.type}-600`}>{subscriptionMessage.text}</p>}
-          </div>
-        ) : (
-          <p className="mt-4 text-sm font-semibold text-green-600">{subscriptionMessage.text}</p>
-        )}
-        <div className="mt-8 pt-6 border-t border-gray-200">
-          <p className="text-lg text-gray-600 mb-4 font-semibold">Share your achievement:</p>
-          <div className="flex justify-center space-x-4">
-            <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(window.location.href)}`} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2 bg-sky-500 text-white font-semibold py-2 px-4 rounded-full hover:bg-sky-600 transition shadow-md">
-              <span>Share on X</span>
-            </a>
-            <a href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(window.location.href)}&title=${encodeURIComponent(shareText)}`} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2 bg-blue-700 text-white font-semibold py-2 px-4 rounded-full hover:bg-blue-800 transition shadow-md">
-              <span>Share on LinkedIn</span>
-            </a>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  const currentSituation = EXAM_DATA.situations[currentSituationIndex];
-  const maxScoreOption = currentSituation.options.reduce((max, opt) => opt.score > max.score ? opt : max, { score: -Infinity });
-
-  return (
-    <div className="bg-gray-50 min-h-screen py-10">
-      <div className="container mx-auto px-4 max-w-4xl">
-        <div className="mb-10 text-center">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-2">{EXAM_DATA.icon} {EXAM_DATA.courseName} Simulator</h1>
-          <p className="text-lg md:text-xl text-gray-600">Test your compliance knowledge, risk management, and financial ethics.</p>
-        </div>
-        <div className="bg-white p-6 md:p-10 rounded-3xl shadow-2xl border border-gray-100">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 border-b pb-4">
-            <h2 className="text-2xl font-bold text-indigo-700 mb-2 sm:mb-0">Situation {currentSituationIndex + 1}/{EXAM_DATA.situations.length}</h2>
-            <span className="text-2xl font-extrabold text-gray-800 bg-indigo-100 px-4 py-1 rounded-full shadow-inner">Score: {finalScore}</span>
-          </div>
-          <p className="text-gray-700 text-xl leading-relaxed mb-8">{currentSituation.scenario}</p>
-          <div className="space-y-4 mb-8">
-            {shuffledOptions.map((option, index) => {
-              let buttonClass = 'w-full text-left p-4 rounded-xl border border-gray-300 shadow-sm bg-white hover:bg-indigo-50 hover:shadow-md transition duration-150 ease-in-out text-gray-800';
-              if (selectedOption) {
-                if (option.text === selectedOption.text) {
-                  if (selectedOption.score >= 100) buttonClass += ' bg-green-600 text-white';
-                  else if (selectedOption.score >= 70) buttonClass += ' bg-yellow-500 text-gray-900';
-                  else if (selectedOption.score > 25) buttonClass += ' bg-orange-500 text-white';
-                  else buttonClass += ' bg-red-600 text-white';
-                  buttonClass += ' ring-4 ring-offset-2 ring-opacity-50 ring-indigo-300 scale-[1.01]';
-                } else if (option.text === maxScoreOption.text) {
-                  buttonClass += ' bg-blue-100 border-blue-500 opacity-90 shadow-md';
-                } else {
-                  buttonClass += ' opacity-50';
-                }
-              }
-              return (
-                <button key={index} onClick={() => handleDecision(option)} className={buttonClass} disabled={!!selectedOption}>
-                  {option.text}
-                </button>
-              );
-            })}
-          </div>
-          {selectedOption && (
-            <div className="bg-indigo-50 p-5 rounded-xl border-l-4 border-indigo-500 shadow-inner mb-6">
-              <h3 className="font-bold text-lg text-indigo-800 mb-2">Outcome Rationale:</h3>
-              <p className="text-gray-800">{selectedOption.outcome}</p>
-            </div>
-          )}
-          {selectedOption && (
-            <div className="text-center">
-              <button onClick={handleNext} className="bg-indigo-600 text-white font-bold py-3 px-8 rounded-full shadow-xl hover:bg-indigo-700 transition">
-                {currentSituationIndex === EXAM_DATA.situations.length - 1 ? 'See Final Results' : 'Next Situation'}
-              </button>
             </div>
           )}
         </div>
@@ -605,7 +439,21 @@ export default function App() {
       case 'customTrackForm': return <CustomTrackFormPage />;
       case 'geniusForm': return <YoungGeniusFormPage />;
       case 'DemoSimulator': return <DemoSimulatorPage course={activeCourse} />;
-      case 'ExamSimulator': return <ExamSimulatorPage course={activeCourse} />;
+      case 'ExamSimulator':
+        // 🔥 Route to the correct exam simulator based on course.id
+        switch (activeCourse.id) {
+          case 'banking': return <BankingExamSimulatorPage course={activeCourse} />;
+          case 'logistics': return <LogisticsExamSimulatorPage course={activeCourse} />;
+          case 'medical': return <MedicalExamSimulatorPage course={activeCourse} />;
+          case 'oilgas': return <OilGasExamSimulatorPage course={activeCourse} />;
+          case 'mining': return <MiningExamSimulatorPage course={activeCourse} />;
+          case 'aviation': return <PilotExamSimulatorPage course={activeCourse} />;
+          case 'aesthetic': return <AestheticianExamSimulatorPage course={activeCourse} />;
+          case 'legal': return <LegalExamSimulatorPage course={activeCourse} />;
+          case 'hospitality': return <HospitalityExamSimulatorPage course={activeCourse} />;
+          case 'cabin': return <CabinCrewExamSimulatorPage course={activeCourse} />;
+          default: return <PlaceholderPage pageTitle="Exam Simulator" course={activeCourse} />;
+        }
       case 'Pathway': return <PathwayPage course={activeCourse} />;
       case 'Scenario': return <ScenarioPage course={activeCourse} />;
       case 'Unit1': return <Unit1Page course={activeCourse} />;
