@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 // Data can be moved to a separate file later if it grows
 const COLOR_MAP = {

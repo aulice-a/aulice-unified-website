@@ -1,4 +1,4 @@
-// src/components/LogisticsExamSimulatorPage.jsx
+// src/pages/LogisticsExamSimulatorPage.jsx
 import React, { useState, useEffect } from 'react';
 
 const LOGISTICS_EXAM_DATA = {
@@ -108,7 +108,10 @@ const LOGISTICS_EXAM_DATA = {
   ]
 };
 
-const MAX_SCORE = LOGISTICS_EXAM_DATA.situations.reduce((sum, s) => sum + Math.max(...s.options.map(o => o.score)), 0);
+const MAX_SCORE = LOGISTICS_EXAM_DATA.situations.reduce(
+  (sum, s) => sum + Math.max(...s.options.map(o => o.score)),
+  0
+);
 
 const LogisticsExamSimulatorPage = ({ course }) => {
   const [examState, setExamState] = useState('progress');
@@ -176,4 +179,78 @@ const LogisticsExamSimulatorPage = ({ course }) => {
         <h2 className="text-5xl font-extrabold text-indigo-600 mb-4">Results Complete!</h2>
         <p className="text-3xl font-bold text-gray-800 mb-6">Total Score: {finalScore} / {MAX_SCORE} ({percentage}%)</p>
         <div className="mx-auto max-w-2xl bg-indigo-50 p-6 rounded-xl">
-          <h3 className="text
+          <h3 className="text-xl font-bold">{feedback.title}</h3>
+          <p className="mt-2 text-gray-700">{feedback.description}</p>
+        </div>
+
+        <div className="mt-8">
+          <h4 className="text-lg font-semibold text-gray-800 mb-3">Share Your Result</h4>
+          <p className="text-gray-600 mb-4">{shareText}</p>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your email for a detailed report"
+            className="px-4 py-2 border border-gray-300 rounded-lg w-full max-w-md mb-3"
+            disabled={isSubmitting}
+          />
+          <button
+            onClick={handleSubscription}
+            disabled={isSubmitting}
+            className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 disabled:opacity-50"
+          >
+            {isSubmitting ? "Sent!" : "Get Full Report"}
+          </button>
+          {subscriptionMessage.text && (
+            <p className={`mt-2 text-${subscriptionMessage.type}-600 font-medium`}>
+              {subscriptionMessage.text}
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  const currentSituation = LOGISTICS_EXAM_DATA.situations[currentSituationIndex];
+
+  return (
+    <div className="max-w-4xl mx-auto p-6">
+      <h1 className="text-3xl font-bold text-gray-800 mb-2">{LOGISTICS_EXAM_DATA.courseName} Crisis Simulator</h1>
+      <p className="text-gray-600 mb-6">Scenario {currentSituationIndex + 1} of {LOGISTICS_EXAM_DATA.situations.length}</p>
+      <div className="bg-gray-50 p-6 rounded-xl mb-6">
+        <p className="text-lg">{currentSituation.scenario}</p>
+      </div>
+      <div className="space-y-4">
+        {shuffledOptions.map((option, idx) => (
+          <button
+            key={idx}
+            onClick={() => handleDecision(option)}
+            disabled={selectedOption !== null}
+            className={`w-full text-left p-4 rounded-lg border transition ${
+              selectedOption?.text === option.text
+                ? option.score === 125
+                  ? "border-green-500 bg-green-50"
+                  : "border-red-500 bg-red-50"
+                : "border-gray-300 hover:bg-gray-100"
+            }`}
+          >
+            {option.text}
+          </button>
+        ))}
+      </div>
+      {selectedOption && (
+        <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <p className="font-medium text-blue-800">{selectedOption.outcome}</p>
+          <button
+            onClick={handleNext}
+            className="mt-4 bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700"
+          >
+            {currentSituationIndex < LOGISTICS_EXAM_DATA.situations.length - 1 ? "Next Scenario" : "View Results"}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default LogisticsExamSimulatorPage;
