@@ -1,21 +1,20 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
-// Note: If using Firebase v9+, import specific functions like getFunctions, httpsCallable
-// import { getFunctions, httpsCallable } from 'firebase/functions';
+// src/pages/BankingExamSimulator.jsx
+import React, { useState, useEffect } from 'react';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
-// --- API Configuration (MUST BE REPLACED WITH ACTUAL KEYS) ---
-// Please replace these placeholder values with your actual ConvertKit credentials.
-const CONVERTKIT_API_KEY = "YOUR_CONVERTKIT_API_KEY_HERE";
-const CONVERTKIT_FORM_ID = "YOUR_CONVERTKIT_FORM_ID_HERE";
-const MAX_RETRIES = 5;
+const BankingExamSimulator = () => {
+  const [currentSituationIndex, setCurrentSituationIndex] = useState(0);
+  const [finalScore, setFinalScore] = useState(0);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [shuffledOptions, setShuffledOptions] = useState([]);
+  const [showOutcome, setShowOutcome] = useState(false);
+  const [showResults, setShowResults] = useState(false);
+  const [email, setEmail] = useState('');
+  const [subscriptionMessage, setSubscriptionMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-// --- Simulator Configuration & Data (Updated for Banking) ---
-const COURSE = {
-  name: "Banking Professional",
-  slug: "banking-simulator",
-  icon: "🏦"
-};
-
-const situations = [
+  const situations = [
     {
       id: 1,
       scenario: "A long-standing, high-net-worth client with a history of sporadic, large cash deposits attempts to deposit $15,000 in cash, stating it's for a 'personal debt repayment.' This exceeds the Cash Transaction Report (CTR) threshold.",
@@ -37,307 +36,265 @@ const situations = [
       ]
     },
     {
-        id: 3,
-        scenario: "You receive an urgent subpoena for client financial records. The subpoena appears valid but requests highly sensitive, non-public personal information for multiple unrelated accounts.",
-        options: [
-            { text: "Verify the subpoena’s authenticity and scope with the Legal and Compliance departments before releasing any documents.", score: 100, outcome: "Releasing client information must adhere to strict internal protocols and legal review to protect client privacy and the bank from liability." },
-            { text: "Immediately release the documents as requested to comply with the court order and avoid penalties.", score: 50, outcome: "Releasing documents without internal review risks violating privacy laws (like Gramm-Leach-Bliley) if the scope is overly broad or the subpoena is flawed." },
-            { text: "Contact the clients whose records are requested to inform them of the subpoena and ask how they wish to proceed.", score: 75, outcome: "While transparency is good, legal advice often dictates that you should not notify clients until after the bank's legal team has reviewed the mandatory disclosure." },
-            { text: "Refuse to comply, citing client confidentiality, and risk contempt of court.", score: 0, outcome: "A valid subpoena overrides client confidentiality; refusal without legal grounds is a major compliance failure." }
-        ]
+      id: 3,
+      scenario: "You receive an urgent subpoena for client financial records. The subpoena appears valid but requests highly sensitive, non-public personal information for multiple unrelated accounts.",
+      options: [
+        { text: "Verify the subpoena’s authenticity and scope with the Legal and Compliance departments before releasing any documents.", score: 100, outcome: "Releasing client information must adhere to strict internal protocols and legal review to protect client privacy and the bank from liability." },
+        { text: "Immediately release the documents as requested to comply with the court order and avoid penalties.", score: 50, outcome: "Releasing documents without internal review risks violating privacy laws (like Gramm-Leach-Bliley) if the scope is overly broad or the subpoena is flawed." },
+        { text: "Contact the clients whose records are requested to inform them of the subpoena and ask how they wish to proceed.", score: 75, outcome: "While transparency is good, legal advice often dictates that you should not notify clients until after the bank's legal team has reviewed the mandatory disclosure." },
+        { text: "Refuse to comply, citing client confidentiality, and risk contempt of court.", score: 0, outcome: "A valid subpoena overrides client confidentiality; refusal without legal grounds is a major compliance failure." }
+      ]
     },
     {
-        id: 4,
-        scenario: "You are preparing a pitch for a major institutional investor. Your supervisor gives you internal, non-public research from a different department that strongly supports your investment thesis.",
-        options: [
-            { text: "Review the research with the Compliance team to ensure it's permissible for external disclosure before including it in the pitch.", score: 125, outcome: "Using internal research without compliance clearance risks leaking Material Non-Public Information (MNPI), which could lead to insider trading accusations and regulatory action." },
-            { text: "Include the research immediately, as it greatly strengthens the pitch and helps the bank win the deal.", score: 0, outcome: "This is a direct violation of information barriers ('Chinese Walls') and creates regulatory risk." },
-            { text: "Only use the research to inform your argument but don't cite the internal document itself.", score: 50, outcome: "While better, the research might still contain MNPI that influences the client, making this a gray area that should be avoided." },
-            { text: "Exclude the research entirely and base the pitch only on publicly available data.", score: 75, outcome: "This is the safest option, but you may lose a competitive edge. Full compliance review is the optimal path." }
-        ]
+      id: 4,
+      scenario: "You are preparing a pitch for a major institutional investor. Your supervisor gives you internal, non-public research from a different department that strongly supports your investment thesis.",
+      options: [
+        { text: "Review the research with the Compliance team to ensure it's permissible for external disclosure before including it in the pitch.", score: 125, outcome: "Using internal research without compliance clearance risks leaking Material Non-Public Information (MNPI), which could lead to insider trading accusations and regulatory action." },
+        { text: "Include the research immediately, as it greatly strengthens the pitch and helps the bank win the deal.", score: 0, outcome: "This is a direct violation of information barriers ('Chinese Walls') and creates regulatory risk." },
+        { text: "Only use the research to inform your argument but don't cite the internal document itself.", score: 50, outcome: "While better, the research might still contain MNPI that influences the client, making this a gray area that should be avoided." },
+        { text: "Exclude the research entirely and base the pitch only on publicly available data.", score: 75, outcome: "This is the safest option, but you may lose a competitive edge. Full compliance review is the optimal path." }
+      ]
     },
     {
-        id: 5,
-        scenario: "A junior colleague notices an anomaly in a trading algorithm—a temporary inefficiency that, if exploited manually, could yield a personal profit of $50,000 before the system patch.",
-        options: [
-            { text: "Immediately report the loophole to the Technology and Compliance teams to have the algorithm fixed and ensure no one else exploits it.", score: 125, outcome: "Reporting the flaw protects the bank's system integrity, prevents market manipulation, and is the highest standard of ethical conduct." },
-            { text: "Exploit the loophole once for $50,000, then immediately report it.", score: 0, outcome: "Unauthorized trading using non-public information about a system flaw is unethical and illegal, often resulting in termination and regulatory fines." },
-            { text: "Tell the colleague to ignore it, as exploiting it might lead to trouble.", score: 25, outcome: "Ignoring a known flaw is negligent and exposes the bank to massive risk if another employee or external entity finds it." },
-            { text: "Discuss the potential profit with a senior colleague to see if they think it's worth the risk.", score: 50, outcome: "This spreads the knowledge of the flaw without addressing the core problem: the need for a system fix." }
-        ]
+      id: 5,
+      scenario: "A junior colleague notices an anomaly in a trading algorithm—a temporary inefficiency that, if exploited manually, could yield a personal profit of $50,000 before the system patch.",
+      options: [
+        { text: "Immediately report the loophole to the Technology and Compliance teams to have the algorithm fixed and ensure no one else exploits it.", score: 125, outcome: "Reporting the flaw protects the bank's system integrity, prevents market manipulation, and is the highest standard of ethical conduct." },
+        { text: "Exploit the loophole once for $50,000, then immediately report it.", score: 0, outcome: "Unauthorized trading using non-public information about a system flaw is unethical and illegal, often resulting in termination and regulatory fines." },
+        { text: "Tell the colleague to ignore it, as exploiting it might lead to trouble.", score: 25, outcome: "Ignoring a known flaw is negligent and exposes the bank to massive risk if another employee or external entity finds it." },
+        { text: "Discuss the potential profit with a senior colleague to see if they think it's worth the risk.", score: 50, outcome: "This spreads the knowledge of the flaw without addressing the core problem: the need for a system fix." }
+      ]
     },
     {
-        id: 6,
-        scenario: "You are analyzing a client's portfolio performance when you notice a large, suspicious fund transfer to an offshore account in a high-risk jurisdiction, flagged internally as potential money laundering.",
-        options: [
-            { text: "Follow the bank's Anti-Money Laundering (AML) procedure, freeze the funds if necessary, and immediately file a Suspicious Activity Report (SAR).", score: 125, outcome: "Compliance with AML/KYC regulations is paramount. SAR filing is legally required when suspicion is present, and immediate action prevents further illicit activity." },
-            { text: "Contact the client and ask them for a detailed explanation for the transfer.", score: 25, outcome: "Notifying the client of an SAR (known as 'tipping off') is illegal and hinders the investigation. You must proceed internally first." },
-            { text: "Ignore the flag, as the client is very important and you do not want to jeopardize the relationship.", score: 0, outcome: "Prioritizing client relationship over AML compliance is a severe violation that can lead to catastrophic fines and criminal liability for the bank." },
-            { text: "Wait a few weeks to see if similar suspicious activity occurs before filing the report.", score: 50, outcome: "Delaying an SAR compromises the investigation and the bank's duty to report suspicious activity promptly." }
-        ]
+      id: 6,
+      scenario: "You are analyzing a client's portfolio performance when you notice a large, suspicious fund transfer to an offshore account in a high-risk jurisdiction, flagged internally as potential money laundering.",
+      options: [
+        { text: "Follow the bank's Anti-Money Laundering (AML) procedure, freeze the funds if necessary, and immediately file a Suspicious Activity Report (SAR).", score: 125, outcome: "Compliance with AML/KYC regulations is paramount. SAR filing is legally required when suspicion is present, and immediate action prevents further illicit activity." },
+        { text: "Contact the client and ask them for a detailed explanation for the transfer.", score: 25, outcome: "Notifying the client of an SAR (known as 'tipping off') is illegal and hinders the investigation. You must proceed internally first." },
+        { text: "Ignore the flag, as the client is very important and you do not want to jeopardize the relationship.", score: 0, outcome: "Prioritizing client relationship over AML compliance is a severe violation that can lead to catastrophic fines and criminal liability for the bank." },
+        { text: "Wait a few weeks to see if similar suspicious activity occurs before filing the report.", score: 50, outcome: "Delaying an SAR compromises the investigation and the bank's duty to report suspicious activity promptly." }
+      ]
     },
     {
-        id: 7,
-        scenario: "Your team is under immense pressure to meet quarterly sales targets. Your manager suggests offering highly complex, high-fee structured products to less sophisticated clients who might not fully understand the risk.",
-        options: [
-            { text: "Express concern to your manager, citing **Suitability** requirements, and escalate the sales practice to Compliance if the practice continues.", score: 125, outcome: "The duty of suitability requires that products sold match the client's financial sophistication, objectives, and risk tolerance. Escalation protects both the client and the bank's reputation." },
-            { text: "Follow the manager's direction, as meeting targets is the priority and the clients signed a waiver.", score: 0, outcome: "Waivers do not absolve the bank of suitability duty, and selling unsuitable products is often predatory and leads to regulatory action (e.g., FINRA)." },
-            { text: "Only offer the products to clients who ask about high-risk investments.", score: 75, outcome: "While better, you still have an affirmative duty to ensure the product is suitable, even if the client expresses interest." },
-            { text: "Sell the products, but verbally warn the clients about the high risk.", score: 50, outcome: "A verbal warning is insufficient; documented suitability and full disclosure of complexity are required." }
-        ]
+      id: 7,
+      scenario: "Your team is under immense pressure to meet quarterly sales targets. Your manager suggests offering highly complex, high-fee structured products to less sophisticated clients who might not fully understand the risk.",
+      options: [
+        { text: "Express concern to your manager, citing **Suitability** requirements, and escalate the sales practice to Compliance if the practice continues.", score: 125, outcome: "The duty of suitability requires that products sold match the client's financial sophistication, objectives, and risk tolerance. Escalation protects both the client and the bank's reputation." },
+        { text: "Follow the manager's direction, as meeting targets is the priority and the clients signed a waiver.", score: 0, outcome: "Waivers do not absolve the bank of suitability duty, and selling unsuitable products is often predatory and leads to regulatory action (e.g., FINRA)." },
+        { text: "Only offer the products to clients who ask about high-risk investments.", score: 75, outcome: "While better, you still have an affirmative duty to ensure the product is suitable, even if the client expresses interest." },
+        { text: "Sell the products, but verbally warn the clients about the high risk.", score: 50, outcome: "A verbal warning is insufficient; documented suitability and full disclosure of complexity are required." }
+      ]
     },
     {
-        id: 8,
-        scenario: "A private equity client asks for your bank to finance a leveraged buyout (LBO) of a competitor. You know the LBO will result in massive job losses in a local community where your bank has significant retail presence.",
-        options: [
-            { text: "Provide the financing if the deal meets all regulatory and credit risk criteria, separating business decisions from social impact.", score: 100, outcome: "While social responsibility is a factor, a bank's primary fiduciary and credit duty is to its shareholders and maintaining prudential lending standards. Blocking a profitable, compliant deal based purely on social risk is difficult to justify." },
-            { text: "Refuse the financing to protect the bank's public reputation and the local community.", score: 50, outcome: "This is a decision based on social responsibility, which is important, but it neglects the bank's core function and its fiduciary duty to maximize shareholder return when all risk parameters are met." },
-            { text: "Insist on a lower leverage ratio to minimize the risk of post-LBO default, regardless of social impact.", score: 75, outcome: "Focusing on credit risk is always correct, but it sidesteps the ethical/social question." },
-            { text: "Anonymously inform the press about the LBO's negative community impact before the deal closes.", score: 0, outcome: "Leaking client deal information is a severe breach of confidentiality and trust." }
-        ]
+      id: 8,
+      scenario: "A private equity client asks for your bank to finance a leveraged buyout (LBO) of a competitor. You know the LBO will result in massive job losses in a local community where your bank has significant retail presence.",
+      options: [
+        { text: "Provide the financing if the deal meets all regulatory and credit risk criteria, separating business decisions from social impact.", score: 100, outcome: "While social responsibility is a factor, a bank's primary fiduciary and credit duty is to its shareholders and maintaining prudential lending standards. Blocking a profitable, compliant deal based purely on social risk is difficult to justify." },
+        { text: "Refuse the financing to protect the bank's public reputation and the local community.", score: 50, outcome: "This is a decision based on social responsibility, which is important, but it neglects the bank's core function and its fiduciary duty to maximize shareholder return when all risk parameters are met." },
+        { text: "Insist on a lower leverage ratio to minimize the risk of post-LBO default, regardless of social impact.", score: 75, outcome: "Focusing on credit risk is always correct, but it sidesteps the ethical/social question." },
+        { text: "Anonymously inform the press about the LBO's negative community impact before the deal closes.", score: 0, outcome: "Leaking client deal information is a severe breach of confidentiality and trust." }
+      ]
     },
     {
-        id: 9,
-        scenario: "You are the manager of a small branch. A long-time employee is consistently underperforming, but they are a single parent and firing them would cause severe hardship. You need to staff a new, critical compliance role.",
-        options: [
-            { text: "Reassign the employee to a non-critical administrative role that matches their current performance level, then hire a qualified candidate for the compliance position.", score: 125, outcome: "This balances the needs of the business (hiring a competent compliance officer) with compassion for the employee, showing ethical management." },
-            { text: "Fire the employee immediately and hire a new person for the compliance role.", score: 50, outcome: "While efficiency is restored, this ignores the duty of care to employees and should be a last resort after performance management." },
-            { text: "Place the underperforming employee in the critical compliance role, hoping they improve.", score: 0, outcome: "Placing an underperforming employee in a critical compliance role is negligent and exposes the bank to massive regulatory risk." },
-            { text: "Keep the employee in their current role and simply outsource the new compliance function to a high-cost consultant.", score: 25, outcome: "This is fiscally irresponsible and avoids the core HR management issue." }
-        ]
+      id: 9,
+      scenario: "You are the manager of a small branch. A long-time employee is consistently underperforming, but they are a single parent and firing them would cause severe hardship. You need to staff a new, critical compliance role.",
+      options: [
+        { text: "Reassign the employee to a non-critical administrative role that matches their current performance level, then hire a qualified candidate for the compliance position.", score: 125, outcome: "This balances the needs of the business (hiring a competent compliance officer) with compassion for the employee, showing ethical management." },
+        { text: "Fire the employee immediately and hire a new person for the compliance role.", score: 50, outcome: "While efficiency is restored, this ignores the duty of care to employees and should be a last resort after performance management." },
+        { text: "Place the underperforming employee in the critical compliance role, hoping they improve.", score: 0, outcome: "Placing an underperforming employee in a critical compliance role is negligent and exposes the bank to massive regulatory risk." },
+        { text: "Keep the employee in their current role and simply outsource the new compliance function to a high-cost consultant.", score: 25, outcome: "This is fiscally irresponsible and avoids the core HR management issue." }
+      ]
     },
     {
-        id: 10,
-        scenario: "You discover a pattern of gender-biased pay disparity among senior staff, which is not illegal but is against the bank’s stated corporate values of equity.",
-        options: [
-            { text: "Privately present the data and a proposal for a phased correction to the head of HR and the executive management team.", score: 100, outcome: "Addressing ethical disparities through formal channels is the most effective way to uphold corporate values without violating privacy or causing internal chaos." },
-            { text: "Confront the executives responsible publicly during the next town hall meeting.", score: 25, outcome: "Public confrontation is unprofessional and likely to result in retaliation without solving the underlying issue." },
-            { text: "Ignore the disparity, stating that if it were illegal, HR would have already addressed it.", score: 0, outcome: "Ignoring clear evidence of unfairness violates the bank's stated values and your professional ethical obligation." },
-            { text: "Leak the anonymous pay data to the entire company via an internal email.", score: 50, outcome: "While high impact, leaking data violates confidentiality and makes you vulnerable to termination for inappropriate communication." }
-        ]
+      id: 10,
+      scenario: "You discover a pattern of gender-biased pay disparity among senior staff, which is not illegal but is against the bank’s stated corporate values of equity.",
+      options: [
+        { text: "Privately present the data and a proposal for a phased correction to the head of HR and the executive management team.", score: 100, outcome: "Addressing ethical disparities through formal channels is the most effective way to uphold corporate values without violating privacy or causing internal chaos." },
+        { text: "Confront the executives responsible publicly during the next town hall meeting.", score: 25, outcome: "Public confrontation is unprofessional and likely to result in retaliation without solving the underlying issue." },
+        { text: "Ignore the disparity, stating that if it were illegal, HR would have already addressed it.", score: 0, outcome: "Ignoring clear evidence of unfairness violates the bank's stated values and your professional ethical obligation." },
+        { text: "Leak the anonymous pay data to the entire company via an internal email.", score: 50, outcome: "While high impact, leaking data violates confidentiality and makes you vulnerable to termination for inappropriate communication." }
+      ]
     }
   ];
 
-const MAX_SCORE = situations.reduce((sum, s) => sum + Math.max(...s.options.map(o => o.score)), 0);
+  const MAX_SCORE = situations.reduce((sum, s) => sum + Math.max(...s.options.map(o => o.score)), 0);
 
-// --- Utility Function for Shuffling ---
-function shuffleArray(array) {
-  const newArray = [...array];
-  for (let i = newArray.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-  }
-  return newArray;
-}
+  // Shuffle options on situation change
+  useEffect(() => {
+    const currentOptions = situations[currentSituationIndex].options;
+    const shuffled = [...currentOptions].sort(() => Math.random() - 0.5);
+    setShuffledOptions(shuffled);
+    setSelectedOption(null);
+    setShowOutcome(false);
+  }, [currentSituationIndex]);
 
-// --- Utility Function for Exponential Backoff (MANDATORY FOR API) ---
-async function exponentialBackoffFetch(url, options, retries = 0) {
-    try {
-        const response = await fetch(url, options);
-        if (response.status === 429 || response.status >= 500) {
-            if (retries < MAX_RETRIES) {
-                const delay = Math.pow(2, retries) * 1000 + (Math.random() * 1000); // 2^n seconds + jitter
-                console.log(`Retrying API call in ${Math.round(delay / 1000)}s...`);
-                await new Promise(resolve => setTimeout(resolve, delay));
-                return exponentialBackoffFetch(url, options, retries + 1);
-            }
-        }
-        return response;
-    } catch (error) {
-        if (retries < MAX_RETRIES) {
-            const delay = Math.pow(2, retries) * 1000 + (Math.random() * 1000);
-            console.log(`Network error, retrying API call in ${Math.round(delay / 1000)}s...`);
-            await new Promise(resolve => setTimeout(resolve, delay));
-            return exponentialBackoffFetch(url, options, retries + 1);
-        }
-        console.error("API Fetch Error:", error); // Log the final error
-        throw new Error('Failed to fetch API after multiple retries.');
-    }
-}
-
-// --- Feedback Function ---
-function getFeedback(score, maxScore) {
-  const percentage = (score / maxScore) * 100;
-
-  if (percentage >= 90) {
-    return { title: "Master Compliance Officer", description: "Your judgment is excellent, demonstrating deep knowledge of regulatory requirements (AML, Suitability) and risk management. You prioritize the bank's long-term integrity.", color: "text-green-600", icon: "✅" };
-  } else if (percentage >= 70) {
-    return { title: "Skilled Banker", description: "You possess a solid understanding of financial ethics and client protection. Most decisions align with best practices and regulatory compliance.", color: "text-blue-600", icon: "👍" };
-  } else if (percentage >= 50) {
-    return { title: "Developing Analyst", description: "Your fundamentals are sound, but some decisions showed missed opportunities for identifying money laundering risks or prioritizing compliance over sales pressure. Focus on regulatory details.", color: "text-yellow-600", icon: "⚠️" };
-  } else {
-    return { title: "Needs Review", description: "Many of your decisions resulted in low scores, indicating significant areas for review regarding key regulations (BSA, AML) and ethical duties to the client and the firm.", color: "text-red-600", icon: "🛑" };
-  }
-}
-
-// --- React Component ---
-const BankingExamSimulatorPage = () => {
-  const [currentSituationIndex, setCurrentSituationIndex] = useState(0);
-  const [finalScore, setFinalScore] = useState(0);
-  const [selectedOption, setSelectedOption] = useState(null); // Store the selected option object
-  const [showOutcome, setShowOutcome] = useState(false);
-  const [quizComplete, setQuizComplete] = useState(false);
-  const [email, setEmail] = useState('');
-  const [subscriptionStatus, setSubscriptionStatus] = useState('idle'); // 'idle', 'submitting', 'success', 'error'
-  const [subscriptionMessage, setSubscriptionMessage] = useState('');
-
-  const currentSituation = situations[currentSituationIndex];
-  const maxScoreOption = useMemo(() => {
-    if (!currentSituation) return null;
-    return currentSituation.options.reduce((max, opt) => opt.score > max.score ? opt : max, { score: -Infinity });
-  }, [currentSituation]);
-
-  // Shuffle options only when the situation changes
-  const shuffledOptions = useMemo(() => {
-    if (!currentSituation) return [];
-    return shuffleArray(currentSituation.options);
-  }, [currentSituation]);
-
-
-  const handleDecision = useCallback((option) => {
-    if (showOutcome) return; // Prevent clicking after decision
-
+  const handleDecision = (option) => {
+    if (selectedOption) return;
     setSelectedOption(option);
-    setFinalScore(prevScore => prevScore + option.score);
+    setFinalScore(prev => prev + option.score);
     setShowOutcome(true);
-  }, [showOutcome]);
+  };
 
   const handleNext = () => {
     if (currentSituationIndex < situations.length - 1) {
-      setCurrentSituationIndex(prevIndex => prevIndex + 1);
-      setSelectedOption(null); // Reset selection
-      setShowOutcome(false); // Hide outcome for next question
+      setCurrentSituationIndex(prev => prev + 1);
     } else {
-      setQuizComplete(true); // End of quiz
+      setShowResults(true);
     }
   };
 
-  const handleEmailChange = (event) => {
-    setEmail(event.target.value);
+  const getFeedback = (score) => {
+    const percentage = (score / MAX_SCORE) * 100;
+    if (percentage >= 90) return { title: "Master Compliance Officer", description: "Your judgment is excellent, demonstrating deep knowledge of regulatory requirements (AML, Suitability) and risk management. You prioritize the bank's long-term integrity.", color: "text-green-600", icon: "✅" };
+    if (percentage >= 70) return { title: "Skilled Banker", description: "You possess a solid understanding of financial ethics and client protection. Most decisions align with best practices and regulatory compliance.", color: "text-blue-600", icon: "👍" };
+    if (percentage >= 50) return { title: "Developing Analyst", description: "Your fundamentals are sound, but some decisions showed missed opportunities for identifying money laundering risks or prioritizing compliance over sales pressure. Focus on regulatory details.", color: "text-yellow-600", icon: "⚠️" };
+    return { title: "Needs Review", description: "Many of your decisions resulted in low scores, indicating significant areas for review regarding key regulations (BSA, AML) and ethical duties to the client and the firm.", color: "text-red-600", icon: "🛑" };
   };
 
-  const handleSubscription = async () => {
+  const handleSubscription = async (e) => {
+    e.preventDefault();
     if (!email || !email.includes('@')) {
-      setSubscriptionStatus('error');
       setSubscriptionMessage("Please enter a valid email address.");
       return;
     }
 
-    if (CONVERTKIT_API_KEY === "YOUR_CONVERTKIT_API_KEY_HERE" || CONVERTKIT_FORM_ID === "YOUR_CONVERTKIT_FORM_ID_HERE") {
-      setSubscriptionStatus('error');
-      setSubscriptionMessage("Configuration Error: API Key/Form ID missing.");
-      console.error("ConvertKit API Key or Form ID not set in the component.");
-      return;
-    }
-
-    setSubscriptionStatus('submitting');
-    setSubscriptionMessage("Processing subscription...");
-
-    const url = `https://api.convertkit.com/v3/forms/${CONVERTKIT_FORM_ID}/subscribe`;
-    const payload = {
-      api_key: CONVERTKIT_API_KEY,
-      email: email
-    };
-
-    try {
-      const response = await exponentialBackoffFetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-
-      const result = await response.json();
-
-      if (response.ok && result.subscription) {
-        setSubscriptionStatus('success');
-        setSubscriptionMessage("Success! Check your inbox for your detailed compliance risk report.");
-      } else {
-        console.error("ConvertKit API Error:", result);
-        setSubscriptionStatus('error');
-        setSubscriptionMessage(result.message || 'Subscription failed. Please check key/ID and try again.');
-      }
-    } catch (error) {
-      console.error("Network or Fetch Error:", error);
-      setSubscriptionStatus('error');
-      setSubscriptionMessage('A network error occurred. Please refresh and try again.');
-    }
+    // TODO: Replace with real ConvertKit API integration in Firebase Functions
+    setSubscriptionMessage("Success! Check your inbox for your detailed compliance risk report.");
+    setIsSubmitting(true);
   };
 
-  // --- Render Functions ---
-
-  const renderSimulator = () => {
-    if (!currentSituation) return <div>Loading...</div>; // Handle case where situation might not be ready
+  if (showResults) {
+    const feedback = getFeedback(finalScore);
+    const percentage = Math.round((finalScore / MAX_SCORE) * 100);
+    const shareText = `I scored ${percentage}% on the Banking Professional Simulator! Test your financial ethics and compliance knowledge here.`;
+    const encodedShareText = encodeURIComponent(shareText);
+    const shareUrl = encodeURIComponent(window.location.href);
 
     return (
-      <div id="simulator-view" className="bg-white p-6 md:p-10 rounded-3xl shadow-2xl border border-gray-100">
-        {/* Situation & Score Header */}
+      <div className="bg-white p-6 md:p-10 rounded-3xl shadow-2xl border border-gray-100 text-center max-w-4xl mx-auto my-10">
+        <h2 className="text-5xl font-extrabold text-indigo-600 mb-4">Assessment Complete!</h2>
+        <p className="text-3xl font-bold text-gray-800 mb-6">Total Score: {finalScore} / {MAX_SCORE} ({percentage}%)</p>
+        <div className="mx-auto max-w-2xl bg-gray-50 p-6 rounded-2xl border-2 border-dashed border-indigo-200 shadow-lg">
+          <h3 className={`text-3xl font-extrabold ${feedback.color} mb-2`}>{feedback.icon} {feedback.title}</h3>
+          <p className="text-xl text-gray-700">{feedback.description}</p>
+        </div>
+
+        <h3 className="text-2xl font-bold text-gray-700 mb-4 border-t pt-6 mt-6">Unlock Your Detailed Performance Report</h3>
+        <div className="mx-auto max-w-sm">
+          <form onSubmit={handleSubscription}>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Your Professional Email"
+              className="w-full p-3 mb-4 border border-gray-300 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 text-center"
+              disabled={isSubmitting}
+            />
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-full shadow-lg hover:bg-blue-700 transition duration-150 ease-in-out transform hover:scale-[1.01]"
+            >
+              {isSubmitting ? "Sent!" : "Get Detailed Report"}
+            </button>
+          </form>
+          {subscriptionMessage && (
+            <p className={`mt-4 text-sm font-semibold ${
+              subscriptionMessage.includes('Success') ? 'text-green-600' : 
+              subscriptionMessage.includes('valid') ? 'text-yellow-600' : 'text-red-600'
+            }`}>
+              {subscriptionMessage}
+            </p>
+          )}
+        </div>
+
+        <div className="mt-8 pt-6 border-t border-gray-200">
+          <p className="text-lg text-gray-600 mb-4 font-semibold">Share your achievement:</p>
+          <div className="flex justify-center space-x-4">
+            <a
+              href={`https://twitter.com/intent/tweet?text=${encodedShareText}&url=${shareUrl}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center space-x-2 bg-sky-500 text-white font-semibold py-2 px-4 rounded-full hover:bg-sky-600 transition shadow-md"
+            >
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M18.901 1.153h3.68l-8.046 9.273 9.423 12.872h-7.792l-5.698-7.788-6.075 7.788H1.2l8.349-9.596L.265 1.153H8.16l5.243 6.994L18.901 1.153zm-2.12 19.982h2.28L6.463 3.109H4.072l12.709 18.026z"/>
+              </svg>
+              <span>Share on X</span>
+            </a>
+            <a
+              href={`https://www.linkedin.com/shareArticle?mini=true&url=${shareUrl}&title=${encodedShareText}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center space-x-2 bg-blue-700 text-white font-semibold py-2 px-4 rounded-full hover:bg-blue-800 transition shadow-md"
+            >
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.367-4-3.524-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.754 7 2.404v6.831z"/>
+              </svg>
+              <span>Share on LinkedIn</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const currentSituation = situations[currentSituationIndex];
+
+  return (
+    <div className="max-w-4xl mx-auto px-4 py-10">
+      <div className="text-center mb-10">
+        <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-2">🏦 Banking Professional Simulator</h1>
+        <p className="text-lg md:text-xl text-gray-600">Test your compliance knowledge, risk management, and financial ethics.</p>
+      </div>
+
+      <div className="bg-white p-6 md:p-10 rounded-3xl shadow-2xl border border-gray-100">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 border-b pb-4">
-          <h2 id="situation-title" className="text-2xl font-bold text-indigo-700 mb-2 sm:mb-0">
+          <h2 className="text-2xl font-bold text-indigo-700 mb-2 sm:mb-0">
             Situation {currentSituationIndex + 1}/{situations.length}
           </h2>
-          <span id="score-display" className="text-2xl font-extrabold text-gray-800 bg-indigo-100 px-4 py-1 rounded-full shadow-inner">
+          <span className="text-2xl font-extrabold text-gray-800 bg-indigo-100 px-4 py-1 rounded-full shadow-inner">
             Score: {finalScore}
           </span>
         </div>
 
-        {/* Scenario Text */}
-        <div className="mb-8">
-          <p className="text-gray-700 text-xl leading-relaxed" id="situation-text">
-            {currentSituation.scenario}
-          </p>
+        <p className="text-gray-700 text-xl leading-relaxed mb-8">
+          {currentSituation.scenario}
+        </p>
+
+        <div className="space-y-4 mb-8">
+          {shuffledOptions.map((option, idx) => (
+            <button
+              key={idx}
+              onClick={() => handleDecision(option)}
+              disabled={selectedOption !== null}
+              className={`w-full text-left p-4 rounded-xl border shadow-sm transition duration-150 ease-in-out ${
+                selectedOption?.text === option.text
+                  ? option.score >= 100
+                    ? 'bg-green-600 text-white shadow-lg ring-4 ring-offset-2 ring-green-300'
+                    : option.score >= 70
+                    ? 'bg-yellow-500 text-gray-900 shadow-lg ring-4 ring-offset-2 ring-yellow-300'
+                    : option.score > 25
+                    ? 'bg-orange-500 text-white shadow-lg ring-4 ring-offset-2 ring-orange-300'
+                    : 'bg-red-600 text-white shadow-lg ring-4 ring-offset-2 ring-red-300'
+                  : 'bg-white text-gray-800 border-gray-300 hover:bg-indigo-50 hover:shadow-md'
+              }`}
+            >
+              {option.text}
+            </button>
+          ))}
         </div>
 
-        {/* Options Container */}
-        <div id="options-container" className={`space-y-4 mb-8 ${showOutcome ? 'pointer-events-none' : ''}`}>
-          {shuffledOptions.map((option, index) => {
-            const isSelected = selectedOption?.text === option.text;
-            const isCorrect = maxScoreOption?.text === option.text;
-
-            // Determine button styling based on state
-            let buttonClasses = 'option-button w-full text-left p-4 rounded-xl border border-gray-300 shadow-sm bg-white hover:bg-indigo-50 hover:shadow-md transition duration-150 ease-in-out text-gray-800';
-            if (showOutcome) {
-              if (isSelected) {
-                if (option.score >= 100) buttonClasses += ' bg-green-600 text-white shadow-lg scale-[1.01] ring-4 ring-offset-2 ring-opacity-50 ring-indigo-300 border-transparent';
-                else if (option.score >= 70) buttonClasses += ' bg-yellow-500 text-gray-900 shadow-lg scale-[1.01] ring-4 ring-offset-2 ring-opacity-50 ring-indigo-300 border-transparent';
-                else if (option.score > 25) buttonClasses += ' bg-orange-500 text-white shadow-lg scale-[1.01] ring-4 ring-offset-2 ring-opacity-50 ring-indigo-300 border-transparent';
-                else buttonClasses += ' bg-red-600 text-white shadow-lg scale-[1.01] ring-4 ring-offset-2 ring-opacity-50 ring-indigo-300 border-transparent';
-              } else if (isCorrect) {
-                // Highlight the actual correct answer if the selected one wasn't
-                 buttonClasses += ' bg-blue-100 border-blue-500 opacity-90 shadow-md';
-              } else {
-                 buttonClasses += ' opacity-50'; // Dim unselected, incorrect options
-              }
-              // Remove hover effects after selection
-              buttonClasses = buttonClasses.replace(' hover:bg-indigo-50 hover:shadow-md', '');
-            }
-
-
-            return (
-              <button
-                key={index}
-                className={buttonClasses}
-                onClick={() => handleDecision(option)}
-                disabled={showOutcome} // Disable button after selection
-              >
-                {option.text}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Outcome Section */}
-        {showOutcome && selectedOption && (
-          <div id="outcome-section" className="bg-indigo-50 p-5 rounded-xl border-l-4 border-indigo-500 shadow-inner mb-6">
+        {showOutcome && (
+          <div className="bg-indigo-50 p-5 rounded-xl border-l-4 border-indigo-500 shadow-inner mb-6">
             <h3 className="font-bold text-lg text-indigo-800 mb-2">Outcome Rationale:</h3>
-            <p id="outcome-text" className="text-gray-800">{selectedOption.outcome}</p>
+            <p className="text-gray-800">{selectedOption.outcome}</p>
           </div>
         )}
 
-        {/* Next Button */}
         {showOutcome && (
           <div className="text-center">
             <button
-              id="next-button"
               onClick={handleNext}
               className="bg-indigo-600 text-white font-bold py-3 px-8 rounded-full shadow-xl hover:bg-indigo-700 transition duration-150 ease-in-out transform hover:scale-[1.02]"
             >
@@ -346,100 +303,8 @@ const BankingExamSimulatorPage = () => {
           </div>
         )}
       </div>
-    );
-  };
-
-  const renderResults = () => {
-    const feedback = getFeedback(finalScore, MAX_SCORE);
-    const percentage = Math.round((finalScore / MAX_SCORE) * 100);
-    const shareText = `I scored ${percentage}% on the ${COURSE.name} Simulator! Test your financial ethics and compliance knowledge here.`;
-    const encodedShareText = encodeURIComponent(shareText);
-    const shareUrl = encodeURIComponent(window.location.href); // Or a specific URL if preferred
-
-    return (
-      <div id="results-view" className="bg-white p-6 md:p-10 rounded-3xl shadow-2xl border border-gray-100 text-center">
-        <div className="mb-8">
-          <h2 className="text-5xl font-extrabold text-indigo-600 mb-4">Assessment Complete!</h2>
-          <p id="results-score-display" className="text-3xl font-bold text-gray-800 mb-6">
-            Total Score: {finalScore} / {MAX_SCORE} ({percentage}%)
-          </p>
-          <div id="results-feedback" className="mx-auto max-w-2xl bg-gray-50 p-6 rounded-2xl border-2 border-dashed border-indigo-200 shadow-lg">
-            <h3 className={`text-3xl font-extrabold ${feedback.color} mb-2`}>{feedback.icon} {feedback.title}</h3>
-            <p className="text-xl text-gray-700">{feedback.description}</p>
-          </div>
-        </div>
-
-        <h3 className="text-2xl font-bold text-gray-700 mb-4 border-t pt-6 mt-6">Unlock Your Detailed Performance Report</h3>
-
-        {/* Lead Magnet / Subscription Form */}
-        <div className="mx-auto max-w-sm">
-          {subscriptionStatus !== 'success' && (
-            <>
-              <input
-                type="email"
-                id="email-input"
-                placeholder="Your Professional Email"
-                value={email}
-                onChange={handleEmailChange}
-                className="w-full p-3 mb-4 border border-gray-300 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 text-center"
-                disabled={subscriptionStatus === 'submitting'}
-              />
-              <button
-                id="subscribe-button"
-                onClick={handleSubscription}
-                className={`w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-full shadow-lg hover:bg-blue-700 transition duration-150 ease-in-out transform hover:scale-[1.01] ${subscriptionStatus === 'submitting' ? 'opacity-50 cursor-not-allowed' : ''}`}
-                disabled={subscriptionStatus === 'submitting'}
-              >
-                {subscriptionStatus === 'submitting' ? "Submitting..." : "Get Detailed Report"}
-              </button>
-            </>
-          )}
-          <p id="subscription-message" className={`mt-4 text-sm font-semibold ${
-            subscriptionStatus === 'success' ? 'text-green-600' :
-            subscriptionStatus === 'error' ? 'text-red-600' :
-            subscriptionStatus === 'submitting' ? 'text-gray-500' : ''
-          }`}>
-            {subscriptionMessage}
-          </p>
-        </div>
-
-        {/* Social Sharing */}
-        <div className="mt-8 pt-6 border-t border-gray-200">
-            <p className="text-lg text-gray-600 mb-4 font-semibold">Share your achievement:</p>
-            <div className="flex justify-center space-x-4">
-                <a id="twitter-share" href={`https://twitter.com/intent/tweet?text=${encodedShareText}&url=${shareUrl}`} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2 bg-sky-500 text-white font-semibold py-2 px-4 rounded-full hover:bg-sky-600 transition shadow-md">
-                    {/* SVG for Twitter/X */}
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.901 1.153h3.68l-8.046 9.273 9.423 12.872h-7.792l-5.698-7.788-6.075 7.788H1.2l8.349-9.596L.265 1.153H8.16l5.243 6.994L18.901 1.153zm-2.12 19.982h2.28L6.463 3.109H4.072l12.709 18.026z"/></svg>
-                    <span>Share on X</span>
-                </a>
-                <a id="linkedin-share" href={`https://www.linkedin.com/shareArticle?mini=true&url=${shareUrl}&title=${encodedShareText}`} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2 bg-blue-700 text-white font-semibold py-2 px-4 rounded-full hover:bg-blue-800 transition shadow-md">
-                   {/* SVG for LinkedIn */}
-                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.367-4-3.524-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.754 7 2.404v6.831z"/></svg>
-                    <span>Share on LinkedIn</span>
-                </a>
-            </div>
-        </div>
-
-      </div>
-    );
-  };
-
-  // --- Main Component Return ---
-  return (
-    <div className="container mx-auto px-4 max-w-4xl py-10">
-      {/* Title and Description */}
-      <div className="mb-10 text-center">
-        <h1 id="app-title" className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-2">
-          {COURSE.icon} {COURSE.name} Exam Simulator
-        </h1>
-        <p className="text-lg md:text-xl text-gray-600">Test your compliance knowledge, risk management, and financial ethics.</p>
-      </div>
-
-      {/* Conditional Rendering: Show Simulator or Results */}
-      {quizComplete ? renderResults() : renderSimulator()}
-
     </div>
   );
 };
 
-export default BankingExamSimulatorPage;
+export default BankingExamSimulator;

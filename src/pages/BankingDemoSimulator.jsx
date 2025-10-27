@@ -1,5 +1,7 @@
 // src/pages/BankingDemoSimulatorPage.jsx
 import React, { useState } from 'react';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 const BankingDemoSimulatorPage = ({ course }) => {
   const [feedback, setFeedback] = useState(null);

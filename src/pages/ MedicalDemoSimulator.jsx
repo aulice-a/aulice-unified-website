@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
-function LogisticsCrisisSimulator() {
+function MedicalCrisisSimulator() {
     // Use React state to store the feedback message
     const [feedback, setFeedback] = useState(null);
 
@@ -12,25 +12,25 @@ function LogisticsCrisisSimulator() {
         let feedbackClass = '';
 
         switch (choice) {
-            case 'land_route':
-                feedbackData.title = "A Solid Contingency Plan";
-                feedbackData.text = "This is a good, reliable choice. While it may result in a slight delay, it ensures the shipment will arrive safely. It demonstrates adaptability and a clear understanding of risk management, opting for a safe alternative over a high-risk gamble.";
-                feedbackClass = "border-yellow-500 bg-yellow-100 text-yellow-900";
-                break;
-            case 'air_freight':
-                feedbackData.title = "The Best and Most Decisive Action";
-                feedbackData.text = "This is the ideal solution. It guarantees the shipment will arrive on time, regardless of the land route issues. While it is more expensive, the cost is justified by the critical nature of the supplies. This choice prioritizes mission success and is a hallmark of a great leader.";
+            case 'patient1':
+                feedbackData.title = "Immediate Priority";
+                feedbackData.text = "Correct. This patient has a severe, life-threatening injury that is still treatable. They fall into the 'immediate' or 'red' category of triage, requiring your attention first to save their life.";
                 feedbackClass = "border-green-500 bg-green-100 text-green-900";
                 break;
-            case 'wait':
-                feedbackData.title = "A Catastrophic Failure of Leadership";
-                feedbackData.text = "Doing nothing is an unacceptable failure. Waiting for the highway to clear would result in a mission failure, potentially costing lives due to the lack of critical supplies. A leader must always be proactive and find solutions, not wait for problems to solve themselves.";
-                feedbackClass = "border-red-500 bg-red-100 text-red-900";
+            case 'patient2':
+                feedbackData.title = "Delayed Care";
+                feedbackData.text = "Incorrect. While this patient is in pain, their injuries are not immediately life-threatening. They would be triaged into the 'delayed' or 'yellow' category, meaning they can wait for care until the most critical patients are stabilized.";
+                feedbackClass = "border-yellow-500 bg-yellow-100 text-yellow-900";
                 break;
-            case 'back_road':
-                feedbackData.title = "An Unnecessary Gamble";
-                feedbackData.text = "Choosing a dangerous, unpaved road is reckless. While it may be shorter, it puts the driver, vehicle, and cargo at extreme risk of damage or complete loss. A leader must be able to weigh risk against reward and avoid unnecessary dangers.";
-                feedbackClass = "border-purple-500 bg-purple-100 text-purple-900";
+            case 'patient3':
+                feedbackData.title = "Minor Injuries";
+                feedbackData.text = "Incorrect. This patient is considered 'minor' or 'green' in triage. They can be treated last, as their injuries do not pose a serious risk to their life.";
+                feedbackClass = "border-blue-500 bg-blue-100 text-blue-900";
+                break;
+            case 'patient4':
+                feedbackData.title = "Deceased or Expectant";
+                feedbackData.text = "Incorrect. In a multi-casualty incident, a patient with no pulse or breathing is considered 'expectant' or 'black.' Your resources would be spent on patients who have a chance of survival.";
+                feedbackClass = "border-red-500 bg-red-100 text-red-900";
                 break;
             default:
                 setFeedback(null);
@@ -44,7 +44,7 @@ function LogisticsCrisisSimulator() {
     // Styles that were on the <body> tag, applied to the root div
     const pageStyles = {
         fontFamily: "'Inter', sans-serif",
-        backgroundImage: "url('https://images.unsplash.com/photo-1549480016-d87d464b97e9?q=80&w=2832&auto=format&fit=crop')",
+        backgroundImage: "url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=2940&auto=format&fit=crop')",
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundAttachment: 'fixed'
@@ -73,54 +73,54 @@ function LogisticsCrisisSimulator() {
 
             <div className="bg-gray-900/80 backdrop-blur-sm shadow-2xl rounded-3xl p-8 max-w-2xl w-full text-center text-white">
                 {/* Header Banner */}
-                <div className="bg-blue-800 rounded-t-3xl -mt-8 -mx-8 px-8 py-6 shadow-xl border-b-4 border-white">
-                    <h2 className="text-xl font-bold tracking-wide">Supply Chain Simulation</h2>
+                <div className="bg-red-800 rounded-t-3xl -mt-8 -mx-8 px-8 py-6 shadow-xl border-b-4 border-white">
+                    <h2 className="text-xl font-bold tracking-wide">Medical Triage Simulator</h2>
                 </div>
 
                 {/* Simulator Content */}
                 <div className="p-4 mt-6">
-                    <h1 className="text-3xl font-extrabold text-white mb-2">📦 Urgent Shipment Delayed</h1>
+                    <h1 className="text-3xl font-extrabold text-white mb-2">🚨 Multiple Casualties Arriving</h1>
                     <p className="text-lg text-gray-300 mb-6">
-                        You are a Logistics Manager. A vital shipment of medical supplies is en route when a severe landslide blocks the primary highway. The supplies are needed at the hospital in less than 24 hours.
+                        You are the Lead Physician in the ER. An ambulance is arriving with four victims from a major traffic incident.
                     </p>
 
                     <div className="bg-gray-800 p-6 rounded-2xl shadow-inner text-left mb-6 border-l-4 border-white">
-                        <h3 className="text-xl font-bold text-sky-400 mb-2">⚠️ Situation</h3>
+                        <h3 className="text-xl font-bold text-red-400 mb-2">⚠️ Situation</h3>
                         <p className="text-gray-300">
-                            The driver is stopped and awaiting instructions. A passive approach will result in mission failure. Your team is looking to you for a solution to get the shipment to its destination on time.
+                            The paramedic gives you a quick rundown of the patients. Based on the initial report, you must decide who to treat first.
                         </p>
                         <ul className="list-disc list-inside mt-4 space-y-2">
-                            <li><span className="font-semibold text-yellow-300">Option 1:</span> Divert to a longer, secondary land route.</li>
-                            <li><span className="font-semibold text-green-300">Option 2:</span> Arrange an emergency air freight shipment.</li>
-                            <li><span className="font-semibold text-blue-300">Option 3:</span> Instruct the driver to wait for the landslide to be cleared.</li>
-                            <li><span className="font-semibold text-red-300">Option 4:</span> Attempt to navigate a dangerous, unpaved back road.</li>
+                            <li><span className="font-semibold text-yellow-300">Patient 1:</span> Unconscious, severe head trauma, breathing erratically.</li>
+                            <li><span className="font-semibold text-green-300">Patient 2:</span> Conscious, multiple broken bones, in severe pain but stable.</li>
+                            <li><span className="font-semibold text-blue-300">Patient 3:</span> Minor cuts and bruises, walking and talking.</li>
+                            <li><span className="font-semibold text-red-300">Patient 4:</span> Unconscious, no breathing detected, no pulse.</li>
                         </ul>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <button 
-                            onClick={() => handleChooseOption('land_route')} 
+                            onClick={() => handleChooseOption('patient1')} 
                             className="w-full py-3 px-6 bg-red-600 text-white font-bold rounded-xl text-lg shadow-lg hover:bg-red-700 transition-transform duration-200 transform hover:scale-105"
                         >
-                            🛣️ Divert to Secondary Route
+                            🩻 Triage Patient 1
                         </button>
                         <button 
-                            onClick={() => handleChooseOption('air_freight')} 
-                            className="w-full py-3 px-6 bg-green-600 text-white font-bold rounded-xl text-lg shadow-lg hover:bg-green-700 transition-transform duration-200 transform hover:scale-105"
-                        >
-                            ✈️ Arrange Emergency Air Freight
-                        </button>
-                        <button 
-                            onClick={() => handleChooseOption('wait')} 
-                            className="w-full py-3 px-6 bg-gray-600 text-white font-bold rounded-xl text-lg shadow-lg hover:bg-gray-700 transition-transform duration-200 transform hover:scale-105"
-                        >
-                            ⏳ Wait for Highway to Clear
-                        </button>
-                        <button 
-                            onClick={() => handleChooseOption('back_road')} 
+                            onClick={() => handleChooseOption('patient2')} 
                             className="w-full py-3 px-6 bg-blue-600 text-white font-bold rounded-xl text-lg shadow-lg hover:bg-blue-700 transition-transform duration-200 transform hover:scale-105"
                         >
-                            ⚠️ Attempt Back Road
+                            🩹 Triage Patient 2
+                        </button>
+                        <button 
+                            onClick={() => handleChooseOption('patient3')} 
+                            className="w-full py-3 px-6 bg-green-600 text-white font-bold rounded-xl text-lg shadow-lg hover:bg-green-700 transition-transform duration-200 transform hover:scale-105"
+                        >
+                            🚶 Triage Patient 3
+                        </button>
+                        <button 
+                            onClick={() => handleChooseOption('patient4')} 
+                            className="w-full py-3 px-6 bg-purple-600 text-white font-bold rounded-xl text-lg shadow-lg hover:bg-purple-700 transition-transform duration-200 transform hover:scale-105"
+                        >
+                            🚫 Triage Patient 4
                         </button>
                     </div>
 
@@ -153,4 +153,4 @@ function LogisticsCrisisSimulator() {
     );
 }
 
-export default LogisticsCrisisSimulator;
+export default MedicalCrisisSimulator;

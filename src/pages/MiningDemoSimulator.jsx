@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
-function LogisticsCrisisSimulator() {
+function MiningCrisisSimulator() {
     // Use React state to store the feedback message
     const [feedback, setFeedback] = useState(null);
 
@@ -11,25 +11,25 @@ function LogisticsCrisisSimulator() {
         let feedbackData = {};
         let feedbackClass = '';
 
-        switch (choice) {
-            case 'land_route':
-                feedbackData.title = "A Solid Contingency Plan";
-                feedbackData.text = "This is a good, reliable choice. While it may result in a slight delay, it ensures the shipment will arrive safely. It demonstrates adaptability and a clear understanding of risk management, opting for a safe alternative over a high-risk gamble.";
+        switch(choice) {
+            case 'rapid':
+                feedbackData.title = "High Risk, High Reward";
+                feedbackData.text = "This is a courageous but dangerous choice. While it shows decisive leadership and could save lives quickly, it also places your rescue teams at a high risk. A true leader understands the balance between speed and safety.";
                 feedbackClass = "border-yellow-500 bg-yellow-100 text-yellow-900";
                 break;
-            case 'air_freight':
-                feedbackData.title = "The Best and Most Decisive Action";
-                feedbackData.text = "This is the ideal solution. It guarantees the shipment will arrive on time, regardless of the land route issues. While it is more expensive, the cost is justified by the critical nature of the supplies. This choice prioritizes mission success and is a hallmark of a great leader.";
+            case 'protocol':
+                feedbackData.title = "Prudent and Responsible";
+                feedbackData.text = "This decision prioritizes the safety of the entire rescue team and avoids a potentially catastrophic second collapse. It demonstrates a commitment to established safety protocols, even under extreme pressure. While slower, it is the most reliable path.";
                 feedbackClass = "border-green-500 bg-green-100 text-green-900";
                 break;
-            case 'wait':
-                feedbackData.title = "A Catastrophic Failure of Leadership";
-                feedbackData.text = "Doing nothing is an unacceptable failure. Waiting for the highway to clear would result in a mission failure, potentially costing lives due to the lack of critical supplies. A leader must always be proactive and find solutions, not wait for problems to solve themselves.";
+            case 'seal':
+                feedbackData.title = "Unethical and Unacceptable";
+                feedbackData.text = "In this scenario, sealing the mine to protect assets, at the expense of trapped lives, is an ethically indefensible choice. It would ruin the company's reputation and lead to legal and criminal charges. Leadership means prioritizing people over profits.";
                 feedbackClass = "border-red-500 bg-red-100 text-red-900";
                 break;
-            case 'back_road':
-                feedbackData.title = "An Unnecessary Gamble";
-                feedbackData.text = "Choosing a dangerous, unpaved road is reckless. While it may be shorter, it puts the driver, vehicle, and cargo at extreme risk of damage or complete loss. A leader must be able to weigh risk against reward and avoid unnecessary dangers.";
+            case 'wait':
+                feedbackData.title = "Lack of Decisiveness";
+                feedbackData.text = "Waiting for external help, while seemingly safe, is a failure to act. The trapped crew is on a finite timeline. A leader must be able to make critical decisions with the information at hand, not defer the responsibility to others.";
                 feedbackClass = "border-purple-500 bg-purple-100 text-purple-900";
                 break;
             default:
@@ -44,7 +44,7 @@ function LogisticsCrisisSimulator() {
     // Styles that were on the <body> tag, applied to the root div
     const pageStyles = {
         fontFamily: "'Inter', sans-serif",
-        backgroundImage: "url('https://images.unsplash.com/photo-1549480016-d87d464b97e9?q=80&w=2832&auto=format&fit=crop')",
+        backgroundImage: "url('https://images.unsplash.com/photo-1549414002-f8c6f6e520d2?q=80&w=2832&auto=format&fit=crop')",
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundAttachment: 'fixed'
@@ -73,54 +73,54 @@ function LogisticsCrisisSimulator() {
 
             <div className="bg-gray-900/80 backdrop-blur-sm shadow-2xl rounded-3xl p-8 max-w-2xl w-full text-center text-white">
                 {/* Header Banner */}
-                <div className="bg-blue-800 rounded-t-3xl -mt-8 -mx-8 px-8 py-6 shadow-xl border-b-4 border-white">
-                    <h2 className="text-xl font-bold tracking-wide">Supply Chain Simulation</h2>
+                <div className="bg-stone-800 rounded-t-3xl -mt-8 -mx-8 px-8 py-6 shadow-xl border-b-4 border-white">
+                    <h2 className="text-xl font-bold tracking-wide">Mine Collapse Crisis</h2>
                 </div>
 
                 {/* Simulator Content */}
                 <div className="p-4 mt-6">
-                    <h1 className="text-3xl font-extrabold text-white mb-2">📦 Urgent Shipment Delayed</h1>
+                    <h1 className="text-3xl font-extrabold text-white mb-2">⛏️ Shaft Collapse Reported</h1>
                     <p className="text-lg text-gray-300 mb-6">
-                        You are a Logistics Manager. A vital shipment of medical supplies is en route when a severe landslide blocks the primary highway. The supplies are needed at the hospital in less than 24 hours.
+                        You are the Mine Site Manager. A portion of the main shaft has caved in, trapping a small crew below ground.
                     </p>
 
                     <div className="bg-gray-800 p-6 rounded-2xl shadow-inner text-left mb-6 border-l-4 border-white">
-                        <h3 className="text-xl font-bold text-sky-400 mb-2">⚠️ Situation</h3>
+                        <h3 className="text-xl font-bold text-orange-400 mb-2">⚠️ Situation</h3>
                         <p className="text-gray-300">
-                            The driver is stopped and awaiting instructions. A passive approach will result in mission failure. Your team is looking to you for a solution to get the shipment to its destination on time.
+                            Your rescue teams are at the site. A direct, rapid rescue is possible but extremely dangerous, risking more lives. The safer, official protocol is much slower and could take too long.
                         </p>
                         <ul className="list-disc list-inside mt-4 space-y-2">
-                            <li><span className="font-semibold text-yellow-300">Option 1:</span> Divert to a longer, secondary land route.</li>
-                            <li><span className="font-semibold text-green-300">Option 2:</span> Arrange an emergency air freight shipment.</li>
-                            <li><span className="font-semibold text-blue-300">Option 3:</span> Instruct the driver to wait for the landslide to be cleared.</li>
-                            <li><span className="font-semibold text-red-300">Option 4:</span> Attempt to navigate a dangerous, unpaved back road.</li>
+                            <li><span className="font-semibold text-yellow-300">Option 1:</span> Rapid, high-risk rescue attempt now.</li>
+                            <li><span className="font-semibold text-green-300">Option 2:</span> Follow the official, slower rescue protocol.</li>
+                            <li><span className="font-semibold text-blue-300">Option 3:</span> Prioritize sealing the shaft to prevent a wider collapse.</li>
+                            <li><span className="font-semibold text-red-300">Option 4:</span> Wait for the national rescue task force to arrive.</li>
                         </ul>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <button 
-                            onClick={() => handleChooseOption('land_route')} 
+                            onClick={() => handleChooseOption('rapid')} 
                             className="w-full py-3 px-6 bg-red-600 text-white font-bold rounded-xl text-lg shadow-lg hover:bg-red-700 transition-transform duration-200 transform hover:scale-105"
                         >
-                            🛣️ Divert to Secondary Route
+                            🚀 Attempt Rapid Rescue
                         </button>
                         <button 
-                            onClick={() => handleChooseOption('air_freight')} 
+                            onClick={() => handleChooseOption('protocol')} 
                             className="w-full py-3 px-6 bg-green-600 text-white font-bold rounded-xl text-lg shadow-lg hover:bg-green-700 transition-transform duration-200 transform hover:scale-105"
                         >
-                            ✈️ Arrange Emergency Air Freight
+                            ✅ Follow Official Protocol
+                        </button>
+                        <button 
+                            onClick={() => handleChooseOption('seal')} 
+                            className="w-full py-3 px-6 bg-gray-600 text-white font-bold rounded-xl text-lg shadow-lg hover:bg-gray-700 transition-transform duration-200 transform hover:scale-105"
+                        >
+                            🚧 Seal the Mine Shaft
                         </button>
                         <button 
                             onClick={() => handleChooseOption('wait')} 
-                            className="w-full py-3 px-6 bg-gray-600 text-white font-bold rounded-xl text-lg shadow-lg hover:bg-gray-700 transition-transform duration-200 transform hover:scale-105"
-                        >
-                            ⏳ Wait for Highway to Clear
-                        </button>
-                        <button 
-                            onClick={() => handleChooseOption('back_road')} 
                             className="w-full py-3 px-6 bg-blue-600 text-white font-bold rounded-xl text-lg shadow-lg hover:bg-blue-700 transition-transform duration-200 transform hover:scale-105"
                         >
-                            ⚠️ Attempt Back Road
+                            ⏱️ Wait for Experts
                         </button>
                     </div>
 
@@ -153,4 +153,4 @@ function LogisticsCrisisSimulator() {
     );
 }
 
-export default LogisticsCrisisSimulator;
+export default MiningCrisisSimulator;

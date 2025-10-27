@@ -1,5 +1,7 @@
 // src/components/LegalExamSimulatorPage.jsx
 import React, { useState, useEffect } from 'react';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 const LEGAL_EXAM_DATA = {
   courseName: "Legal Professional",

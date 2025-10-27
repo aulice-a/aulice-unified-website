@@ -6,33 +6,38 @@ import Footer from '../components/Footer';
 // We extract the repetitive question data into an array to be mapped.
 const parts = [
   {
-    partTitle: "Part 1: Safety & Emergency Response",
+    partTitle: "Part 1: Transportation & Operations",
     questions: [
-      { id: 'q1', title: "1. The dewatering pump fails underground. What do you do?", prompt: "Think about: Is there a backup? What’s the risk? Who do you inform?" },
-      { id: 'q2', title: "2. A contractor uses unapproved equipment. How do you respond?", prompt: "Think about: How do you enforce standards? Can you stop work?" },
-      { id: 'q3', title: "3. You notice cracks in the tunnel wall. What actions do you take?", prompt: "Think about: Is it structural? Who assesses it? Do you evacuate?" },
-      { id: 'q4', title: "4. A gas alarm sounds in an active working area. What are your immediate actions?", prompt: "Think about: Who do you alert? What's the protocol for evacuation?" },
-      { id: 'q5', title: "5. A rockfall occurs, blocking a main haulage road. How do you manage the situation?", prompt: "Think about: What is the first priority? Who do you call?" },
-      { id: 'q6', title: "6. A new team member is not following the lockout-tagout procedure correctly. How do you intervene?", prompt: "Think about: How do you correct them safely? What do you say?" },
-      { id: 'q7', title: "7. A conveyor belt is slipping and overheating. How do you handle this?", prompt: "Think about: What is the risk? What is your procedure?" },
-      { id: 'q8', title: "8. You discover a piece of safety equipment, like a gas detector, is faulty. What is the protocol?", prompt: "Think about: Who do you report to? What do you do with the equipment?" },
-      { id: 'q9', title: "9. An underground fire is reported. What are the key steps for fire containment and evacuation?", prompt: "Think about: What's the immediate action? What does a fire command sound like?" },
-      { id: 'q10', title: "10. A worker reports a near-miss incident. How do you investigate it?", prompt: "Think about: What questions do you ask? What's the goal of the investigation?" }
+      { id: 'q1', title: "1. A truck breaks down en route. How do you manage the delay?", prompt: "Think about: Do you reroute? Who do you inform? How do you update the client?" },
+      { id: 'q2', title: "2. A warehouse has loaded the wrong item onto a truck. What is your action?", prompt: "Think about: Do you stop the truck? Who do you contact at the warehouse?" },
+      { id: 'q3', title: "3. A shipment is held up at customs. What is your first point of contact and what do you do?", prompt: "Think about: What documents might be missing? What is the risk?" },
+      { id: 'q4', title: "4. Severe weather is forecast on a major highway. How do you prepare your drivers and shipments?", prompt: "Think about: How do you communicate? What is the priority?" },
+      { id: 'q5', title: "5. A driver is 3 hours late for a scheduled pickup. How do you communicate with the warehouse and the client?", prompt: "Think about: How do you explain the delay? What is the solution?" },
+      { id: 'q6', title: "6. You notice a discrepancy between the packing list and the actual goods. How do you address this?", prompt: "Think about: What is the risk? What is the solution?" },
+      { id: 'q7', title: "7. A client wants to change the destination of a shipment that is already in transit. How do you respond?", prompt: "Think about: Is it possible? What are the costs and risks?" },
+      { id: 'q8', title: "8. A client is unhappy with a delay that was caused by a natural disaster. How do you handle the conversation?", prompt: "Think about: How do you explain the cause? How do you show empathy?" },
+      { id: 'q9', title: "9. A client wants to know the status of their shipment every hour. How do you manage their expectations?", prompt: "Think about: How do you communicate without causing panic?" },
+      { id: 'q10', title: "10. A carrier has submitted an invoice with an unexpected surcharge. How do you resolve this?", prompt: "Think about: What is the first step? What do you say to the carrier?" }
     ]
   },
   {
-    partTitle: "Part 2: Technical Operations & Communication",
+    partTitle: "Part 2: Client Communication & Problem-Solving",
     questions: [
-      { id: 'q11', title: "11. Explain the purpose of a ventilation plan to a new hire.", prompt: "Think about: Why is it important? How does it work?" }
-      // Other questions (Q12-Q22) were not included in the source HTML
+      { id: 'q11', title: "11. A client wants a cost estimate for a new, complex delivery route. How do you respond?", prompt: "Think about: What information do you need?" },
+      { id: 'q12', title: "12. A shipment of delicate goods has been damaged in transit. What is your first course of action?", prompt: "Think about: Who do you inform? What is the process for a claim?" },
+      { id: 'q13', title: "13. You need to explain the concept of a 'bill of lading' to a new client. What is your explanation?", prompt: "Think about: Use simple language. What is its purpose?" },
+      { id: 'q14', title: "14. A client wants to switch from sea freight to air freight. What do you tell them?", prompt: "Think about: What are the benefits and costs? What is the risk?" },
+      { id: 'q15', title: "15. How do you communicate urgency to a driver without causing them to panic or rush?", prompt: "Think about: How do you motivate them?" },
+      { id: 'q16', title: "16. A client has a question about a technical aspect of a delivery, such as the type of container. How do you respond?", prompt: "Think about: How do you show your expertise?" }
     ]
   },
   {
-    partTitle: "Part 3: Leadership & Professional Growth",
+    partTitle: "Part 3: Supply Chain Management & Technology",
     questions: [
-      { id: 'q23', title: "23. How do you stay calm and maintain control during an emergency situation?", prompt: "Think about: What are your steps?" },
-      { id: 'q24', title: "24. A team member is struggling with a task. How do you help them without doing the work for them?", prompt: "Think about: How do you guide them?" }
-      // Other questions (Q25-Q34) were not included in the source HTML
+      { id: 'q17', title: "17. How do you explain the benefits of a new logistics tracking system to your team?", prompt: "Think about: How do you show value?" },
+      { id: 'q18', title: "18. A major port is shut down due to a strike. How do you communicate this to clients and internal teams?", prompt: "Think about: What is the risk? What is the solution?" },
+      { id: 'q19', title: "19. How do you coordinate with a supplier to expedite an urgent order?", prompt: "Think about: What do you say to the supplier?" },
+      { id: 'q20', title: "20. How do you identify and mitigate a potential risk in the supply chain?", prompt: "Think about: What are the steps? What do you say to your team?" }
     ]
   }
 ];
@@ -46,7 +51,7 @@ const PageStyles = () => (
     header {
       text-align: center;
       padding: 40px 20px;
-      background: #27ae60;
+      background: #2c3e50;
       color: white;
     }
     header h1 {
@@ -62,7 +67,7 @@ const PageStyles = () => (
     }
     h2, h3 {
       margin: 20px 0 10px;
-      color: #27ae60;
+      color: #2c3e50;
     }
     p, ul, ol {
       margin: 10px 0;
@@ -70,7 +75,7 @@ const PageStyles = () => (
     .btn {
       display: inline-block;
       padding: 10px 20px;
-      background: #27ae60;
+      background: #2c3e50;
       color: white;
       border: none;
       border-radius: 6px;
@@ -89,7 +94,7 @@ const PageStyles = () => (
       background: #f8f9fa;
       padding: 20px;
       margin: 20px 0;
-      border-left: 4px solid #27ae60;
+      border-left: 4px solid #2c3e50;
       border-radius: 6px;
     }
     .feedback {
@@ -106,13 +111,12 @@ const PageStyles = () => (
       top: 1rem;
       right: 1rem;
       z-index: 10;
-      background-color: rgba(39, 174, 96, 0.8);
+      background-color: rgba(44, 62, 80, 0.8);
       backdrop-filter: blur(8px);
       border-radius: 2rem;
       padding: 0.5rem 1.5rem;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
-
     .top-nav ul {
       display: flex;
       list-style-type: none;
@@ -120,7 +124,6 @@ const PageStyles = () => (
       padding: 0;
       gap: 1.5rem;
     }
-
     .top-nav a {
       color: white;
       text-decoration: none;
@@ -128,15 +131,14 @@ const PageStyles = () => (
       font-size: 0.875rem;
       transition: color 0.3s ease;
     }
-
     .top-nav a:hover {
-      color: #f0f0f0;
+      color: #e8e8e8;
     }
   `}} />
 );
 
 // --- Main Component ---
-function MiningScenarioPage() {
+function LogisticsScenarioPage() {
   // Create a single state object to hold all responses and feedback
   const [responses, setResponses] = useState(() => {
     const initialState = {};
@@ -162,7 +164,7 @@ function MiningScenarioPage() {
     let feedbackMsg = '';
 
     if (text.length < 20) {
-      feedbackMsg = "<strong>💡 Tip:</strong> Be specific. Include who you inform, what actions you take, and why.";
+      feedbackMsg = "<strong>💡 Tip:</strong> Be specific. Include communication, coordination, and risk management.";
     } else {
       feedbackMsg = "<strong>✅ Well done!</strong> Your response shows leadership under pressure.";
     }
@@ -199,18 +201,18 @@ function MiningScenarioPage() {
       </nav>
 
       <header>
-        <h1>⛏️ Professional Practice Scenarios: Mining Engineers</h1>
-        <p>Solve real engineering challenges using English as your tool.</p>
+        <h1>🚚 Professional Practice Scenarios: Logistics Coordinators</h1>
+        <p>Solve real operational challenges using English as your tool.</p>
       </header>
 
       <div className="container">
 
         <h2>🎯 After completing this lesson, you will be able to:</h2>
         <ul>
-          <li>Explain technical systems to non-engineers.</li>
-          <li>Lead during dewatering and ventilation failures.</li>
-          <li>Report risks and recommend solutions.</li>
-          <li>Coordinate with contractors and safety teams.</li>
+          <li>Explain delays and rerouting to clients clearly.</li>
+          <li>Coordinate with drivers, warehouses, and customs.</li>
+          <li>Lead during supply chain disruptions.</li>
+          <li>Communicate urgency without panic.</li>
         </ul>
 
         {/* Map over the parts and questions to render them dynamically */}
@@ -256,4 +258,4 @@ function MiningScenarioPage() {
   );
 }
 
-export default MiningScenarioPage;
+export default LogisticsScenarioPage;

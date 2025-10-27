@@ -1,5 +1,7 @@
 // src/components/HospitalityExamSimulatorPage.jsx
 import React, { useState, useEffect } from 'react';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 const HOSPITALITY_EXAM_DATA = {
   courseName: "Hotel & Hospitality Professional",
